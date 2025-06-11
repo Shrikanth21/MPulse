@@ -1,0 +1,55 @@
+{
+    "userName": "shrikanth@inapp.com",
+    "homePageURL": "https://dev.mpulse9.com/#/main/maintenanceAdvisor/dashboard",
+    "equipmentRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/EquipmentRecords/",
+    "buildingRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/BuildingRecords/",
+    "menuItemTitle": "Capital Assets",
+    "subMenuItemTitle": "Equipment Records",
+    "buildingMenueText": "Building Records",
+    "create_wko": "Create Work Order",
+    "general_field": "Date Opened",
+    "wo_info": {
+        "taskAssignedToWorkOrder": "Task Assigned to Work Order",
+        "taskId":"PMI-022",
+        "assetAssignedToTask": "Asset Assigned to Task",
+        "assetId":"EQU-001",
+        "personnelAssignedToAsset": "Personnel Assigned to Asset",
+        "empId":"EMP-001",
+        "inventoryAssignedToAsset": "Inventory Assigned to Asset",
+        "inventoryId":"PRT-001"
+    },
+    "icons": {
+        "task_link_icon": "Link Additional Task",
+        "asset_link_icon": "Link Additional Asset",
+        "personnel_link_icon": "Link Additional Personnel",
+        "inventory_link_icon": "Link Additional Inventory",
+        "media_link_icon": "Click here to link a record",
+        "unlinkIcon": "Delete Selected Task",
+        "plusIcon": "Add new record",
+        "dropdownIcon": "More",
+        "calendarIcon": "Date Due",
+        "special_char": "@",
+        "crossIcon": "Delete current record"
+    },
+    "element_text": {
+        "got_it_btn": "GOT IT",
+        "wor": "Work Order Records",
+        "link_button": "Link",
+        "ok_button_text": "OK",
+        "replace_button": "Replace",
+        "input_ok_button": "Ok",
+        "task_checkList_text": "Task Checklists - test",
+        "close_wko_text": "Close Work Order",
+        "yes_button": "Yes",
+        "continue_button_text": "Continue",
+        "calendar_today_button": "Today",
+        "media_text":"Media",
+        "dashboard_text":"Dashboard"
+    },
+    "CheckListFields_data": {
+        "checkList_second_field": "Curr",
+        "inputValue": "1",
+        "checkList_first_field": "Release1",
+        "backspace_count":3
+    }
+}

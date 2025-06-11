@@ -1,0 +1,14 @@
+{
+    "cSpell.words": [
+        "corelib",
+        "loging",
+        "loginpage",
+        "successfull"
+    ],
+    "cucumber.features": [
+        "src/test/features/**/*.feature"
+    ],
+    "cucumber.glue": [
+        "src/test/steps/**/*.ts"
+    ]
+}

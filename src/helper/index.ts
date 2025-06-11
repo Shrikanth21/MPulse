@@ -1,0 +1,30 @@
+import dotenv from 'dotenv';
+import reporter from 'cucumber-html-reporter';
+
+dotenv.config({
+  path: `${process.cwd()}/config/.env.${process.env.environment ?? 'qa'}`
+});
+
+const options = {
+  theme: "bootstrap" as "bootstrap",
+  jsonFile: 'reports/cucumber_report.json',
+  output: 'reports/cucumber_report_bootstrap.html',
+  reportSuiteAsScenarios: true,
+  scenarioTimestamp: true,
+  launchReport: true,
+  columnLayout: 1,
+  screenshotsDirectory: 'reports/',
+  failedSummaryReport: true,
+  metadata: {
+    browser: process.env.browser ?? 'chrome',
+    app_url: process.env.app_url ?? 'http://localhost',
+    environment: process.env.environment ?? 'qa',
+    platform: process.env.platform ?? 'web',
+  }
+};
+
+function generateHtmlReport() {
+  reporter.generate(options);
+}
+
+generateHtmlReport();

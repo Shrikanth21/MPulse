@@ -1,0 +1,39 @@
+{
+  "name": "cucumber-bdd",
+  "version": "1.0.0",
+  "description": "this is automation of pw with bdd",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js test & npx ts-node index.ts",
+    "test-parallel": "cucumber-js features/create.wko.feature --parallel 2 & npx ts-node src/helper/index.ts",
+    "wko-test": "cucumber-js features/wko.feature --tags @wkoE2E & npx ts-node src/helper/index.ts",
+    "close-wko-test": "cucumber-js features/close.wko.feature --tags @closeWko & npx ts-node src/helper/index.ts",
+    "cancel-wko-test": "cucumber-js features/cancel.wko.feature --tags @cancelWko & npx ts-node src/helper/index.ts",
+    "hold-wko-test": "cucumber-js features/hold.wko.feature --tags @holdWko & npx ts-node src/helper/index.ts",
+    "update-wko-test": "cucumber-js features/workOrder.Search.Update.feature --tags @updatewo & npx ts-node src/helper/index.ts",
+    "create-wkoListView-test": "cucumber-js features/workOrder.Create.ListView.feature --tags @closeListViewWko & npx ts-node src/helper/index.ts",
+    "sort-wko-test": "cucumber-js features/workOrder.Sorting.feature --tags @sortwo & npx ts-node src/helper/index.ts",
+    "delete-wko-test": "cucumber-js features/workOrder.Delete.feature --tags @wkoDelete & npx ts-node src/helper/index.ts"
+  },
+  "keywords": [
+    "pw",
+    "ts",
+    "js"
+  ],
+  "author": "Shrikant Khairnar",
+  "license": "ISC",
+  "devDependencies": {
+    "@cucumber/cucumber": "^10.9.0",
+    "@playwright/test": "^1.40.1",
+    "cross-env": "^7.0.3",
+    "cucumber-html-reporter": "^7.1.1",
+    "dotenv": "^16.3.2",
+    "playwright": "^1.40.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "winston": "^3.17.0",
+    "xlsx": "^0.18.5"
+  }
+}

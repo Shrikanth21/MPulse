@@ -1,0 +1,72 @@
+{
+    "homePageURL": "https://dev.mpulse9.com/#/main/maintenanceAdvisor/dashboard",
+    "workOrderRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/WorkOrderRecords/",
+    "menuItemTitle": "Work Orders",
+    "subMenuItemTitle": "Work Order Records",
+    "wo_info": {
+        "assetAssignedToTask": "Asset Assigned to Task",
+        "assetId":"EQU-023",
+        "personnelAssignedToAsset": "Personnel Assigned to Asset",
+        "empId":"EMP-041",
+        "inventoryAssignedToAsset": "Inventory Assigned to Asset",
+        "inventoryId":"PRT-001"
+    },
+    "icons": {
+        "asset_link_icon": "Link Additional Asset",
+        "personnel_link_icon": "Link Additional Personnel",
+        "personnel_eye_icon": "View TimeSheet Details for Selected Personnel",
+        "inventory_link_icon": "Link Additional Inventory",
+        "media_link_icon": "Click here to link a record",
+        "plusIcon": "Add new record",
+        "calendarIcon": "Date Due",
+        "crossIcon": "Delete current record",
+        "plusIcon_title":"Add Row",
+        "crossIcon_title":"Click here to close"
+    },
+    "element_text": {
+        "got_it_btn": "GOT IT",
+        "link_button": "Link",
+        "ok_button_text": "OK",
+        "replace_button": "Replace",
+        "input_ok_button": "Ok",
+        "close_wko_text": "Close Work Order",
+        "yes_button": "Yes",
+        "continue_button_text": "Continue",
+        "media_text": "Media",
+        "general_tab_text": "General",
+        "open_status_text": "Open",
+        "closed_status_text": "Closed",
+        "timeSheetDetails_text": "Time Sheet Details",
+        "hoursField_text": "0.00",
+        "hours": "2",
+        "upload_text": "Upload"
+    },
+    "dropdownSelections": [
+        {
+            "ddType": "WorkOrderType",
+            "ddValue": "Electrical - Lighting"
+        },
+        {
+            "ddType": "WorkOrderGroup",
+            "ddValue": "PM"
+        },
+        {
+            "ddType": "WorkOrderPriority",
+            "ddValue": "03-Medium"
+        }
+    ],
+    "costFields":[
+        {
+            "id": "OtherCost",
+            "fieldName": "Other Cost",
+            "inputField": "OtherCost",
+            "cost": "50"
+        },
+        {
+            "id": "EstCost",
+            "fieldName": "Estimated Cost",
+            "inputField": "EstCost",
+            "cost": "100"
+        }
+    ]
+}
