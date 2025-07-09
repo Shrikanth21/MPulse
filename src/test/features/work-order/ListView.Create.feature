@@ -1,8 +1,9 @@
 Feature: List View - Create a Work Order Record - Close
 
-  @closeListViewWko
+  @closeListViewWko @listView @e2e
   Scenario: Create a Work Order Record and Close
     Given the user log into the application
+    And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user creates a new Work Order record from List view with a unique description
     And the user upload media file

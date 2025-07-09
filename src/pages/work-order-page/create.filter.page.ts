@@ -1,0 +1,289 @@
+import { Page } from "@playwright/test";
+import { getPage } from "../../base/base";
+import { WebActions } from "../../base/web.action.util";
+import { timeouts } from "../../helper/timeouts-config";
+
+class CreateFilterPage {
+    private get currentPage(): Page {
+        return getPage();
+    }
+
+    private get actions(): WebActions {
+        return new WebActions(this.currentPage);
+    }
+
+    private elements = {
+        navbarBrand: { selector: "//a[@class='navbar-brand']", name: "Navbar Brand" },
+        customizeButton: { selector: "//i[@class='fas fa-cog']", name: "Customize Button" },
+        customizeModalHeader: { selector: "//div[@class='modal-header ng-binding ui-draggable-handle' and contains(text(),'Customize')]", name: "Customize Modal Header" },
+        addLayoutButton: { selector: "//li[@title='Add']//i[@class='fa fa-plus']", name: "Add Layout Button" },
+        layoutEntryInput: { selector: "//input[@id='layoutEntry']", name: "Layout Entry Input" },
+        applyButton: { selector: "//button[@title='Apply']", name: "Apply Button" },
+        saveButton: { selector: "//li[@title='Save']//i[@class='fas fa-check']", name: "Save Button" },
+        expandGridDropdownIcon: { selector: "//div[@class='expand-grid-left']//div[@class='dx-dropdowneditor-icon']", name: "Expand Grid Dropdown Icon" },
+        deleteCurrentRecord: { selector: "//li[@ng-hide='hideLayoutSelector']//i[@class='far fa-times-circle']", name: "Delete Current Layout Record" },
+        confirmYesButton: { selector: "//div[@aria-label='Yes']", name: "Confirm Yes Button" },
+        confirmNoButton: { selector: "//div[@aria-label='No']", name: "Confirm No Button" },
+        listItems: { selector: "//div[@class='dx-item dx-list-item']", name: "List Items" },
+        customFilterDropdown: { selector: "//div[@ng-switch-when='customfilter']/descendant::input[@class='dx-texteditor-input']", name: "Custom Filter Input" },
+        colorCodeDropdown: { selector: "//tr[@class='ng-scope ui-sortable-handle']//input[@class='dx-texteditor-input']", name: "Color Code Dropdown" },
+        colorInput: { selector: "//input[contains(@class, 'default-color-asb')]", name: "Color Input" },
+        dataRows: { selector: "//tr[contains(@class, 'dx-row dx-data-row dx-column')]", name: "Data Rows" },
+        addMoreFilterButton: { selector: "//a[@title='Add']", name: "Add More Filter Button" },
+        expandGridDropdownInput: { selector: "//div[contains(@class,'expand-grid-left')]//input[@class='dx-texteditor-input']", name: "Expand Grid Dropdown Input" },
+    };
+
+    private getFilterOptions = (filterOption: string): string => `//span[@title='${filterOption}']`;
+    private getCustomDivByTitle = (title: string): string => `//div[@title='${title}']`;
+    private getColumnCellByTitle = (title: string): string => `//div[text()='${title}']`;
+    private getTabByTitle = (tabTeading: string): string => `//li[@title='${tabTeading}']`;
+    private getValueDivByTitle = (title: string): string => `//div[@title='${title}' and contains(@class, 'dx-item-content')]`;
+
+    public async clickOnFilter(title: string): Promise<void> {
+        const filterLocator = this.actions.getLocator(this.getFilterOptions(title));
+        await this.actions.waitForElementToBeVisible(filterLocator, `Filter with title ${title} present on the page`);
+        await this.actions.click(filterLocator, `Filter with title ${title}`);
+    }
+
+    public async selectFilterOption(titles: string[]): Promise<void> {
+        for (const title of titles) {
+            const filterLocator = this.actions.getLocator(this.getFilterOptions(title));
+            const isChecked = await filterLocator.isChecked?.() ?? false;
+            if (!isChecked) {
+                await this.actions.click(filterLocator, `Filter with title ${title}`);
+            }
+        }
+    }
+
+    public async clickOnOutside(): Promise<void> {
+        const navbarBrandLocator = this.actions.getLocator(this.elements.navbarBrand.selector);
+        await this.actions.click(navbarBrandLocator, this.elements.navbarBrand.name);
+    }
+
+    public async verifyLayoutAppliedAndColumnsVisible(columnTitles: string[]): Promise<void> {
+        for (const title of columnTitles) {
+            const columnLocator = this.actions.getLocator(this.getColumnCellByTitle(title));
+            await this.actions.waitForElementToBeVisible(columnLocator, `Column with title ${title} is present on the page`);
+            const coulmnTitle = await this.actions.getText(columnLocator, `Column with title ${title}`);
+            await this.actions.assertEqual(coulmnTitle, title, `Column with title ${title} is not visible`);
+        }
+    }
+
+    public async clickOnCustomizeButton(): Promise<void> {
+        const clearDropdownEditor = this.actions.getLocator(this.elements.expandGridDropdownInput.selector);
+        await this.actions.clearAndTypeText(clearDropdownEditor, 'ID and Description Only', this.elements.expandGridDropdownInput.name);
+        await this.actions.click(this.actions.getLocator(this.getCustomDivByTitle('ID and Description Only')), 'ID and Description Only');
+        const customizeButtonLocator = this.actions.getLocator(this.elements.customizeButton.selector);
+        await this.actions.click(customizeButtonLocator, this.elements.customizeButton.name);
+    }
+
+    public async clickOnCustomizeButtonAgain(): Promise<void> {
+        const customizeButtonLocator = this.actions.getLocator(this.elements.customizeButton.selector);
+        await this.actions.waitForElementToBeVisible(customizeButtonLocator, this.elements.customizeButton.name);
+        await this.actions.click(customizeButtonLocator, this.elements.customizeButton.name);
+    }
+
+    public async verifyCustomizeModalHeader(): Promise<void> {
+        const customizeModalHeaderLocator = this.actions.getLocator(this.elements.customizeModalHeader.selector);
+        await this.actions.waitForElementToBeVisible(customizeModalHeaderLocator, this.elements.customizeModalHeader.name);
+    }
+
+    public async clickOnAddLayoutButton(): Promise<void> {
+        const addLayoutButtonLocator = this.actions.getLocator(this.elements.addLayoutButton.selector);
+        await this.actions.click(addLayoutButtonLocator, this.elements.addLayoutButton.name);
+    }
+
+    public async enterLayoutName(layoutName: string): Promise<void> {
+        const layoutEntryInputLocator = this.actions.getLocator(this.elements.layoutEntryInput.selector);
+        await this.actions.waitForElementToBeVisible(layoutEntryInputLocator, this.elements.layoutEntryInput.name);
+        await this.actions.typeText(layoutEntryInputLocator, layoutName, this.elements.layoutEntryInput.name);
+    }
+
+    public async clickOnApplyButton(): Promise<void> {
+        const applyButtonLocator = this.actions.getLocator(this.elements.applyButton.selector);
+        await this.actions.click(applyButtonLocator, this.elements.applyButton.name);
+    }
+
+    public async clickOnSaveButton(): Promise<void> {
+        const saveButtonLocator = this.actions.getLocator(this.elements.saveButton.selector);
+        await this.actions.click(saveButtonLocator, this.elements.saveButton.name);
+    }
+
+    public async verifyLayoutCreatedSuccessfully(layoutName: string): Promise<void> {
+        const layoutEntryInputLocator = this.actions.getLocator(this.elements.expandGridDropdownIcon.selector);
+        await this.actions.waitForElementToBeVisible(layoutEntryInputLocator, this.elements.expandGridDropdownIcon.name);
+        await this.actions.click(layoutEntryInputLocator, this.elements.expandGridDropdownIcon.name);
+        const layoutOptionLocator = this.actions.getLocator(this.getCustomDivByTitle(layoutName));
+        const layoutTitle = await this.actions.getText(layoutOptionLocator, this.elements.expandGridDropdownIcon.name);
+        await this.actions.assertEqual(layoutTitle, layoutName, `${layoutName} is not present in the dropdown`);
+        await this.actions.click(layoutEntryInputLocator, this.elements.expandGridDropdownIcon.name);
+        await this.clickOnOutside();
+    }
+
+    public async clickOnDeleteCurrentRecord(): Promise<void> {
+        await this.clickOnCustomizeButtonAgain();
+        const deleteCurrentRecordLocator = this.actions.getLocator(this.elements.deleteCurrentRecord.selector);
+        await this.actions.click(deleteCurrentRecordLocator, this.elements.deleteCurrentRecord.name);
+        await this.clickOnConfirmYesButton();
+    }
+
+    public async clickOnConfirmYesButton(): Promise<void> {
+        const confirmYesButtonLocator = this.actions.getLocator(this.elements.confirmYesButton.selector);
+        await this.actions.click(confirmYesButtonLocator, this.elements.confirmYesButton.name);
+    }
+
+    public async verifyTextNotPresentInListItems(text: string): Promise<void> {
+        const listItemsLocator = this.actions.getLocator(this.elements.listItems.selector);
+        const items = await listItemsLocator.allTextContents();
+        const isPresent = items.some(item => item.trim() === text);
+        if (isPresent) {
+            throw new Error(`Text "${text}" is present in the list items, but it should not be.`);
+        }
+    }
+
+    public async verifyLayoutDeleted(layoutName: string): Promise<void> {
+        const layoutEntryInputLocator = this.actions.getLocator(this.elements.expandGridDropdownIcon.selector);
+        await this.actions.waitForElementToBeVisible(layoutEntryInputLocator, this.elements.expandGridDropdownIcon.name);
+        await this.actions.click(layoutEntryInputLocator, this.elements.expandGridDropdownIcon.name);
+        await this.verifyTextNotPresentInListItems(layoutName);
+        await this.actions.click(layoutEntryInputLocator, this.elements.expandGridDropdownIcon.name);
+    }
+
+    public async clickOnTab(tabName: string): Promise<void> {
+        const customFiltersTabLocator = this.actions.getLocator(this.getTabByTitle(tabName));
+        await this.actions.waitForElementToBeVisible(customFiltersTabLocator, `Custom Filters Tab with title ${tabName} is present`);
+        await this.actions.click(customFiltersTabLocator, `${tabName} Tab`);
+    }
+
+    public async applyCustomFilter(filterName: string, operator: string, value: string, condition: string): Promise<void> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
+        const customFilterFieldInput = this.actions.getLocator(this.elements.customFilterDropdown.selector).nth(0);
+        await this.actions.waitForElementToBeVisible(customFilterFieldInput, this.elements.customFilterDropdown.name);
+        await this.actions.click(customFilterFieldInput, this.elements.customFilterDropdown.name);
+
+        const customFilterFieldInputLocator = this.actions.getLocator(this.getCustomDivByTitle(filterName));
+        await this.actions.waitForElementToBeVisible(customFilterFieldInputLocator, `Custom filter field with title ${filterName} is present`);
+        await this.actions.click(customFilterFieldInputLocator, `Clicked on custom filter field: ${filterName}`);
+
+        const customFilterOperatorInputLocator = this.actions.getLocator(this.elements.customFilterDropdown.selector).nth(1);
+        await this.actions.waitForElementToBeVisible(customFilterOperatorInputLocator, this.elements.customFilterDropdown.name);
+        await this.actions.click(customFilterOperatorInputLocator, this.elements.customFilterDropdown.name);
+
+        const customFilterOperatorItemLocator = this.actions.getLocator(this.getCustomDivByTitle(operator));
+        await this.actions.click(customFilterOperatorItemLocator, `Clicked on custom filter operator: ${operator}`);
+
+        const customFilterValueInputLocator = this.actions.getLocator(this.elements.customFilterDropdown.selector).nth(2);
+        await this.actions.waitForElementToBeVisible(customFilterValueInputLocator, this.elements.customFilterDropdown.name);
+        await this.actions.click(customFilterValueInputLocator, this.elements.customFilterDropdown.name);
+
+        const customFilterValueInput = this.actions.getLocator(this.getValueDivByTitle(value));
+        await this.actions.waitForElementToBeVisible(customFilterValueInput, `Custom filter value input with title ${value} is present`);
+        await this.actions.click(customFilterValueInput, `Clicked on custom filter value: ${value}`);
+
+        const customFilterConditionInputLocator = this.actions.getLocator(this.elements.customFilterDropdown.selector).nth(3);
+        await this.actions.waitForElementToBeVisible(customFilterConditionInputLocator, this.elements.customFilterDropdown.name);
+        await this.actions.click(customFilterConditionInputLocator, this.elements.customFilterDropdown.name);
+
+        const customFilterConditionItemLocator = this.actions.getLocator(this.getCustomDivByTitle(condition));
+        await this.actions.waitForElementToBeVisible(customFilterConditionItemLocator, `Custom filter condition item with title ${condition} is present`);
+        await this.actions.click(customFilterConditionItemLocator, `Clicked on custom filter condition: ${condition}`);
+    }
+
+    public async applyMoreCustomFilter(filterName: string, operator: string, value: string, condition: string): Promise<void> {
+        const addMoreFilterButtonLocators = this.actions.getLocator(this.elements.addMoreFilterButton.selector);
+        const count = await addMoreFilterButtonLocators.count?.() ?? 1;
+        let addMoreFilterButtonLocator;
+        if (count > 1) {
+            addMoreFilterButtonLocator = addMoreFilterButtonLocators.nth(count - 1);
+        } else {
+            addMoreFilterButtonLocator = addMoreFilterButtonLocators;
+        }
+        await this.actions.waitForElementToBeVisible(addMoreFilterButtonLocator, this.elements.addMoreFilterButton.name);
+        const isEnabled = await addMoreFilterButtonLocator.isEnabled?.() ?? true;
+        if (isEnabled) {
+            await this.actions.click(addMoreFilterButtonLocator, this.elements.addMoreFilterButton.name);
+        }
+
+        const customFilterFieldInput = this.actions.getLocator(this.elements.customFilterDropdown.selector).nth(4);
+        await this.actions.waitForElementToBeVisible(customFilterFieldInput, this.elements.customFilterDropdown.name);
+        await this.actions.click(customFilterFieldInput, this.elements.customFilterDropdown.name);
+
+        const customFilterFieldInputLocator = this.actions.getLocator(this.getCustomDivByTitle(filterName)).nth(1);
+        await this.actions.waitForElementToBeVisible(customFilterFieldInputLocator, `Custom filter field with title ${filterName} is present`);
+        await this.actions.click(customFilterFieldInputLocator, `Clicked on custom filter field: ${filterName}`);
+
+        const customFilterOperatorInputLocator = this.actions.getLocator(this.elements.customFilterDropdown.selector).nth(5);
+        await this.actions.waitForElementToBeVisible(customFilterOperatorInputLocator, this.elements.customFilterDropdown.name);
+        await this.actions.click(customFilterOperatorInputLocator, this.elements.customFilterDropdown.name);
+
+        const customFilterOperatorItemLocator = this.actions.getLocator(this.getCustomDivByTitle(operator)).nth(1);
+        await this.actions.click(customFilterOperatorItemLocator, `Clicked on custom filter operator: ${operator}`);
+
+        const customFilterValueInputLocator = this.actions.getLocator(this.elements.customFilterDropdown.selector).nth(6);
+        await this.actions.waitForElementToBeVisible(customFilterValueInputLocator, this.elements.customFilterDropdown.name);
+        await this.actions.click(customFilterValueInputLocator, this.elements.customFilterDropdown.name);
+
+        const customFilterValueInput = this.actions.getLocator(this.getValueDivByTitle(value));
+        await this.actions.waitForElementToBeVisible(customFilterValueInput, `Custom filter value input with title ${value} is not present`);
+        await this.actions.click(customFilterValueInput, `Clicked on custom filter value: ${value}`);
+
+        const customFilterConditionInputLocator = this.actions.getLocator(this.elements.customFilterDropdown.selector).nth(7);
+        await this.actions.waitForElementToBeVisible(customFilterConditionInputLocator, this.elements.customFilterDropdown.name);
+        await this.actions.click(customFilterConditionInputLocator, this.elements.customFilterDropdown.name);
+
+        const customFilterConditionItemLocator = this.actions.getLocator(this.getCustomDivByTitle(condition)).nth(1);
+        await this.actions.waitForElementToBeVisible(customFilterConditionItemLocator, `Custom filter condition item with title ${condition} is not present`);
+        await this.actions.click(customFilterConditionItemLocator, `Clicked on custom filter condition: ${condition}`);
+    }
+
+    public async verifyOnlyWorkOrdersFilter(status: string, createdBy: string): Promise<void> {
+        const statusListItemsLocator = this.actions.getLocator(this.getColumnCellByTitle(status));
+        const statusItems = await statusListItemsLocator.allTextContents();
+        for (const item of statusItems) {
+            await this.actions.assertEqual(item.trim(), status, `Work Order with status ${status} is not present in the list`);
+        }
+
+        const createdByListItemsLocator = this.actions.getLocator(this.getColumnCellByTitle(createdBy));
+        const createdByItems = await createdByListItemsLocator.allTextContents();
+        for (const item of createdByItems) {
+            await this.actions.assertEqual(item.trim(), createdBy, `Work Order with createdBy ${createdBy} is not present in the list`);
+        }
+    }
+
+    public async applyColorCodeFilter(filterName: string, operator: string, value: string, color: string): Promise<void> {
+        const colorCodeFilterInput = this.actions.getLocator(this.elements.colorCodeDropdown.selector).nth(0);
+        await this.actions.click(colorCodeFilterInput, this.elements.colorCodeDropdown.name);
+
+        const customFilterFieldInputLocator = this.actions.getLocator(this.getCustomDivByTitle(filterName));
+        await this.actions.click(customFilterFieldInputLocator, `Select color code filter field: ${filterName}`);
+
+        const colorCodeOperatorInput = this.actions.getLocator(this.elements.colorCodeDropdown.selector).nth(1);
+        await this.actions.click(colorCodeOperatorInput, `Select color code operator: ${operator}`);
+
+        const customFilterOperatorItemLocator = this.actions.getLocator(this.getCustomDivByTitle(operator));
+        await this.actions.click(customFilterOperatorItemLocator, `Select color code operator: ${operator}`);
+
+        const colorCodeValueInput = this.actions.getLocator(this.elements.colorCodeDropdown.selector).nth(2);
+        await this.actions.click(colorCodeValueInput, `Select color code value: ${value}`);
+
+        const customFilterValueInput = this.actions.getLocator(this.getValueDivByTitle(value));
+        await this.actions.waitForElementToBeVisible(customFilterValueInput, `Color code value input with title ${value} is not present`);
+        await this.actions.click(customFilterValueInput, `Select color code value: ${value}`);
+
+        const colorInputLocator = this.actions.getLocator(this.elements.colorInput.selector);
+        await this.actions.waitForElementToBeVisible(colorInputLocator, this.elements.colorInput.name);
+        await this.actions.clearAndTypeText(colorInputLocator, color, this.elements.colorInput.name);
+
+        await this.clickOnApplyButton();
+    }
+
+    public async verifyColorCodeApplied(color: string): Promise<void> {
+        const colorCodeFilterInput = this.actions.getLocator(this.elements.dataRows.selector).nth(0);
+        await this.actions.waitForElementToBeVisible(colorCodeFilterInput, this.elements.dataRows.name);
+        await this.actions.waitForCustomDelay(timeouts.medium);
+        const appliedColor = await this.actions.getCSSProperty(colorCodeFilterInput, 'background-color', this.elements.dataRows.name);
+        await this.actions.assertEqual(appliedColor, color, `Color code for ${color} is not applied correctly`);
+    }
+}
+
+export const createFilterPage = new CreateFilterPage();

@@ -38,11 +38,18 @@ BeforeAll(async () => {
 Before(async function (scenario) {
   const scenarioName = scenario.pickle?.name ?? 'UnknownScenario';
   this.logger = setLoggerForScenario(scenarioName.replace(/[^a-zA-Z0-9-_]/g, '_'));
+
+  if (!browser) {
+    browser = await chromium.launch({ headless: false });
+  }
   context = await browser.newContext({
     viewport: null,
     javaScriptEnabled: true
   });
   page = await context.newPage();
+  page.on('dialog', async dialog => {
+    await dialog.accept();
+  });
   this.page = page;
   await page.goto(process.env.app_url!);
 });

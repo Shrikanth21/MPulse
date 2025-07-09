@@ -10,9 +10,7 @@ let logger: Logger = createLogger({
       return `[${timestamp}] [${level.toUpperCase()}]: ${message}`;
     })
   ),
-  transports: [
-    new transports.Console()
-  ]
+  transports: [new transports.Console()]
 });
 
 export function setLoggerForScenario(scenarioName: string): void {
@@ -24,9 +22,7 @@ export function setLoggerForScenario(scenarioName: string): void {
   const timestamp = new Date().toISOString().replace(/:/g, '-').replace('T', '_').replace('Z', '');
   const safeScenarioName = scenarioName.replace(/[^a-zA-Z0-9-_]/g, '_');
   const logFilePath = path.join(logsDir, `TestLogs-${safeScenarioName}-${timestamp}.log`);
-
   logger.clear();
-
   logger.add(new transports.Console());
   logger.add(new transports.File({ filename: logFilePath }));
 }

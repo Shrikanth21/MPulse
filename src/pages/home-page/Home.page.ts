@@ -25,7 +25,9 @@ class HomePage {
 
   public async clickButtonByText(buttonText: string): Promise<void> {
     const buttonLocator = this.actions.getLocator(this.getElementByText(buttonText));
+    if(await buttonLocator.isVisible()){
     await this.actions.click(buttonLocator, `Button: ${buttonText}`);
+    }
   }
 
   public async clickSideMenuIcon(): Promise<void> {

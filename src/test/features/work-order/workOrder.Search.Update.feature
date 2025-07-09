@@ -1,8 +1,9 @@
-Feature: Positive Test Cases for MPulse Application
+Feature: Work Order - Update Work Order Details
 
-  @updatewo
-  Scenario: User can update workorder under MPulse application
+  @wko @updateWko @e2e
+  Scenario: Create and modify a Work Order under Work Order Records
     Given the user log into the application
+    And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user creates a new Work Order with a unique description and uploads media
     Then the user search the Work Order Records by work order id

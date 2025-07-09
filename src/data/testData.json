@@ -1,55 +1,116 @@
 {
-    "userName": "shrikanth@inapp.com",
-    "homePageURL": "https://dev.mpulse9.com/#/main/maintenanceAdvisor/dashboard",
-    "equipmentRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/EquipmentRecords/",
-    "buildingRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/BuildingRecords/",
-    "menuItemTitle": "Capital Assets",
-    "subMenuItemTitle": "Equipment Records",
-    "buildingMenueText": "Building Records",
-    "create_wko": "Create Work Order",
-    "general_field": "Date Opened",
-    "wo_info": {
-        "taskAssignedToWorkOrder": "Task Assigned to Work Order",
-        "taskId":"PMI-022",
-        "assetAssignedToTask": "Asset Assigned to Task",
-        "assetId":"EQU-001",
-        "personnelAssignedToAsset": "Personnel Assigned to Asset",
-        "empId":"EMP-001",
-        "inventoryAssignedToAsset": "Inventory Assigned to Asset",
-        "inventoryId":"PRT-001"
+  "userName": "shrikanth@inapp.com",
+  "homePageURL": "https://dev.mpulse9.com/#/main/maintenanceAdvisor/dashboard",
+  "equipmentRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/EquipmentRecords/",
+  "buildingRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/BuildingRecords/",
+  "customizationLanguageUrl": "https://dev.mpulse9.com/#/main/language/Language",
+  "workOrderRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/WorkOrderRecords/",
+  "menuItemWorkTitle": "Work Orders",
+  "subMenuItemWorkTitle": "Work Order Records",
+  "managementToolButton": "Management Tools",
+  "workFLow": "WorkFlow",
+  "workOrderTitle": "Work Orders",
+  "menuItemTitle": "Capital Assets",
+  "managementToolsMenue": "Management Tools",
+  "subMenuItemTitle": "Equipment Records",
+  "customizationSubMenuItemTitle": "Customization",
+  "buildingMenueText": "Building Records",
+  "create_wko": "Create Work Order",
+  "general_field": "Date Opened",
+  "languageMenuItem": "Language",
+  "wo_info": {
+    "taskAssignedToWorkOrder": "Task Assigned to Work Order",
+    "taskId": "PMI-022",
+    "assetAssignedToTask": "Asset Assigned to Task",
+    "assetId": "EQU-001",
+    "personnelAssignedToAsset": "Personnel Assigned to Asset",
+    "empId": "EMP-001",
+    "inventoryAssignedToAsset": "Inventory Assigned to Asset",
+    "inventoryId": "PRT-001",
+    "workOrderId": "WKO"
+  },
+  "icons": {
+    "task_link_icon": "Link Additional Task",
+    "personnel_eye_icon": "View TimeSheet Details for Selected Personnel",
+    "asset_link_icon": "Link Additional Asset",
+    "personnel_link_icon": "Link Additional Personnel",
+    "inventory_link_icon": "Link Additional Inventory",
+    "media_link_icon": "Click here to link a record",
+    "unlinkIcon": "Delete Selected Task",
+    "plusIcon": "Add new record",
+    "plusIcon_title": "Add Row",
+    "dropdownIcon": "More",
+    "calendarIcon": "Date Due",
+    "special_char": "@",
+    "crossIcon": "Delete current record",
+    "crossIcon_title": "Click here to close"
+  },
+  "element_text": {
+    "open_status_text": "Open",
+    "closed_status_text": "Closed",
+    "pending_status_text": "Pending",
+    "got_it_btn": "GOT IT",
+    "wor": "Work Order Records",
+    "link_button": "Link",
+    "ok_button_text": "OK",
+    "replace_button": "Replace",
+    "input_ok_button": "Ok",
+    "task_checkList_text": "Task Checklists - test",
+    "close_wko_text": "Close Work Order",
+    "yes_button": "Yes",
+    "continue_button_text": "Continue",
+    "calendar_today_button": "Today",
+    "media_text": "Media",
+    "dashboard_text": "Dashboard",
+    "timeSheetDetails_text": "Time Sheet Details",
+    "general_tab_text": "General",
+    "hoursField_text": "0.00",
+    "hours": "2"
+  },
+  "CheckListFields_data": {
+    "checkList_second_field": "Curr",
+    "inputValue": "1",
+    "checkList_first_field": "Release1",
+    "backspace_count": 3
+  },
+  "costFields": [
+    {
+      "id": "OtherCost",
+      "fieldName": "Other Cost",
+      "inputField": "OtherCost",
+      "cost": "50"
     },
-    "icons": {
-        "task_link_icon": "Link Additional Task",
-        "asset_link_icon": "Link Additional Asset",
-        "personnel_link_icon": "Link Additional Personnel",
-        "inventory_link_icon": "Link Additional Inventory",
-        "media_link_icon": "Click here to link a record",
-        "unlinkIcon": "Delete Selected Task",
-        "plusIcon": "Add new record",
-        "dropdownIcon": "More",
-        "calendarIcon": "Date Due",
-        "special_char": "@",
-        "crossIcon": "Delete current record"
-    },
-    "element_text": {
-        "got_it_btn": "GOT IT",
-        "wor": "Work Order Records",
-        "link_button": "Link",
-        "ok_button_text": "OK",
-        "replace_button": "Replace",
-        "input_ok_button": "Ok",
-        "task_checkList_text": "Task Checklists - test",
-        "close_wko_text": "Close Work Order",
-        "yes_button": "Yes",
-        "continue_button_text": "Continue",
-        "calendar_today_button": "Today",
-        "media_text":"Media",
-        "dashboard_text":"Dashboard"
-    },
-    "CheckListFields_data": {
-        "checkList_second_field": "Curr",
-        "inputValue": "1",
-        "checkList_first_field": "Release1",
-        "backspace_count":3
+    {
+      "id": "EstCost",
+      "fieldName": "Estimated Cost",
+      "inputField": "EstCost",
+      "cost": "100"
     }
+  ],
+
+  "customization": {
+    "recordAreaDropdownValues": {
+      "work_Orders": "Work Orders",
+      "work_Order_Records": "Work Order Records",
+      "working_Hours_And_Dates": "Working Hours And Dates",
+      "equipment_Records": "Equipment Records",
+      "building_Records": "Building Records",
+      "maintenance_Request_Records": "Maintenance Request Records"
+    },
+    "languageDropdownValues": {
+      "status": "Status",
+      "state": "State",
+      "start_date": "Start Date"
+    },
+    "status_label_change": "Work Order Status",
+    "state_label_change": "Work Order State",
+    "start_date_label_change": "Work Order Start Date"
+  },
+  "dataBase": {
+    "freshDBSep": "FreshDBSep",
+    "anchorglass_inapapptest": "ANCHORGLASS_INAPPTEST",
+    "inapp_pns": "INAPP_PNS",
+    "fresdb959_inappdev": "FRESHDB959_INAPPDEV",
+    "automation_freshdb": "AutomationFreshDB"
+  }
 }

@@ -6,9 +6,9 @@
     "cancel_reason": "due to other reason",
     "wo_info": {
         "assetAssignedToTask": "Asset Assigned to Task",
-        "assetId": "EQU-002",
+        "assetId": "EQU-023",
         "personnelAssignedToAsset": "Personnel Assigned to Asset",
-        "empId": "EMP-023",
+        "empId": "EMP-001",
         "inventoryAssignedToAsset": "Inventory Assigned to Asset",
         "inventoryId": "PRT-001"
     },
@@ -42,7 +42,7 @@
         "hoursField_text": "0.00",
         "hours": "2",
         "upload_text": "Upload",
-        "status_text":"Statu",
+        "status_text":"Status",
         "hold_reason_text":"Waiting for parts"
     },
     "dropdownSelections": [

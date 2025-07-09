@@ -70,7 +70,11 @@ class SearchUpdateWorkOrderPage {
     public async verifyUpdatedDescription(expectedDescription: string): Promise<void> {
         const descriptionTextLocator = this.actions.getLocator(this.elements.getDescriptionText.selector);
         const actualDescription = await this.actions.getText(descriptionTextLocator, this.elements.getDescriptionText.name);
-        await this.actions.assertNotEqual(actualDescription, expectedDescription);
+        await this.actions.assertNotEqual(
+            actualDescription,
+            expectedDescription,
+            `Description "${actualDescription}" should not be equal to expected description "${expectedDescription}"`
+        );
     }
 }
 

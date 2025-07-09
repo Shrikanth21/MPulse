@@ -1,6 +1,6 @@
 import { Locator, Page, expect } from '@playwright/test';
-import logger from '../helper/loggs/logger';
 import { timeouts } from '../helper/timeouts-config';
+import logger from '../helper/loggs/logger';
 
 export class WebActions {
   private page: Page;
@@ -9,18 +9,16 @@ export class WebActions {
     this.page = page;
   }
 
-  public async waitForDelay(): Promise<void> {
-    await this.page.waitForTimeout(timeouts.medium);
+  public getLocator(selector: string): Locator {
+    return this.page.locator(selector);
   }
 
-  public async waitForElement(locator: Locator, elementDescription: string): Promise<void> {
-    try {
-      await locator.waitFor({ state: 'visible', timeout: timeouts.large });
-      logger.info(`Element is visible: ${elementDescription}`);
-    } catch (error) {
-      logger.error(`Failed to wait for element to be visible: ${elementDescription} | Error: ${error}`);
-      throw error;
+  public getVisibleLocator(selector: string, description?: string): Locator {
+    const locator = this.page.locator(selector).filter({ has: this.page.locator(':visible') });
+    if (description) {
+      console.log(`Locator created for: ${description} | Selector: ${selector}`);
     }
+    return locator;
   }
 
   public async hoverOverElement(locator: Locator, elementDescription: string): Promise<void> {
@@ -33,10 +31,6 @@ export class WebActions {
       logger.error(`Failed to hover over element: ${elementDescription} | Error: ${error}`);
       throw error;
     }
-  }
-
-  public getLocator(selector: string): Locator {
-    return this.page.locator(selector);
   }
 
   public async click(locator: Locator, elementDescription: string): Promise<void> {
@@ -79,26 +73,12 @@ export class WebActions {
   public async clearAndTypeText(locator: Locator, text: string, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
-      await this.waitForDelay();
       await locator.clear();
       await this.waitForDelay();
       await locator.fill(text);
       logger.info(`Successfully cleared and typed text into element: ${elementDescription} | Text: ${text}`);
     } catch (error) {
       logger.error(`Failed to clear and type text into element: ${elementDescription} | Text: ${text} | Error: ${error}`);
-      throw error;
-    }
-  }
-
-  public async validateCurrentUrl(expectedUrl: string): Promise<void> {
-    try {
-      await this.waitForDelay();
-      await this.page.waitForLoadState('networkidle');
-      await this.page.waitForTimeout(3000);
-      await this.page.waitForURL(expectedUrl, { waitUntil: 'load', timeout: 20000 });
-      logger.info(`Successfully validated current URL: ${expectedUrl}`);
-    } catch (error) {
-      logger.error(`Failed to validate current URL: ${expectedUrl} | Error: ${error}`);
       throw error;
     }
   }
@@ -127,6 +107,19 @@ export class WebActions {
     }
   }
 
+  public async mouseHoverAndClick(locator: Locator, elementDescription: string): Promise<void> {
+    try {
+      await this.waitForElement(locator, elementDescription);
+      await locator.hover();
+      await this.waitForDelay();
+      await locator.click();
+      logger.info(`Successfully hovered and clicked on element: ${elementDescription}`);
+    } catch (error) {
+      logger.error(`Failed to hover and click on element: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
   public async uploadFile(locator: Locator, filePath: string, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -135,50 +128,6 @@ export class WebActions {
       logger.info(`Successfully uploaded file to element: ${elementDescription} | File Path: ${filePath}`);
     } catch (error) {
       logger.error(`Failed to upload file to element: ${elementDescription} | File Path: ${filePath} | Error: ${error}`);
-      throw error;
-    }
-  }
-
-  public async selectDropdownOptionByValue(locator: Locator, value: string, elementDescription: string): Promise<void> {
-    try {
-      await this.waitForElement(locator, elementDescription);
-      await this.waitForDelay();
-      await locator.selectOption({ value });
-      logger.info(`Successfully selected dropdown option by value: ${value} for element: ${elementDescription}`);
-    } catch (error) {
-      logger.error(`Failed to select dropdown option by value: ${value} for element: ${elementDescription} | Error: ${error}`);
-      throw error;
-    }
-  }
-
-  public async selectDropdownOptionByText(locator: Locator, text: string, elementDescription: string): Promise<void> {
-    try {
-      await this.waitForElement(locator, elementDescription);
-      await this.waitForDelay();
-      await locator.selectOption({ label: text });
-      logger.info(`Successfully selected dropdown option by text: ${text} for element: ${elementDescription}`);
-    } catch (error) {
-      logger.error(`Failed to select dropdown option by text: ${text} for element: ${elementDescription} | Error: ${error}`);
-      throw error;
-    }
-  }
-
-  public async waitForElementToBeVisible(locator: Locator, elementDescription: string): Promise<void> {
-    try {
-      await this.waitForElement(locator, elementDescription);
-    } catch (error) {
-      logger.error(`Failed to wait for element to be visible: ${elementDescription} | Error: ${error}`);
-      throw error;
-    }
-  }
-
-  public async waitForElementToBeHidden(locator: Locator, elementDescription: string): Promise<void> {
-    try {
-      await this.waitForDelay();
-      await expect(locator, `Element still visible: ${elementDescription}`).toBeHidden();
-      logger.info(`Element is hidden: ${elementDescription}`);
-    } catch (error) {
-      logger.error(`Failed to wait for element to be hidden: ${elementDescription} | Error: ${error}`);
       throw error;
     }
   }
@@ -194,18 +143,6 @@ export class WebActions {
       logger.error(`Failed to drag element: ${sourceDescription} and drop it on: ${targetDescription} | Error: ${error}`);
       throw error;
     }
-  }
-
-  public async isVisible(locator: Locator, elementDescription: string): Promise<boolean> {
-    try {
-      const isVisible = await locator.isVisible();
-      logger.info(`Element visibility check for: ${elementDescription} | Is Visible: ${isVisible}`);
-      return isVisible;
-    } catch (error) {
-      logger.error(`Failed to check visibility for element: ${elementDescription} | Error: ${error}`);
-      throw error;
-    }
-
   }
 
   public async getText(locator: Locator, elementDescription: string): Promise<string> {
@@ -254,8 +191,15 @@ export class WebActions {
     }
   }
 
-  public async waitForCustomDelay(delayMs: number): Promise<void> {
-    await this.page.waitForTimeout(delayMs);
+  public async performKeyboardAction(key: string, elementDescription?: string): Promise<void> {
+    try {
+      await this.waitForDelay();
+      await this.page.keyboard.press(key);
+      logger.info(`Successfully performed keyboard action: ${key}${elementDescription ? ` on ${elementDescription}` : ''}`);
+    } catch (error) {
+      logger.error(`Failed to perform keyboard action: ${key}${elementDescription ? ` on ${elementDescription}` : ''} | Error: ${error}`);
+      throw error;
+    }
   }
 
   public async clickUsingActions(locator: Locator, elementDescription: string): Promise<void> {
@@ -272,10 +216,146 @@ export class WebActions {
     }
   }
 
-  public async assertNotEqual(actualValue: string, expectedValue: string): Promise<void> {
+  public async validateCurrentUrl(expectedUrl: string): Promise<void> {
     try {
       await this.waitForDelay();
-      await expect(actualValue).not.toEqual(expectedValue);
+      await this.page.waitForLoadState('networkidle');
+      await this.page.waitForTimeout(3000);
+      await this.page.waitForURL(expectedUrl, { waitUntil: 'load', timeout: 20000 });
+      logger.info(`Successfully validated current URL: ${expectedUrl}`);
+    } catch (error) {
+      logger.error(`Failed to validate current URL: ${expectedUrl} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async getCSSProperty(locator: Locator, property: string, elementDescription: string): Promise<string> {
+    try {
+      await this.waitForElement(locator, elementDescription);
+      const value = await locator.evaluate((el, prop) => {
+        return window.getComputedStyle(el).getPropertyValue(prop);
+      }, property);
+      logger.info(`Successfully retrieved CSS property "${property}" from element: ${elementDescription} | Value: ${value}`);
+      return value;
+    } catch (error) {
+      logger.error(`Failed to get CSS property "${property}" from element: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async waitForDelay(): Promise<void> {
+    await this.page.waitForTimeout(timeouts.small);
+  }
+
+  public async waitForCustomDelay(delayMs: number): Promise<void> {
+    await this.page.waitForTimeout(delayMs);
+  }
+
+  public async waitForElementToBeVisible(locator: Locator, elementDescription: string): Promise<void> {
+    try {
+      await this.waitForElement(locator, elementDescription);
+    } catch (error) {
+      logger.error(`Failed to wait for element to be visible: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async waitForElementToBeEnabled(locator: Locator, elementDescription: string): Promise<void> {
+    try {
+      await this.waitForElement(locator, elementDescription);
+      await this.waitForDelay();
+      await expect(locator, `Element not enabled: ${elementDescription}`).toBeEnabled();
+      logger.info(`Element is enabled: ${elementDescription}`);
+    } catch (error) {
+      logger.error(`Failed to wait for element to be clickable: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async waitForElementToBeHidden(locator: Locator, elementDescription: string): Promise<void> {
+    try {
+      await this.waitForDelay();
+      await expect(locator, `Element still visible: ${elementDescription}`).toBeHidden();
+      logger.info(`Element is hidden: ${elementDescription}`);
+    } catch (error) {
+      logger.error(`Failed to wait for element to be hidden: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async waitToBeVisible(locator: Locator, elementDescription: string): Promise<void> {
+    try {
+      await this.waitForDelay();
+      await expect(locator, `Element not visible: ${elementDescription}`).toBeVisible();
+      logger.info(`Element is visible: ${elementDescription}`);
+    } catch (error) {
+      logger.error(`Failed to wait for element to be visible: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async waitForElement(locator: Locator, elementDescription: string): Promise<void> {
+    try {
+      await locator.isVisible({ timeout: timeouts.medium });
+      logger.info(`Element is visible: ${elementDescription}`);
+    } catch (error) {
+      logger.error(`Failed to wait for element to be visible: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async waitForCondition(conditionFn: () => Promise<boolean>, timeout: number, failureMessage: string = 'Condition not met'): Promise<void> {
+    const start = Date.now();
+    try {
+      while (Date.now() - start < timeouts.medium) {
+        if (await conditionFn()) return;
+        await this.waitForCustomDelay(timeouts.small);
+      }
+      logger.error(`${failureMessage} after ${timeouts.medium}ms`);
+      throw new Error(`${failureMessage} after ${timeouts.medium}ms`);
+    } catch (error) {
+      logger.error(`Error while waiting for condition: ${failureMessage} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async waitForNewDropdownOptionsToLoad(locator: Locator, timeout: number): Promise<void> {
+    try {
+      const startTime = Date.now();
+      while (Date.now() - startTime < timeout) {
+        const count = await locator.count();
+        for (let i = 0; i < count; i++) {
+          const title = await locator.nth(i).getAttribute('title');
+          if (title && title.trim().length > 0) {
+            logger.info('Dropdown options loaded successfully.');
+            return;
+          }
+        }
+        await this.waitForCustomDelay(timeouts.small);
+      }
+      logger.error(`Dropdown options did not load within ${timeout}ms`);
+      throw new Error(`Dropdown options did not load within ${timeout}ms`);
+    } catch (error) {
+      logger.error(`Failed to wait for dropdown options to load | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async isVisible(locator: Locator, elementDescription: string): Promise<boolean> {
+    try {
+      const isVisible = await locator.isVisible();
+      logger.info(`Element visibility check for: ${elementDescription} | Is Visible: ${isVisible}`);
+      return isVisible;
+    } catch (error: any) {
+      logger.error(`Failed to check visibility for element: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async assertNotEqual(actualValue: string, expectedValue: string, errorMessage: string): Promise<void> {
+    try {
+      await this.waitForDelay();
+      expect(actualValue, errorMessage).not.toEqual(expectedValue);
       logger.info(`Assertion passed: Actual value "${actualValue}" is not equal to expected value "${expectedValue}"`);
     } catch (error) {
       logger.error(`Failed to assert not equal | Error: ${error}`);
@@ -283,14 +363,22 @@ export class WebActions {
     }
   }
 
-  public async assertEqual(actualValue: string, expectedValue: string): Promise<void> {
+  public async assertEqual(actualValue: string, expectedValue: string, errorMessage?: string): Promise<void> {
     try {
       await this.waitForDelay();
-      await expect(actualValue).toEqual(expectedValue);
+      expect(actualValue, errorMessage).toEqual(expectedValue);
       logger.info(`Assertion passed: Actual value "${actualValue}" is equal to expected value "${expectedValue}"`);
     } catch (error) {
       logger.error(`Failed to assert equal | Error: ${error}`);
       throw error;
+    }
+  }
+
+  public async assertForStartWithTrue(condition: boolean, message: string): Promise<void> {
+    if (condition) {
+      console.info(`Assertion passed: ${message}`);
+    } else {
+      throw new Error(`Assertion failed: ${message}`);
     }
   }
 
@@ -327,6 +415,17 @@ export class WebActions {
     }
   }
 
+  public async assertNotContain(actualValue: string, unexpectedSubstring: string): Promise<void> {
+    try {
+      await this.waitForDelay();
+      await expect(actualValue).not.toContain(unexpectedSubstring);
+      logger.info(`Assertion passed: "${actualValue}" does not contain "${unexpectedSubstring}"`);
+    } catch (error) {
+      logger.error(`Failed to assert not contain | Error: ${error}`);
+      throw error;
+    }
+  }
+
   public async assertDefined(value: any, message: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -334,17 +433,6 @@ export class WebActions {
       logger.info(`Assertion passed: Value is defined. ${message}`);
     } catch (error) {
       logger.error(`Failed to assert defined | Error: ${error}`);
-      throw error;
-    }
-  }
-
-  public async waitToBeVisible(locator: Locator, elementDescription: string): Promise<void> {
-    try {
-      await this.waitForDelay();
-      await expect(locator, `Element not visible: ${elementDescription}`).toBeVisible();
-      logger.info(`Element is visible: ${elementDescription}`);
-    } catch (error) {
-      logger.error(`Failed to wait for element to be visible: ${elementDescription} | Error: ${error}`);
       throw error;
     }
   }

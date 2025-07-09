@@ -41,8 +41,8 @@ When(
     );
     await workOrderPage.setGeneralFields(
       testData.element_text.general_tab_text,
-      testData.dropdownSelections,
-      getRandomString("digits", 10)
+      getRandomString("digits", 10),
+      { ddType: testData.dropdownSelections.map((item: any) => item.ddType) }
     );
   }
 );
@@ -69,7 +69,6 @@ When(
     await workOrderPage.linkAssetToTask(generatedDescription,
       testData.wo_info.assetAssignedToTask,
       testData.icons.asset_link_icon,
-      testData.wo_info.assetId,
       testData.element_text.replace_button
     );
 
@@ -79,7 +78,6 @@ When(
     await workOrderPage.linkPersonnelToAsset(
       testData.wo_info.personnelAssignedToAsset,
       testData.icons.personnel_link_icon,
-      testData.wo_info.empId,
       testData.element_text.link_button
     );
     await workOrderPage.selectByElementText(generatedDescription);
@@ -87,7 +85,6 @@ When(
     await workOrderPage.linkInventoryToAsset(
       testData.wo_info.inventoryAssignedToAsset,
       testData.icons.inventory_link_icon,
-      testData.wo_info.inventoryId,
       testData.element_text.link_button,
       testData.element_text.input_ok_button
     );
@@ -112,7 +109,7 @@ When("the user hold the created Work Order record", async function () {
   actions = new WebActions(this.page);
   await workOrderPage.clickButtonByText(testData.element_text.general_tab_text);
   await actions.performKeyboardShortcutWithRobot();
-  await workOrderPage.clickSaveButton();
+  //await workOrderPage.clickEditButton()
   await workOrderPage.holdWKO(
     testData.element_text.status_text,
     testData.element_text.status_text,
@@ -122,6 +119,7 @@ When("the user hold the created Work Order record", async function () {
     getFutureDay(2),
     testData.element_text.save_button_text
   );
+  //await workOrderPage.clickSaveButton();
 });
 
 Then("the Work Order record should be hold successfully", async function () {

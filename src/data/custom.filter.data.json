@@ -1,0 +1,68 @@
+{
+  "layOutFilterOptions": {
+    "actualHours": "Actual Hours",
+    "createdDate": "Created Date",
+    "otherCost": "Other Cost",
+    "createdBy": "Created By",
+    "status": "Status",
+    "assetType": "Asset Type",
+    "dateDue": "Date Due",
+    "workOrderPriority": "Work Order Priority"
+  },
+  "filterTabOptions": {
+    "addColumnTab": "Add Columns to Layout",
+    "colorCodeTab": "Color Code",
+    "columnSummaryTab": "Column Summary",
+    "customFiltersTab": "Custom Filters"
+  },
+  "customFilterOperatorItemContent": {
+    "equal": "Equal",
+    "notEqual": "Doesn't equal",
+    "beginsWith": "Begins with",
+    "contains": "Contains",
+    "cancelButton": "Contains"
+  },
+  "customFilterValueItem": {
+    "statusValue": {
+      "cancel": "Canceled",
+      "closed": "Closed",
+      "hold": "Hold",
+      "open": "Open"
+    },
+    "createdByValue": {
+      "created_by": "Shrikant@inapp.com"
+    },
+    "customFilterConditionItem": {
+      "and": "And",
+      "or": "Or"
+    }
+  },
+  "customColorItem": {
+    "Black": "rgb(0, 0, 0)",
+    "White": "rgb(255, 255, 255)",
+    "Red": "rgb(255, 0, 0)",
+    "Lime": "rgb(0, 255, 0)",
+    "Blue": "rgb(0, 0, 255)",
+    "Yellow": "rgb(255, 255, 0)",
+    "Cyan": "rgb(0, 255, 255)",
+    "Magenta": "rgb(255, 0, 255)",
+    "Silver": "rgb(192, 192, 192)",
+    "Gray": "rgb(128, 128, 128)",
+    "Maroon": "rgb(128, 0, 0)",
+    "Olive": "rgb(128, 128, 0)",
+    "Green": "rgb(0, 128, 0)",
+    "Purple": "rgb(128, 0, 128)",
+    "Teal": "rgb(0, 128, 128)",
+    "Navy": "rgb(0, 0, 128)",
+    "Orange": "rgb(255, 165, 0)",
+    "Pink": "rgb(255, 192, 203)",
+    "Brown": "rgb(165, 42, 42)",
+    "Gold": "rgb(255, 215, 0)",
+    "LightGray": "rgb(211, 211, 211)"
+  },
+  "maintenanceAdvisor": {
+    "maintenance_advisor_title": "Maintenance Advisor",
+    "maintenance_advisor_Configure_dashboard": "Configure Dashboard",
+    "dashboard_title": "Dashboard"
+  }
+}

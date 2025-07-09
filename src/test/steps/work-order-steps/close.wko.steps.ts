@@ -6,7 +6,7 @@ import { homePage } from '../../../pages/home-page/Home.page';
 import { workOrderPage } from '../../../pages/work-order-page/WorkOrderPage.page';
 import { generatedDescription } from '../../../helper/get.different.description';
 import { getRandomString } from '../../../helper/get-random-string';
-import { getFutureDay } from '../../../helper/date/get.future.date';
+import { getFutureDateFormatted, getFutureDay } from '../../../helper/date/get.future.date';
 
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
 
@@ -21,15 +21,17 @@ When('the user navigates to the Work Order Records page', async function () {
         testData.element_text.got_it_btn,
         testData.menuItemTitle,
         testData.subMenuItemTitle,
-        testData.workOrderRecordsPageURL
-    );
+        testData.workOrderRecordsPageURL);
 });
 
 When('the user creates a new Work Order with a unique description and uploads media', async function () {
     await workOrderPage.createWorkOrder(testData.icons.plusIcon, generatedDescription, testData.element_text.media_text,
-        testData.icons.media_link_icon,
-        filePath, testData.element_text.upload_text, generatedDescription);
-    await workOrderPage.setGeneralFields(testData.element_text.general_tab_text, testData.dropdownSelections, getRandomString('digits', 10));
+        testData.icons.media_link_icon, filePath, testData.element_text.upload_text, generatedDescription);
+    await workOrderPage.setGeneralFields(
+        testData.element_text.general_tab_text,
+        getRandomString('digits', 10),
+        { ddType: testData.dropdownSelections.map((item: any) => item.ddType) }
+    );
 
 });
 
@@ -55,7 +57,6 @@ When('the user links assets, personnel, and inventory to the Work Order', async 
     await workOrderPage.linkAssetToTask(generatedDescription,
         testData.wo_info.assetAssignedToTask,
         testData.icons.asset_link_icon,
-        testData.wo_info.assetId,
         testData.element_text.replace_button
     );
     await workOrderPage.selectByElementText(generatedDescription);
@@ -63,7 +64,6 @@ When('the user links assets, personnel, and inventory to the Work Order', async 
     await workOrderPage.linkPersonnelToAsset(
         testData.wo_info.personnelAssignedToAsset,
         testData.icons.personnel_link_icon,
-        testData.wo_info.empId,
         testData.element_text.link_button
     );
     await workOrderPage.selectByElementText(generatedDescription);
@@ -71,7 +71,6 @@ When('the user links assets, personnel, and inventory to the Work Order', async 
     await workOrderPage.linkInventoryToAsset(
         testData.wo_info.inventoryAssignedToAsset,
         testData.icons.inventory_link_icon,
-        testData.wo_info.inventoryId,
         testData.element_text.link_button,
         testData.element_text.input_ok_button
     );
@@ -95,9 +94,7 @@ When('the user closes the created Work Order record', async function () {
     await workOrderPage.closeWorkOrder(
         testData.element_text.close_wko_text,
         testData.element_text.yes_button,
-        getFutureDay(2),
-        testData.element_text.ok_button_text,
-        testData.element_text.input_ok_button
+        getFutureDay(2)
     );
 });
 
@@ -117,16 +114,18 @@ When('the user deletes the newly created Work Order record', async function () {
  */
 
 When('the user creates a new Work Order record from List view with a unique description', async function () {
-    await workOrderPage.listViewWKO(generatedDescription)
+    await workOrderPage.listViewWKO(generatedDescription);
 });
 
 When("the user upload media file", async function () {
     await workOrderPage.addMediaAndSelectRecord(testData.element_text.media_text, testData.icons.media_link_icon, filePath, testData.element_text.upload_text);
-    await workOrderPage.setGeneralFields(testData.element_text.general_tab_text, testData.dropdownSelections, getRandomString('digits', 10));
+    await workOrderPage.setGeneralFields(testData.element_text.general_tab_text, getRandomString('digits', 10),
+        { ddType: testData.dropdownSelections.map((item: any) => item.ddType) }
+    );
 });
 
 When('the Work Order record from List view should be close', async function () {
-    await workOrderPage.closeWorkOrderWithButton(getFutureDay(2), testData.element_text.input_ok_button);
+    await workOrderPage.closeWorkOrderWithButton(getFutureDateFormatted(2), testData.element_text.input_ok_button);
 });
 
 Then('the Work Order record from List view should be delete successfully', async function () {

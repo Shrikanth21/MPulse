@@ -3,7 +3,7 @@ import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
 import { timeouts } from "../../helper/timeouts-config";
 
-export class DeleteWOPage {
+class DeleteWOPage {
     private get currentPage(): Page {
         return getPage();
     }
@@ -16,6 +16,7 @@ export class DeleteWOPage {
         deleteWOPage: { selector: "//i[@class='far fa-times-circle']", name: 'Delete workorder page cross button' },
         continueButton: { selector: "//span[normalize-space()='Continue']", name: 'Continue button on Alert window' },
         getWorkOrderId: { selector: "//span[@id='ID']", name: 'Work Order ID' },
+        noMatchesFound: { selector: "//div[contains(text(),'No matches found.')]", name: 'No matches found message' },
     };
 
     public async getCurrentWorkOrderIdText(): Promise<string> {
@@ -35,7 +36,27 @@ export class DeleteWOPage {
         const workOrderIdLocator = this.actions.getLocator(this.Elements.getWorkOrderId.selector);
         await this.actions.waitForElementToBeVisible(workOrderIdLocator, this.Elements.getWorkOrderId.name);
         const workOrderIdText = await this.actions.getText(workOrderIdLocator, this.Elements.getWorkOrderId.name);
-        await this.actions.assertNotEqual(workOrderIdText, beforeDeleteWorkOrderId);
+        await this.actions.assertNotEqual(
+            workOrderIdText,
+            beforeDeleteWorkOrderId,
+            `Work Order ID "${workOrderIdText}" should not be equal to the deleted Work Order ID "${beforeDeleteWorkOrderId}"`
+        );
+    }
+
+    public async vwerifyDeletedWOIdInSearchResults(beforeDeleteWorkOrderId: string): Promise<void> {
+        const workOrderIdLocator = this.actions.getLocator(this.Elements.getWorkOrderId.selector);
+        await this.actions.waitForElementToBeVisible(workOrderIdLocator, this.Elements.getWorkOrderId.name);
+        const workOrderIdText = await this.actions.getText(workOrderIdLocator, this.Elements.getWorkOrderId.name);
+        await this.actions.assertNotEqual(
+            workOrderIdText,
+            beforeDeleteWorkOrderId,
+            `Work Order ID "${workOrderIdText}" should not be equal to the deleted Work Order ID "${beforeDeleteWorkOrderId}"`
+        );
+    }
+
+    public async verifyNoMatchesFoundMessage(): Promise<void> {
+        const noMatchesFoundLocator = this.actions.getLocator(this.Elements.noMatchesFound.selector);
+        await this.actions.waitForElementToBeVisible(noMatchesFoundLocator, this.Elements.noMatchesFound.name);
     }
 }
 

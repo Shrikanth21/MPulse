@@ -16,6 +16,10 @@ Given('the user logs into the application', async function () {
   await loginPage.login(credentials.username);
 });
 
+Given(/^the user selects a specific database$/, async () => {
+  await loginPage.selectDatabase(testData.dataBase.freshDBSep);
+});
+
 When('the user navigates to the Equipment Records page', async function () {
   await homePage.navigateToCapitalAssetsRecordsPage(
     testData.homePageURL,
@@ -53,28 +57,24 @@ When('the user links task, asset, personnel, and inventory to the Work Order', a
   await workOrderPage.linkTaskToWorkOrder(
     testData.wo_info.taskAssignedToWorkOrder,
     testData.icons.task_link_icon,
-    testData.wo_info.taskId,
     testData.element_text.link_button
   );
 
   await workOrderPage.linkAssetToTask(generatedDescription,
     testData.wo_info.assetAssignedToTask,
     testData.icons.asset_link_icon,
-    testData.wo_info.assetId,
     testData.element_text.replace_button
   );
 
   await workOrderPage.linkPersonnelToAsset(
     testData.wo_info.personnelAssignedToAsset,
     testData.icons.personnel_link_icon,
-    testData.wo_info.empId,
     testData.element_text.link_button
   );
 
   await workOrderPage.linkInventoryToAsset(
     testData.wo_info.inventoryAssignedToAsset,
     testData.icons.inventory_link_icon,
-    testData.wo_info.inventoryId,
     testData.element_text.link_button,
     testData.element_text.input_ok_button
   );
