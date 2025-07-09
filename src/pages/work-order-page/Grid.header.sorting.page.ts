@@ -14,15 +14,16 @@ class GridPage {
     }
     
     private Elements = {
-        SortingwobyID: { selector: '//td[@aria-label="Column ID#"]//div[text()="ID#"]', name: 'sort workorder by id' },
-        beforewoID: { selector: "(//div[@class='gridContainer dx-widget dx-visibility-change-handler']//td/div)[39]", name: 'first workID' },
+        sortingwobyID: { selector: '//div[@dx-data-grid="listviewgrid"]/descendant::div[text()="ID#"]', name: 'sort workorder by id' },
+        beforewoID: { selector: "//td[contains(@aria-describedby,'dx-col') and @aria-colindex='2']", name: 'first workID' },
         sideBarExpander: { selector: "[class='sideBarExpander']", name: "Sidebar Expander" },
         maximizeButton: { selector: '[title="Maximize"]', name: "Maximize Button" },
         sideBarCollapse: { selector: "//div[@class='sideBarExOptions']//i[@class='fas fa-chevron-left']", name: "Sidebar Collapse Icon" },
     };
 
     public async getCurrentWorkOrderIdText(): Promise<string> {
-        const beforesortedwoID = this.actions.getLocator(this.Elements.beforewoID.selector);
+        const beforesortedwoID = this.actions.getLocator(this.Elements.beforewoID.selector).nth(0);
+        await this.actions.waitForElementToBeVisible(beforesortedwoID, this.Elements.beforewoID.name);
         return await this.actions.getText(beforesortedwoID, this.Elements.beforewoID.name);
     }
 
@@ -37,9 +38,9 @@ class GridPage {
     }
 
     public async clickColumnHeader(): Promise<void> {
-        const sortbyid = this.actions.getLocator(this.Elements.SortingwobyID.selector).nth(0);
-        await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.SortingwobyID.name);
-        await this.actions.doubleClick(sortbyid, this.Elements.SortingwobyID.name);
+        const sortbyid = this.actions.getLocator(this.Elements.sortingwobyID.selector);
+        await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.sortingwobyID.name);
+        await this.actions.click(sortbyid, this.Elements.sortingwobyID.name);
         await this.currentPage.waitForTimeout(timeouts.largest);
     }
 
@@ -50,8 +51,9 @@ class GridPage {
     }
 
     public async verifySortedWorkOrderId(beforesortedText: string): Promise<void> {
-        const afteresortedwoID = this.actions.getLocator(this.Elements.beforewoID.selector);
-        const aftereSortedwoID = await this.actions.getText(afteresortedwoID, this.Elements.beforewoID.name);
+        const afteresortedwoID = this.actions.getLocator(this.Elements.beforewoID.selector).nth(0);
+        await this.actions.waitForElementToBeVisible(afteresortedwoID, this.Elements.beforewoID.name);
+        const aftereSortedwoID = await afteresortedwoID.innerText();
         console.log(`Before sorted Work Order ID: ${beforesortedText} and After sorted Work Order ID: ${aftereSortedwoID}`);
         await this.actions.assertNotEqual(
             aftereSortedwoID,

@@ -2,6 +2,7 @@ import { expect, Page, selectors } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
 import { gridHeaderSearchFiltersPage } from "./grid.header.searchfilters.page";
+import { timeouts } from "../../helper/timeouts-config";
 
 class OmitAndLookupPage {
     private get currentPage(): Page {
@@ -12,7 +13,7 @@ class OmitAndLookupPage {
         return new WebActions(this.currentPage);
     }
 
-    private getWorkOrderById = (id: string): string => `//div[contains(@title,'${id}')]`
+    private getWorkOrderById = (id: string): string => `//div[@title='${id}']`
     private getbuttonByText = (btnText: string): string => `//button[normalize-space()='${btnText}']`;
 
     public async clickFirstWorkOrderRecord(): Promise<void> {
@@ -34,7 +35,8 @@ class OmitAndLookupPage {
 
     public async verifyOnlyWorkOrderVisible(workOrderId: string): Promise<void> {
         const expectedRecord = this.actions.getLocator(this.getWorkOrderById(workOrderId));
-        await this.actions.waitForElementToBeVisible(expectedRecord, `${expectedRecord} is visible`);
+        await this.actions.waitForCustomDelay(timeouts.medium);
+        await this.actions.waitForElementToBeVisible(expectedRecord, `Work Order ${workOrderId} is visible`);
     }
 }
 

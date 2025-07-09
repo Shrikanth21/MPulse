@@ -6,7 +6,7 @@ Feature: List View - Omit and Lookup functionality
     When the user navigates to the Work Order Records page
     And the user maximizes the Work Order Records list view display
 
-  @omitRecord @listView @e2e
+  @omitRecord @listView @e2e @omitAndLookup
   Scenario: Work Order - Omit and validate exclusion from list
     Then the user get the first record from the Work Order Records list view
     When the user clicks on the "Omit" button
@@ -17,7 +17,7 @@ Feature: List View - Omit and Lookup functionality
     And the user clicks on the "View All" button
     And the user minimize the Work Order Records list view display
 
-  @lookupRecord @listView @e2e
+  @lookupRecord @listView @e2e @omitAndLookup
   Scenario: Work Order - Lookup and isolate a record in list view
     Then the user get the first record from the Work order records list view
     When the user clicks on the "Lookup" button

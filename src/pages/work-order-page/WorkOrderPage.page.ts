@@ -19,7 +19,7 @@ class WorkOrderPage {
         editButton: { selector: '#edit-work-order', name: "Edit Button" },
         mediaMoreButton: { selector: "//div[contains(@class,'media')]//div[@class='moreBtn']", name: "Media More Button" },
         taskLinkRow: { selector: "(//div[@class='dx-datagrid-content']//table)[2]//tr[2]", name: "Task Link Row" },
-        popupCalendarIcon: { selector: "//div[@class='modal-content popup-no-resize ui-resizable']/descendant::div[@class='dx-dropdowneditor-icon']", name: "Popup Calendar Icon" },
+        popupCalendarIcon: { selector: "//div[@class='modal-content ui-resizable']/descendant::div[@class='dx-dropdowneditor-icon']", name: "Popup Calendar Icon" },
         fileInput: { selector: "//input[@title='Choose Files'][1]", name: "File Input" },
         cancelReasonInput: { selector: "//div[@title='Cancel Reason']/following-sibling::div//div[@id='Reasonforcancelation']//input", name: "Cancel Reason Input" },
         cancelReasonFormGroup: { selector: "(//div[@title='Cancel Reason']/following-sibling::div//div[@class='form-group'])[2]", name: "Cancel Reason Form Group" },
@@ -52,6 +52,7 @@ class WorkOrderPage {
 
     private getLinkByTitles = (title: string): string => `//a[@title='${title}']`;
     private getInputButton = (text: string): string => `//input[@value='${text}']`;
+    private getOkButton = (text: string): string => `//input[@value='${text}' and @ng-click='clickedOkButton()']`;
     private getElementByText = (text: string): string => `//span[text()='${text}']`;
     private getCalendarDate = (day: string): string => `(//div[contains(@class, 'dx-calendar-body')]//span[text()='${day}'])[1]`;
     private getPopupCalendarDate = (day: string): string => `((//div[contains(@class, 'dx-calendar-body')])[2]//span[text()='${day}'])[1]`;
@@ -135,7 +136,7 @@ class WorkOrderPage {
         if (await modalTitleLocator.isVisible()) {
             const closeRequestButtonLocator = this.actions.getLocator(this.elements.closeRequestButton.selector);
             await this.actions.click(closeRequestButtonLocator, this.elements.closeRequestButton.name);
-            const inputButtonLocator = this.actions.getLocator(this.getInputButton(text));
+            const inputButtonLocator = this.actions.getLocator(this.getOkButton(text));
             await this.actions.waitForElementToBeVisible(inputButtonLocator, `Input Button: ${text}`);
             await this.actions.scrollToAndClick(inputButtonLocator, `Input Button: ${text}`);
         }
@@ -371,6 +372,7 @@ class WorkOrderPage {
     public async closeWorkOrder(
         closeText: string,
         yesButtonText: string,
+        inputOkButtonText: string,
         day: string
     ): Promise<void> {
         await this.clickSaveButton();
@@ -378,7 +380,8 @@ class WorkOrderPage {
         await this.clickElementByText(yesButtonText);
         await this.clickPopupCalendarIcon();
         await this.selectPopupCalendarDate(day);
-        await this.clickCalendarOkButton();
+        //await this.clickCalendarOkButton();
+        await this.clickOnSecondClosePopup(inputOkButtonText);
     }
 
     public async setPhoneNumber(phoneNumber: string): Promise<void> {
@@ -438,7 +441,8 @@ class WorkOrderPage {
         );
         await this.clickPopupCalendarIcon();
         await this.selectPopupCalendarDate(day);
-        await this.clickInputButton(inputOkButtonText);
+        //await this.clickInputButton(inputOkButtonText);
+        await this.clickOnSecondClosePopup(inputOkButtonText);
 
     }
 
@@ -588,7 +592,6 @@ class WorkOrderPage {
         await this.actions.click(sideBarExpanderLocator, this.elements.sideBarExpander.name);
         const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);
         await this.actions.click(minimizeButton, this.elements.hideButton.name);
-
     }
 }
 

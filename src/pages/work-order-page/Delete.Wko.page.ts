@@ -15,7 +15,7 @@ class DeleteWOPage {
     private Elements = {
         deleteWOPage: { selector: "//i[@class='far fa-times-circle']", name: 'Delete workorder page cross button' },
         continueButton: { selector: "//span[normalize-space()='Continue']", name: 'Continue button on Alert window' },
-        getWorkOrderId: { selector: "//span[@id='ID']", name: 'Work Order ID' },
+        getWorkOrderId: { selector: "//div[contains(@class,'textTruncate')]//span[@id='ID']", name: 'Work Order ID' },
         noMatchesFound: { selector: "//div[contains(text(),'No matches found.')]", name: 'No matches found message' },
     };
 
