@@ -1,6 +1,6 @@
 Feature: Work Order - Update Work Order Details
 
-  @wko @updateWko @e2e
+  @wko @updateWko @e2e @sanityWorkOrder
   Scenario: Create and modify a Work Order under Work Order Records
     Given the user log into the application
     And the user selects a specific database

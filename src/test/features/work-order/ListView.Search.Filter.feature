@@ -1,6 +1,6 @@
 Feature: List View - Search and Filter Work Order Records
 
-  @filterwko  @listView @e2e
+  @filterwko  @listView @e2e @sanityWKListView
   Scenario: Work Order - Filter operations with search conditions in list view
     Given the user log into the application
     And the user selects a specific database

@@ -19,7 +19,7 @@ class WorkOrderPage {
         editButton: { selector: '#edit-work-order', name: "Edit Button" },
         mediaMoreButton: { selector: "//div[contains(@class,'media')]//div[@class='moreBtn']", name: "Media More Button" },
         taskLinkRow: { selector: "(//div[@class='dx-datagrid-content']//table)[2]//tr[2]", name: "Task Link Row" },
-        popupCalendarIcon: { selector: "//div[@class='modal-content ui-resizable']/descendant::div[@class='dx-dropdowneditor-icon']", name: "Popup Calendar Icon" },
+        popupCalendarIcon: { selector: "//div[contains(@class,'modal-content')]/descendant::div[@class='dx-dropdowneditor-icon']", name: "Popup Calendar Icon" },
         fileInput: { selector: "//input[@title='Choose Files'][1]", name: "File Input" },
         cancelReasonInput: { selector: "//div[@title='Cancel Reason']/following-sibling::div//div[@id='Reasonforcancelation']//input", name: "Cancel Reason Input" },
         cancelReasonFormGroup: { selector: "(//div[@title='Cancel Reason']/following-sibling::div//div[@class='form-group'])[2]", name: "Cancel Reason Form Group" },
@@ -139,6 +139,8 @@ class WorkOrderPage {
             const inputButtonLocator = this.actions.getLocator(this.getOkButton(text));
             await this.actions.waitForElementToBeVisible(inputButtonLocator, `Input Button: ${text}`);
             await this.actions.scrollToAndClick(inputButtonLocator, `Input Button: ${text}`);
+        }else{
+            await this.actions.click(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
         }
     }
 
@@ -252,19 +254,9 @@ class WorkOrderPage {
     public async uploadMediaFile(mediaButtonText: string, linkIconTitle: string, filePath: string, btnText: string): Promise<void> {
         await this.clickButtonByText(mediaButtonText);
         await this.actions.click(this.actions.getLocator(this.elements.mediaMoreButton.selector), this.elements.mediaMoreButton.name);
-
         await this.actions.click(this.actions.getLocator(this.elements.getLinkByTitle.selector), `Second Occurrence of Link: ${linkIconTitle}`);
-
-        await this.actions.uploadFile(
-            this.actions.getLocator(this.elements.fileInput.selector),
-            filePath,
-            'Media File Upload'
-        );
-
-        await this.actions.click(
-            this.actions.getLocator(this.getButtonByTitle(btnText)),
-            `${btnText} Button`
-        );
+        await this.actions.uploadFile(this.actions.getLocator(this.elements.fileInput.selector), filePath, 'Media File Upload');
+        await this.actions.click(this.actions.getLocator(this.getButtonByTitle(btnText)), `${btnText} Button`);
     }
 
     public async createWorkOrder(addButtonTitle: string, description: string, mediaButtonText: string, mediaLinkTitle: string, mediaFilePath: string, btnTitle: string, recordText: string): Promise<void> {
@@ -274,7 +266,6 @@ class WorkOrderPage {
         await this.uploadMediaFile(mediaButtonText, mediaLinkTitle, mediaFilePath, btnTitle);
         await this.clickSaveButton();
         await this.selectByElementText(recordText);
-
     }
 
     public async selectDropdownValues(ddType: string): Promise<void> {
@@ -291,12 +282,11 @@ class WorkOrderPage {
                 validTitles.push(title.trim());
             }
         }
-        const dropdownSpecificOptions = validTitles.slice(1, -1);
-        if (dropdownSpecificOptions.length === 0) {
-            console.warn(`No valid options found in the dropdown: ${ddType}`);
+        if (validTitles.length === 0) {
+            console.warn(`No valid options found in the dropdown: ${ddType}. Leaving it empty.`);
             return;
         }
-        const selectedTitle = dropdownSpecificOptions[0];
+        const selectedTitle = validTitles[0];
         const selectedLocator = this.actions.getLocator(this.getDDvalueByTitle(selectedTitle));
         await selectedLocator.hover();
         await selectedLocator.waitFor({ state: 'visible', timeout: 5000 });
@@ -349,10 +339,9 @@ class WorkOrderPage {
                     }
                 }
             }
-            const dropdownSpecificOptions = newTitles.slice(1, -1);
-            if (dropdownSpecificOptions.length === 0) {
-                console.warn(`No valid options found in the dropdown: ${ddType}`);
-                return;
+            if (newTitles.length === 0) {
+                console.warn(`No valid options found in the dropdown: ${ddType}. Leaving it empty.`);
+                continue;
             }
             const selectedTitle = newTitles[0];
             const selectedLocator = this.actions.getLocator(this.getDDvalueByTitle(selectedTitle));

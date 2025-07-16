@@ -1,6 +1,6 @@
 Feature: Work Order - Delete Work Order
 
-  @wko @deleteWko @e2e
+  @wko @deleteWko @e2e @sanityWorkOrder
   Scenario: Work Order - Delete and confirm removal from search results
     Given the user logs into the application
     And the user selects a specific database

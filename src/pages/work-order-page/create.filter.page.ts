@@ -50,6 +50,7 @@ class CreateFilterPage {
             const filterLocator = this.actions.getLocator(this.getFilterOptions(title));
             const isChecked = await filterLocator.isChecked?.() ?? false;
             if (!isChecked) {
+                await this.actions.waitForElementToBeVisible(filterLocator, `Filter with title ${title} is present on the page`);
                 await this.actions.click(filterLocator, `Filter with title ${title}`);
             }
         }

@@ -5,6 +5,7 @@
   "buildingRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/BuildingRecords/",
   "customizationLanguageUrl": "https://dev.mpulse9.com/#/main/language/Language",
   "workOrderRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/WorkOrderRecords/",
+  "workflowWorkOrderUrl": "https://dev.mpulse9.com/#/main/workOrders/WorkOrders",
   "menuItemWorkTitle": "Work Orders",
   "subMenuItemWorkTitle": "Work Order Records",
   "managementToolButton": "Management Tools",
@@ -14,6 +15,7 @@
   "managementToolsMenue": "Management Tools",
   "subMenuItemTitle": "Equipment Records",
   "customizationSubMenuItemTitle": "Customization",
+  "workflowSubMenuItemTitle": "WorkFlow",
   "buildingMenueText": "Building Records",
   "create_wko": "Create Work Order",
   "general_field": "Date Opened",
@@ -43,7 +45,8 @@
     "calendarIcon": "Date Due",
     "special_char": "@",
     "crossIcon": "Delete current record",
-    "crossIcon_title": "Click here to close"
+    "crossIcon_title": "Click here to close",
+    "editIcon": "Edit"
   },
   "element_text": {
     "open_status_text": "Open",
@@ -112,5 +115,6 @@
     "inapp_pns": "INAPP_PNS",
     "fresdb959_inappdev": "FRESHDB959_INAPPDEV",
     "automation_freshdb": "AutomationFreshDB"
-  }
+  },
+  "db_name": "FreshDBSep"
 }

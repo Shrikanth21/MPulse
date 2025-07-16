@@ -1,6 +1,6 @@
 Feature: List View - Maintenance Advisor for Work Order Records
 
-  @setLayoutMA @listView @e2e
+  @setLayoutMA @listView @e2e @sanityWKListView
   Scenario: Maintenance Advisor - Apply layout, filter, and color code settings
     Given the user logs into the application
     And the user selects a specific database

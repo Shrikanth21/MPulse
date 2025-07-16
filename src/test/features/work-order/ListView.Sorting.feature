@@ -1,6 +1,6 @@
 Feature: List View - Sorting Work Order Records
 
-  @sortWko @listView @e2e
+  @sortWko @listView @e2e @sanityWKListView
   Scenario: User sorts Work Order Records by workorderID
     Given the user log into the application
     And the user selects a specific database

@@ -17,6 +17,7 @@ class HomePage {
 
   private getLinkByTitle = (title: string) => `//a[@title='${title}']`;
   private getElementByText = (text: string): string => `//a[text()='${text}']`;
+  private getCustomizationMenuByTitle = (title: string): string => `//div[contains(@class,'siteMainNavSubLists')]//a[@title='${title}']`;
 
 
   public async validateCurrentUrl(expectedUrl: string): Promise<void> {
@@ -30,13 +31,19 @@ class HomePage {
     }
   }
 
+  public async clickCustomizationMenuByTitle(title: string): Promise<void> {
+    const customizationMenuLocator = this.actions.getLocator(this.getCustomizationMenuByTitle(title));
+    await this.actions.waitForElementToBeVisible(customizationMenuLocator, `Customization Menu: ${title}`);
+    await this.actions.click(customizationMenuLocator, `Customization Menu: ${title}`);
+  }
+
   public async clickSideMenuIcon(): Promise<void> {
     const sideMenuIconLocator = this.actions.getLocator(this.elements.sideMenuIcon.selector);
     await this.actions.click(sideMenuIconLocator, this.elements.sideMenuIcon.name);
   }
 
   public async clickLinkByTitle(title: string): Promise<void> {
-    const linkLocator = this.actions.getLocator(this.getLinkByTitle(title));
+    const linkLocator = this.actions.getLocator(this.getLinkByTitle(title)).nth(0);
     await this.actions.click(linkLocator, title);
   }
 

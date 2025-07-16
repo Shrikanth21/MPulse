@@ -1,6 +1,6 @@
 Feature: Work Order - Change Work Order Label Language
 
-  @changeLabel @listView @e2e
+  @changeLabel @listView @e2e @sanityWKListView
   Scenario: Customization - Change and verify record label
     Given the user logs into the application
     And the user selects a specific database

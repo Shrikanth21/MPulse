@@ -1,6 +1,6 @@
 Feature: List View - Create a Work Order Record - Close
 
-  @closeListViewWko @listView @e2e
+  @closeListViewWko @listView @e2e @sanityWKListView
   Scenario: Create a Work Order Record and Close
     Given the user log into the application
     And the user selects a specific database

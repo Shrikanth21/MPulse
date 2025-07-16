@@ -7,7 +7,9 @@
     "status": "Status",
     "assetType": "Asset Type",
     "dateDue": "Date Due",
-    "workOrderPriority": "Work Order Priority"
+    "workOrderPriority": "Work Order Priority",
+    "woValidation": "WO Validation"
+
   },
   "filterTabOptions": {
     "addColumnTab": "Add Columns to Layout",
@@ -27,7 +29,9 @@
       "cancel": "Canceled",
       "closed": "Closed",
       "hold": "Hold",
-      "open": "Open"
+      "open": "Open",
+      "incomplete": "INCOMPLETE",
+      "pass": "PASS"
     },
     "createdByValue": {
       "created_by": "Shrikant@inapp.com"

@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import reporter from 'cucumber-html-reporter';
+import testData from '../data/testData.json';
 
 dotenv.config({
   path: `${process.cwd()}/config/.env.${process.env.environment ?? 'qa'}`
@@ -17,9 +18,10 @@ const options = {
   failedSummaryReport: true,
   metadata: {
     browser: process.env.browser ?? 'chrome',
-    app_url: process.env.app_url ?? 'http://localhost',
+    app_url: process.env.app_url!,
     environment: process.env.environment ?? 'qa',
     platform: process.env.platform ?? 'web',
+    dataBase: testData.db_name
   }
 };
 

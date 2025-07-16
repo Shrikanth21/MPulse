@@ -17,7 +17,7 @@ Given('the user logs into the application', async function () {
 });
 
 Given(/^the user selects a specific database$/, async () => {
-  await loginPage.selectDatabase(testData.dataBase.freshDBSep);
+  await loginPage.selectDatabase(testData.db_name);
 });
 
 When('the user navigates to the Equipment Records page', async function () {
