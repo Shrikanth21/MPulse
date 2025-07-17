@@ -13,6 +13,15 @@ export class WebActions {
     return this.page.locator(selector);
   }
 
+  public getLocatorInsideIframe(selector: string): Locator {
+    return this.page.frameLocator('iframe').locator(selector);
+  }
+
+  public async getActiveElement(): Promise<Locator> {
+    const handle = await this.page.evaluateHandle(() => document.activeElement);
+    return handle.asElement() ? this.page.locator(':focus') : this.page.locator('');
+  }
+
   public getVisibleLocator(selector: string, description?: string): Locator {
     const locator = this.page.locator(selector).filter({ has: this.page.locator(':visible') });
     if (description) {
@@ -232,11 +241,12 @@ export class WebActions {
   public async getCSSProperty(locator: Locator, property: string, elementDescription: string): Promise<string> {
     try {
       await this.waitForElement(locator, elementDescription);
+      await this.page.waitForTimeout(timeouts.small);
       const value = await locator.evaluate((el, prop) => {
         return window.getComputedStyle(el).getPropertyValue(prop);
       }, property);
       logger.info(`Successfully retrieved CSS property "${property}" from element: ${elementDescription} | Value: ${value}`);
-      return value;
+      return value.trim();
     } catch (error) {
       logger.error(`Failed to get CSS property "${property}" from element: ${elementDescription} | Error: ${error}`);
       throw error;
@@ -268,6 +278,18 @@ export class WebActions {
       logger.info(`Element is enabled: ${elementDescription}`);
     } catch (error) {
       logger.error(`Failed to wait for element to be clickable: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async waitForElementToBeDisabled(locator: Locator, elementDescription: string): Promise<void> {
+    try {
+      await this.waitForElement(locator, elementDescription);
+      await this.waitForDelay();
+      await expect(locator, `Element is unexpectedly enabled: ${elementDescription}`).toBeDisabled();
+      logger.info(`Element is disabled as expected: ${elementDescription}`);
+    } catch (error) {
+      logger.error(`Failed to verify element is disabled: ${elementDescription} | Error: ${error}`);
       throw error;
     }
   }
@@ -433,6 +455,19 @@ export class WebActions {
       logger.info(`Assertion passed: Value is defined. ${message}`);
     } catch (error) {
       logger.error(`Failed to assert defined | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  public async isCheckboxChecked(locator: Locator, elementDescription: string): Promise<boolean> {
+    try {
+      await this.waitForElement(locator, elementDescription);
+      const ariaChecked = await locator.getAttribute('aria-checked');
+      const isChecked = ariaChecked === 'false';
+      logger.info(`Checkbox checked state for ${elementDescription}: ${isChecked}`);
+      return isChecked;
+    } catch (error) {
+      logger.error(`Failed to check if checkbox is checked: ${elementDescription} | Error: ${error}`);
       throw error;
     }
   }

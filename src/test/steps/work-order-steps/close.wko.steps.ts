@@ -95,7 +95,7 @@ When('the user closes the created Work Order record', async function () {
         testData.element_text.close_wko_text,
         testData.element_text.yes_button,
         testData.element_text.input_ok_button,
-        getFutureDay(2)
+        getFutureDateFormatted(2)
     );
 });
 

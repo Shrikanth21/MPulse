@@ -109,7 +109,6 @@ When("the user hold the created Work Order record", async function () {
   actions = new WebActions(this.page);
   await workOrderPage.clickButtonByText(testData.element_text.general_tab_text);
   await actions.performKeyboardShortcutWithRobot();
-  //await workOrderPage.clickEditButton()
   await workOrderPage.holdWKO(
     testData.element_text.status_text,
     testData.element_text.status_text,

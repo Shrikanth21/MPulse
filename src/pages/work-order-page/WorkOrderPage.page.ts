@@ -48,6 +48,7 @@ class WorkOrderPage {
         popupTextInput: { selector: "//div[@class='modal-content popup-no-resize ui-resizable']/descendant::input[@class='dx-texteditor-input']", name: "Popup Text Input" },
         modalTitle: { selector: "//div[@class='modal-body']/descendant::div[contains(text(),'The date selected is in the future, please confirm.')]", name: "Modal Title" },
         closeRequestButton: { selector: "//div[@class='modal-header ui-draggable-handle']//button[@title='Click here to close']", name: "Click here to close" },
+        cancelPopupTextInputModal: { selector: "//div[@class='modal-content ui-resizable']/descendant::input[@class='dx-texteditor-input']", name: "Cancel Popup Text Input Modal" },
     };
 
     private getLinkByTitles = (title: string): string => `//a[@title='${title}']`;
@@ -105,13 +106,21 @@ class WorkOrderPage {
     public async clickElementByText(fieldName: string): Promise<void> {
         const fieldLocator = this.actions.getLocator(this.getElementByText(fieldName));
         await this.actions.waitForElementToBeVisible(fieldLocator, `Field: ${fieldName}`);
-        await this.actions.click(fieldLocator, `Field: ${fieldName}`);
+        await this.actions.mouseHoverAndClick(fieldLocator, `Field: ${fieldName}`);
     }
+
+    // public async clickEditIconForField(fieldName: string): Promise<void> {
+    //     const editIconLocator = this.actions.getLocator(this.getEditIcon(fieldName));
+    //     await this.actions.waitForElementToBeVisible(editIconLocator, `Edit Icon for Field: ${fieldName}`);
+    //     await this.actions.click(editIconLocator, `Edit Icon for Field: ${fieldName}`);
+    // }
 
     public async clickEditIconForField(fieldName: string): Promise<void> {
         const editIconLocator = this.actions.getLocator(this.getEditIcon(fieldName));
         await this.actions.waitForElementToBeVisible(editIconLocator, `Edit Icon for Field: ${fieldName}`);
-        await this.actions.mouseHoverAndClick(editIconLocator, `Edit Icon for Field: ${fieldName}`);
+        await this.actions.click(editIconLocator, `Edit Icon for Field: ${fieldName}`);
+        const activeElement = await this.actions.getActiveElement();
+        await activeElement.evaluate(el => el.tagName);
     }
 
     public async selectDateFromCalendar(day: string, buttonText: string): Promise<void> {
@@ -139,7 +148,7 @@ class WorkOrderPage {
             const inputButtonLocator = this.actions.getLocator(this.getOkButton(text));
             await this.actions.waitForElementToBeVisible(inputButtonLocator, `Input Button: ${text}`);
             await this.actions.scrollToAndClick(inputButtonLocator, `Input Button: ${text}`);
-        }else{
+        } else {
             await this.actions.click(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
         }
     }
@@ -367,9 +376,7 @@ class WorkOrderPage {
         await this.clickSaveButton();
         await this.clickElementByText(closeText);
         await this.clickElementByText(yesButtonText);
-        await this.clickPopupCalendarIcon();
-        await this.selectPopupCalendarDate(day);
-        //await this.clickCalendarOkButton();
+        await this.selectCloseDate(day);
         await this.clickOnSecondClosePopup(inputOkButtonText);
     }
 
@@ -428,9 +435,7 @@ class WorkOrderPage {
             this.actions.getLocator(this.elements.cancelReasonSave.selector),
             this.elements.cancelReasonFormGroup.name
         );
-        await this.clickPopupCalendarIcon();
-        await this.selectPopupCalendarDate(day);
-        //await this.clickInputButton(inputOkButtonText);
+        await this.selectCancelDate(day);
         await this.clickOnSecondClosePopup(inputOkButtonText);
 
     }
@@ -438,6 +443,7 @@ class WorkOrderPage {
     public async selectByElementText(radioButtonText: string): Promise<void> {
         const radioButtonLocator = this.actions.getLocator(this.getEleByText(radioButtonText));
         await this.actions.waitForElementToBeVisible(radioButtonLocator, `Radio Button: ${radioButtonText}`);
+        await this.actions.waitForCustomDelay(timeouts.medium);
         await this.actions.click(radioButtonLocator, `Radio Button: ${radioButtonText}`);
     }
 
@@ -456,6 +462,7 @@ class WorkOrderPage {
         for (const field of costFields) {
             await this.setCost(field.id, field.fieldName, field.inputField, field.cost);
         }
+        await this.actions.waitForCustomDelay(timeouts.small);
     }
     public async setEmployeeActualHours(
         personnelText: string,
@@ -485,9 +492,9 @@ class WorkOrderPage {
     }
 
     public async changeWKOstatus(fieldName: string, editIconForField: string, radioButtonText: string): Promise<void> {
-        await this.actions.waitForCustomDelay(timeouts.medium);
+        //await this.actions.waitForCustomDelay(timeouts.medium);
         await this.clickElementByText(fieldName);
-        await this.actions.waitForDelay();
+        //await this.actions.waitForDelay();
         await this.clickEditIconForField(editIconForField);
         await this.selectByElementText(radioButtonText);
     }
@@ -553,6 +560,18 @@ class WorkOrderPage {
         await this.uploadMediaFile(mediaButtonText, mediaLinkTitle, mediaFilePath, btnTitle);
     }
 
+    public async selectCloseDate(day: string): Promise<void> {
+        const locator = await this.actions.getLocator(this.elements.popupTextInput.selector);
+        await this.actions.waitForElementToBeVisible(locator, this.elements.popupTextInput.name);
+        await this.actions.typeText(locator, day, this.elements.popupTextInput.name);
+    }
+
+    public async selectCancelDate(day: string): Promise<void> {
+        const locator = await this.actions.getLocator(this.elements.cancelPopupTextInputModal.selector);
+        await this.actions.waitForElementToBeVisible(locator, this.elements.cancelPopupTextInputModal.name);
+        await this.actions.typeText(locator, day, this.elements.cancelPopupTextInputModal.name);
+    }
+
     public async closeWorkOrderWithButton(
         day: string,
         inputOkButtonText: string
@@ -573,10 +592,7 @@ class WorkOrderPage {
         //     const dateLocators = this.actions.getLocaitator(this.getSecondPopupCalendarDate(day)).nth(0);
         //     await this.actions.click(dateLocators, `Second Occurrence of Calendar Date: ${day}`);
         // }
-        const locator = await this.actions.getLocator(this.elements.popupTextInput.selector);
-        await this.actions.waitForElementToBeVisible(locator, this.elements.popupTextInput.name);
-        await this.actions.typeText(locator, day, this.elements.popupTextInput.name);
-        await this.clickInputButton(inputOkButtonText);
+        await this.selectCloseDate(day);
         await this.clickOnSecondClosePopup(inputOkButtonText);
         await this.actions.click(sideBarExpanderLocator, this.elements.sideBarExpander.name);
         const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);

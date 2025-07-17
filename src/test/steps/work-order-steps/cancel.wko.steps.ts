@@ -7,7 +7,7 @@ import { homePage } from '../../../pages/home-page/Home.page';
 import { workOrderPage } from '../../../pages/work-order-page/WorkOrderPage.page';
 import { generatedDescription } from '../../../helper/get.different.description';
 import { getRandomString } from '../../../helper/get-random-string';
-import { getFutureDay } from '../../../helper/date/get.future.date';
+import { getFutureDateFormatted, getFutureDay } from '../../../helper/date/get.future.date';
 import { timeouts } from '../../../helper/timeouts-config';
 
 let actions: WebActions;
@@ -100,10 +100,9 @@ When('the user cancel the created Work Order record', async function () {
         testData.element_text.status_text,
         testData.element_text.cancel_text,);
     await actions.waitForCustomDelay(timeouts.medium);
-    //await actions.handleAlertPopup();
     await workOrderPage.setCancelReason(
         testData.cancel_reason,
-        getFutureDay(2),
+        getFutureDateFormatted(2),
         testData.element_text.input_ok_button,
     );
     //await workOrderPage.clickSaveButton();
