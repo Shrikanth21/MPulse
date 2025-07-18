@@ -21,7 +21,8 @@ const options = {
     app_url: process.env.app_url!,
     environment: process.env.environment ?? 'qa',
     platform: process.env.platform ?? 'web',
-    dataBase: testData.db_name
+    dataBase: testData.db_name,
+    executionDate: new Date().toLocaleString()
   }
 };
 
