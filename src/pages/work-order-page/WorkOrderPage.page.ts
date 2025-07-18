@@ -526,9 +526,9 @@ class WorkOrderPage {
 
                 case 'Hold Until':
                     await this.actions.click(labelLocator, `Label: ${label}`);
-                    const calendarIconLocator = this.actions.getLocator(this.elements.holdCalendarIcon.selector).nth(1);
-                    await this.actions.waitForElementToBeVisible(calendarIconLocator, this.elements.holdCalendarIcon.name);
-                    await this.actions.click(calendarIconLocator, this.elements.holdCalendarIcon.name);
+                    // const calendarIconLocator = this.actions.getLocator(this.elements.holdCalendarIcon.selector).nth(1);
+                    // await this.actions.waitForElementToBeVisible(calendarIconLocator, this.elements.holdCalendarIcon.name);
+                    // await this.actions.click(calendarIconLocator, this.elements.holdCalendarIcon.name);
                     // const calendarDateLocator = this.actions.getLocator(this.getPopupCalendarDate(day));
                     // await this.actions.click(calendarDateLocator, `Popup Calendar Date: ${day}`);
                     await this.selectHoldDate(day);
