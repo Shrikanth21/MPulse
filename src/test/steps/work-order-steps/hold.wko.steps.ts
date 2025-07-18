@@ -6,7 +6,7 @@ import { homePage } from "../../../pages/home-page/Home.page";
 import { workOrderPage } from "../../../pages/work-order-page/WorkOrderPage.page";
 import { generatedDescription } from "../../../helper/get.different.description";
 import { getRandomString } from "../../../helper/get-random-string";
-import { getFutureDay } from "../../../helper/date/get.future.date";
+import { getFutureDateFormatted, getFutureDay } from "../../../helper/date/get.future.date";
 import { WebActions } from "../../../base/web.action.util";
 
 const filePath = path.resolve(__dirname, "../../docs/MPulse.docx");
@@ -115,7 +115,7 @@ When("the user hold the created Work Order record", async function () {
     testData.element_text.hold_text,
     testData.labels,
     testData.element_text.hold_reason_text,
-    getFutureDay(2),
+    getFutureDateFormatted(2),
     testData.element_text.save_button_text
   );
   //await workOrderPage.clickSaveButton();

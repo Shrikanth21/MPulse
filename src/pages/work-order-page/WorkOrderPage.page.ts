@@ -53,7 +53,7 @@ class WorkOrderPage {
 
     private getLinkByTitles = (title: string): string => `//a[@title='${title}']`;
     private getInputButton = (text: string): string => `//input[@value='${text}']`;
-    private getOkButton = (text: string): string => `//input[@value='${text}' and @ng-click='clickedOkButton()']`;
+    private getOkButton = (text: string): string => `//input[@title='${text}']`;
     private getElementByText = (text: string): string => `//span[text()='${text}']`;
     private getCalendarDate = (day: string): string => `(//div[contains(@class, 'dx-calendar-body')]//span[text()='${day}'])[1]`;
     private getPopupCalendarDate = (day: string): string => `((//div[contains(@class, 'dx-calendar-body')])[2]//span[text()='${day}'])[1]`;
@@ -76,7 +76,7 @@ class WorkOrderPage {
 
 
     public async clickLinkByTitle(title: string): Promise<void> {
-        const elementLocator = this.actions.getLocator(this.getLinkByTitles(title));
+        const elementLocator = this.actions.getLocator(this.getLinkByTitles(title)).nth(0);
         await this.actions.waitForElementToBeVisible(elementLocator, title);
         await this.actions.click(elementLocator, title);
     }
@@ -126,7 +126,7 @@ class WorkOrderPage {
     public async selectDateFromCalendar(day: string, buttonText: string): Promise<void> {
         const dateLocator = this.actions.getLocator(this.getCalendarDate(day));
         await this.actions.click(dateLocator, `Calendar Date: ${day}`);
-        //await this.actions.click(this.actions.getLocator(this.getElementByText(buttonText)), `Button: ${buttonText}`);
+        await this.actions.click(this.actions.getLocator(this.getElementByText(buttonText)), `Button: ${buttonText}`);
     }
 
     public async clickMoreButton(text: string): Promise<void> {
@@ -141,16 +141,18 @@ class WorkOrderPage {
     }
 
     public async clickOnSecondClosePopup(text: string): Promise<void> {
-        const modalTitleLocator = this.actions.getLocator(this.elements.modalTitle.selector);
+        const modalTitleLocator = await this.actions.getLocator(this.elements.modalTitle.selector);
         if (await modalTitleLocator.isVisible()) {
-            const closeRequestButtonLocator = this.actions.getLocator(this.elements.closeRequestButton.selector);
-            await this.actions.click(closeRequestButtonLocator, this.elements.closeRequestButton.name);
-            const inputButtonLocator = this.actions.getLocator(this.getOkButton(text));
+            // const closeRequestButtonLocator = await this.actions.getLocator(this.elements.closeRequestButton.selector);
+            // await this.actions.click(closeRequestButtonLocator, this.elements.closeRequestButton.name);
+            const inputButtonLocator = await this.actions.getLocator(this.getOkButton(text));
             await this.actions.waitForElementToBeVisible(inputButtonLocator, `Input Button: ${text}`);
             await this.actions.scrollToAndClick(inputButtonLocator, `Input Button: ${text}`);
-        } else {
             await this.actions.click(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
         }
+        // } else {
+        //     await this.actions.click(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
+        // }
     }
 
     public async clickInputButton(text: string): Promise<void> {
@@ -212,7 +214,6 @@ class WorkOrderPage {
     }
 
     public async linkAssetToTask(recordText: string, assetText: string, linkTitle: string, buttonText: string): Promise<void> {
-        await this.clickSaveButton();
         await this.selectByElementText(recordText);
         await this.clickMoreButton(assetText);
         await this.clickLinkByTitle(linkTitle);
@@ -528,8 +529,9 @@ class WorkOrderPage {
                     const calendarIconLocator = this.actions.getLocator(this.elements.holdCalendarIcon.selector).nth(1);
                     await this.actions.waitForElementToBeVisible(calendarIconLocator, this.elements.holdCalendarIcon.name);
                     await this.actions.click(calendarIconLocator, this.elements.holdCalendarIcon.name);
-                    const calendarDateLocator = this.actions.getLocator(this.getPopupCalendarDate(day));
-                    await this.actions.click(calendarDateLocator, `Popup Calendar Date: ${day}`);
+                    // const calendarDateLocator = this.actions.getLocator(this.getPopupCalendarDate(day));
+                    // await this.actions.click(calendarDateLocator, `Popup Calendar Date: ${day}`);
+                    await this.selectHoldDate(day);
                     break;
             }
         }
@@ -564,12 +566,20 @@ class WorkOrderPage {
         const locator = await this.actions.getLocator(this.elements.popupTextInput.selector);
         await this.actions.waitForElementToBeVisible(locator, this.elements.popupTextInput.name);
         await this.actions.typeText(locator, day, this.elements.popupTextInput.name);
+        await this.actions.click(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
     }
 
     public async selectCancelDate(day: string): Promise<void> {
         const locator = await this.actions.getLocator(this.elements.cancelPopupTextInputModal.selector);
         await this.actions.waitForElementToBeVisible(locator, this.elements.cancelPopupTextInputModal.name);
         await this.actions.typeText(locator, day, this.elements.cancelPopupTextInputModal.name);
+        await this.actions.click(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
+    }
+
+    public async selectHoldDate(day: string): Promise<void> {
+        const locator = await this.actions.getLocator(this.elements.popupTextInput.selector).nth(2);
+        await this.actions.waitForElementToBeVisible(locator, this.elements.popupTextInput.name);
+        await this.actions.typeText(locator, day, this.elements.popupTextInput.name);
     }
 
     public async closeWorkOrderWithButton(

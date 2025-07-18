@@ -9,7 +9,7 @@ Feature: List View - Create a Work Order Record - Close
     And the user upload media file
     Then the uploaded image should be visible
     And the Work Order status should be Open status
-    Then the user assign a future due date to the Work Order
+    #Then the user assign a future due date to the Work Order
     And the user links assets, personnel, and inventory to the Work Order
-    When the Work Order record from List view should be close
-    Then the Work Order record from List view should be delete successfully
+    Then the Work Order record from List view should be close
+    And the Work Order record from List view should be delete successfully

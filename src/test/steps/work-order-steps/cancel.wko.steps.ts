@@ -93,8 +93,6 @@ When('the user cancel the created Work Order record', async function () {
     actions = new WebActions(this.page);
     await workOrderPage.clickButtonByText(testData.element_text.general_tab_text);
     await actions.performKeyboardShortcutWithRobot();
-    await workOrderPage.clickSaveButton();
-
     await workOrderPage.changeWKOstatus(
         testData.element_text.status_text,
         testData.element_text.status_text,
@@ -105,7 +103,6 @@ When('the user cancel the created Work Order record', async function () {
         getFutureDateFormatted(2),
         testData.element_text.input_ok_button,
     );
-    //await workOrderPage.clickSaveButton();
 });
 
 Then('the Work Order record should be canceled successfully', async function () {

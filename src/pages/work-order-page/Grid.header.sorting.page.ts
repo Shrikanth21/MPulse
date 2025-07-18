@@ -38,6 +38,7 @@ class GridPage {
     }
 
     public async clickColumnHeader(): Promise<void> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
         const sortbyid = this.actions.getLocator(this.Elements.sortingwobyID.selector);
         await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.sortingwobyID.name);
         await this.actions.click(sortbyid, this.Elements.sortingwobyID.name);
@@ -51,6 +52,7 @@ class GridPage {
     }
 
     public async verifySortedWorkOrderId(beforesortedText: string): Promise<void> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
         const afteresortedwoID = this.actions.getLocator(this.Elements.beforewoID.selector).nth(0);
         await this.actions.waitForElementToBeVisible(afteresortedwoID, this.Elements.beforewoID.name);
         const aftereSortedwoID = await afteresortedwoID.innerText();

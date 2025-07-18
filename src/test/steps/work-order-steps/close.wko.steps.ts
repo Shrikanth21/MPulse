@@ -50,7 +50,7 @@ When('the user assign a future due date to the Work Order', async function () {
         getFutureDay(2),
         testData.element_text.ok_button_text
     );
-
+    await this.clickSaveButton();
 });
 
 When('the user links assets, personnel, and inventory to the Work Order', async function () {
@@ -104,7 +104,7 @@ Then('the Work Order record should be closed successfully', async function () {
     await workOrderPage.validateElementText(testData.element_text.closed_status_text);
 });
 
-When('the user deletes the newly created Work Order record', async function () {
+Then('the user deletes the newly created Work Order record', async function () {
     await workOrderPage.deleteRecord(testData.icons.crossIcon,
         testData.element_text.continue_button_text);
 });
@@ -125,7 +125,7 @@ When("the user upload media file", async function () {
     );
 });
 
-When('the Work Order record from List view should be close', async function () {
+Then('the Work Order record from List view should be close', async function () {
     await workOrderPage.closeWorkOrderWithButton(getFutureDateFormatted(2), testData.element_text.input_ok_button);
 });
 

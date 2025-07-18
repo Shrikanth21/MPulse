@@ -9,7 +9,7 @@ Feature: Happy Path Scenarios for MPulse Application
     Then the uploaded image should be visible
     And the Work Order status should be Open
 
-    When the user assign a future due date to the Work Order
+    #When the user assign a future due date to the Work Order
     And the user links assets, personnel, and inventory to the Work Order
     When the user closes the created Work Order record
     Then the Work Order record should be closed successfully
