@@ -1,0 +1,141 @@
+{
+  "homePageURL": "https://dev.mpulse9.com/#/main/maintenanceAdvisor/dashboard",
+  "workOrderRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/WorkOrderRecords/",
+  "maintenanceRequestPageRecordsURL": "https://dev.mpulse9.com/#/main/fal/WorkRequestRecords/",
+  "workOrderURL": "https://dev.mpulse9.com/#/main/workOrders/WorkOrders",
+  "workRequest": "https://dev.mpulse9.com/#/main/fal/WorkRequestRecords/",
+  "wkoMenuItemTitle": "Work Orders",
+  "wkoSubMenuItemTitle": "Work Order Records",
+  "maintenanceRequestSubMenuItemTitle": "Maintenance Request Records",
+  "managementToolButton": "Management Tools",
+  "workFLow": "WorkFlow",
+  "workOrderTitle": "Work Orders",
+  "customization": "Customization",
+  "language": "Language",
+  "wo_info": {
+    "requester_email": "shrikanth.hk@inapp.com",
+    "assetAssignedToTask": "Asset Assigned to Task",
+    "assetId": "EQU-023",
+    "personnelAssignedToAsset": "Personnel Assigned to Asset",
+    "empId": "EMP-001",
+    "inventoryAssignedToAsset": "Inventory Assigned to Asset",
+    "inventoryId": "PRT-001",
+    "maintenanceRequestId": "WRQ",
+    "workOrderId": "WKO"
+  },
+  "icons": {
+    "asset_link_icon": "Link Additional Asset",
+    "personnel_link_icon": "Link Additional Personnel",
+    "personnel_eye_icon": "View TimeSheet Details for Selected Personnel",
+    "inventory_link_icon": "Link Additional Inventory",
+    "media_link_icon": "Click here to link a record",
+    "plusIcon": "Add new record",
+    "calendarIcon": "Date Due",
+    "crossIcon": "Delete current record",
+    "plusIcon_title": "Add Row",
+    "crossIcon_title": "Click here to close"
+  },
+  "element_text": {
+    "got_it_btn": "GOT IT",
+    "link_button": "Link",
+    "ok_button_text": "OK",
+    "save_button": "Save",
+    "replace_button": "Replace",
+    "input_ok_button": "OK",
+    "close_wko_text": "Close Work Order",
+    "yes_button": "Yes",
+    "continue_button_text": "Continue",
+    "media_text": "Media",
+    "general_tab_text": "General",
+    "open_status_text": "Open",
+    "closed_status_text": "Closed",
+    "pending_status_text": "Pending",
+    "convert_status": "Converted",
+    "waiting_for_reply": "Waiting for Reply",
+    "convert_status_id": "RequestStatusDesc",
+    "timeSheetDetails_text": "Time Sheet Details",
+    "hoursField_text": "0.00",
+    "hours": "2",
+    "upload_text": "Upload",
+    "edit_button": "editor",
+    "convert_wko_order": "Convert to Work Order",
+    "yes_convert": "Yes",
+    "send_button": "Send",
+    "reply_text": "Reply To Requester",
+    "quite_waiting": "Quit Waiting",
+    "auto_convert_text": "Would you like to view the converted Work Order?",
+    "email_sent_successfully": "Your message was sent successfully",
+    "cancellation_reason": "The equipment issue was resolved by the on-site team before the request was processed."
+  },
+
+  "custom_text": {
+    "active_user": "Active Users",
+    "invetory_Quant": "Adjust Inventory Quantities",
+    "advanced_inventory": "Advanced Inventory",
+    "approval_list": "Approvals List",
+    "archive": "Archive",
+    "assete_status": "Asset Status Board",
+    "auto_Id": "Auto ID",
+    "wko": "Work Order Records",
+    "work_order": "Work Orders",
+    "work_hours": "Working Hours And Dates",
+    "lable_status": "Status",
+    "status_value": "Status 1",
+    "customization": "Customization",
+    "language": "Language"
+  },
+  "mrrequestdropdownSelections": [
+    {
+      "ddType": "Department"
+    },
+    {
+      "ddType": "AssetType"
+    },
+    {
+      "ddType": "CostCenter"
+    },
+    {
+      "ddType": "Location"
+    },
+    {
+      "ddType": "System"
+    },
+    {
+      "ddType": "LK_ASSETSTATUS"
+    },
+    {
+      "ddType": "FailureCode"
+    },
+    {
+      "ddType": "Reasoncode"
+    },
+    {
+      "ddType": "WorkOrderType"
+    }
+  ],
+  "customLanguageDropDown": [
+    {
+      "ddType": "moduleDropDown",
+      "ddValue": "Work Order Records"
+    },
+    {
+      "ddType": "fieldDropDown",
+      "ddValue": "Status"
+    }
+  ],
+
+  "costFields": [
+    {
+      "id": "OtherCost",
+      "fieldName": "Other Cost",
+      "inputField": "OtherCost",
+      "cost": "50"
+    },
+    {
+      "id": "EstCost",
+      "fieldName": "Estimated Cost",
+      "inputField": "EstCost",
+      "cost": "100"
+    }
+  ]
+}

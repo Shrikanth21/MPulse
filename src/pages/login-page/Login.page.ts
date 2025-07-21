@@ -21,7 +21,7 @@ class LoginPage {
     mpulseLogo: { selector: "//div[@class='loginLogo']", name: 'MPulse Logo' },
     selectDatabaseHeader: { selector: "//h4[text()='Select Database']", name: 'Select Database Header' },
     firstTableCell: { selector: "//td[@class='ng-binding sorting_1']", name: 'First Table Cell' },
-    continueButton: { selector: "//button[@value='Submit']", name: 'Continue Button' },
+    continueButton: { selector: "//button[@value='Submit']", name: 'Continue Button' }
   };
 
   public async fillUsername(username: string): Promise<void> {

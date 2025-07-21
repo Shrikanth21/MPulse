@@ -107,6 +107,7 @@ class CreateFilterPage {
 
     public async clickOnSaveButton(): Promise<void> {
         const saveButtonLocator = this.actions.getLocator(this.elements.saveButton.selector);
+        await this.actions.waitForElementToBeVisible(saveButtonLocator, this.elements.saveButton.name);
         await this.actions.click(saveButtonLocator, this.elements.saveButton.name);
     }
 

@@ -1,6 +1,7 @@
 import { Page } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
+import { timeouts } from "../../helper/timeouts-config";
 
 class MaintenanceAdvisorPage {
     private get currentPage(): Page {
@@ -69,15 +70,19 @@ class MaintenanceAdvisorPage {
         await this.actions.assertEqual(actualText.trim(), `Work Order Records-${layoutName}`, "Draggable block head text mismatch");
     }
 
-    public async verifyMaintenanceAdvisorColorCodeApplied(color: string): Promise<void> {
+    public async verifyMaintenanceAdvisorColorCodeApplied(expectedColor: string): Promise<void> {
         const colorCodeFilterInput = this.actions.getLocator(this.elements.dataRows.selector).nth(0);
         await this.actions.waitForElementToBeVisible(colorCodeFilterInput, this.elements.dataRows.name);
-        const appliedColor = await this.actions.getCSSProperty(colorCodeFilterInput, 'background-color', this.elements.dataRows.name);
-        console.log(`Applied color code: ${appliedColor}`);
-        await this.actions.assertEqual(appliedColor, color, `Color code for ${color} is not applied correctly`);
+        await this.actions.waitForCustomDelay(timeouts.small);
+        let appliedColor = await this.actions.getCSSProperty(colorCodeFilterInput, 'background-color', this.elements.dataRows.name);
+        if (!appliedColor || appliedColor === 'transparent') {
+            const parentLocator = colorCodeFilterInput.locator('..');
+            appliedColor = await this.actions.getCSSProperty(parentLocator, 'background-color', `Parent of ${this.elements.dataRows.name}`);
+        }
+        await this.actions.assertEqual(appliedColor, expectedColor, `Color code "${expectedColor}" is not applied correctly. Found: "${appliedColor}"`);
     }
 
-    public async removeLayout(layoutName: string): Promise<void> {
+    public async removeLayout(): Promise<void> {
         await this.selectConfigureDashboard();
         const removeButton = this.actions.getLocator(this.elements.removeButton.selector);
         await this.actions.waitForElementToBeVisible(removeButton, this.elements.removeButton.name);

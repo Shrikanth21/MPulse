@@ -22,13 +22,9 @@
   "languageMenuItem": "Language",
   "wo_info": {
     "taskAssignedToWorkOrder": "Task Assigned to Work Order",
-    "taskId": "PMI-022",
     "assetAssignedToTask": "Asset Assigned to Task",
-    "assetId": "EQU-001",
     "personnelAssignedToAsset": "Personnel Assigned to Asset",
-    "empId": "EMP-001",
     "inventoryAssignedToAsset": "Inventory Assigned to Asset",
-    "inventoryId": "PRT-001",
     "workOrderId": "WKO"
   },
   "icons": {

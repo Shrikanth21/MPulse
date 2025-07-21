@@ -34,5 +34,5 @@ Then(/^the layout should be visible in dropdown lists$/, async () => {
 });
 
 Then(/^the user remove the Maintenance Advisor layout$/, async () => {
-    await maintenanceAdvisorPage.removeLayout(generatedLayoutName);
+    await maintenanceAdvisorPage.removeLayout();
 });
