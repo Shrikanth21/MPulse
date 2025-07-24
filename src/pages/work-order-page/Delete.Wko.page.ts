@@ -19,12 +19,19 @@ class DeleteWOPage {
         noMatchesFound: { selector: "//div[contains(text(),'No matches found.')]", name: 'No matches found message' },
     };
 
+    /**
+     * Gets the text of the current Work Order ID.
+     * @returns The text of the Work Order ID.
+     */
     public async getCurrentWorkOrderIdText(): Promise<string> {
         const beforesortedwoID = this.actions.getLocator(this.Elements.getWorkOrderId.selector);
         return await this.actions.getText(beforesortedwoID, this.Elements.getWorkOrderId.name);
     }
 
-    public async deletecurrentwo(): Promise<void> {
+    /**
+     * Deletes the current Work Order.
+     */
+    public async deleteCurrentWO(): Promise<void> {
         const deletewolocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
         await this.actions.click(deletewolocator, this.Elements.deleteWOPage.name);
         const continueButtonEL = this.actions.getLocator(this.Elements.continueButton.selector);
@@ -32,6 +39,10 @@ class DeleteWOPage {
         await this.currentPage.waitForTimeout(timeouts.large);
     }
 
+    /**
+     * Verifies that the Work Order ID is no longer present after deletion.
+     * @param beforeDeleteWorkOrderId The Work Order ID before deletion.
+     */
     public async verifyDeletedWOId(beforeDeleteWorkOrderId: string): Promise<void> {
         const workOrderIdLocator = this.actions.getLocator(this.Elements.getWorkOrderId.selector);
         await this.actions.waitForElementToBeVisible(workOrderIdLocator, this.Elements.getWorkOrderId.name);
@@ -43,7 +54,11 @@ class DeleteWOPage {
         );
     }
 
-    public async vwerifyDeletedWOIdInSearchResults(beforeDeleteWorkOrderId: string): Promise<void> {
+    /**
+     * Verifies that the Work Order ID is not present in the search results after deletion.
+     * @param beforeDeleteWorkOrderId The Work Order ID before deletion.
+     */
+    public async verifyDeletedWOIdInSearchResults(beforeDeleteWorkOrderId: string): Promise<void> {
         const workOrderIdLocator = this.actions.getLocator(this.Elements.getWorkOrderId.selector);
         await this.actions.waitForElementToBeVisible(workOrderIdLocator, this.Elements.getWorkOrderId.name);
         const workOrderIdText = await this.actions.getText(workOrderIdLocator, this.Elements.getWorkOrderId.name);
@@ -54,6 +69,9 @@ class DeleteWOPage {
         );
     }
 
+    /**
+     * Verifies that the "No matches found" message is displayed.
+     */
     public async verifyNoMatchesFoundMessage(): Promise<void> {
         const noMatchesFoundLocator = this.actions.getLocator(this.Elements.noMatchesFound.selector);
         await this.actions.waitForElementToBeVisible(noMatchesFoundLocator, this.Elements.noMatchesFound.name);

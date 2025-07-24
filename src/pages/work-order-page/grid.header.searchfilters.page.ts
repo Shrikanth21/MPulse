@@ -2,6 +2,7 @@ import { Page } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
 import { timeouts } from "../../helper/timeouts-config";
+import { commonActionPage } from "../common.action.page";
 
 class GridHeaderSearchFiltersPage {
     private get currentPage(): Page {
@@ -19,13 +20,13 @@ class GridHeaderSearchFiltersPage {
         searchTextBox: { selector: "//tr[@class='dx-row dx-column-lines dx-datagrid-filter-row']//input[@role='textbox']", name: "Search Text Box" },
     };
 
-    private getSearchOptionByTitle = (title: string): string => `//span[text()='${title}']`;
-    public getRowCellSelector = (index: number): string => `//td[contains(@aria-describedby,'dx-col') and @aria-colindex='${index}']`;
-
-
-    public async clickSearchInput(coulmnName: string): Promise<void> {
+    /**
+     * Clicks on the search input for a specific column.
+     * @param columnName The name of the column to click on.
+     */
+    public async clickSearchInput(columnName: string): Promise<void> {
         let searchInput;
-        switch (coulmnName) {
+        switch (columnName) {
             case "ID":
                 searchInput = this.actions.getLocator(this.elements.searchInput.selector).nth(0);
                 break;
@@ -33,21 +34,31 @@ class GridHeaderSearchFiltersPage {
                 searchInput = this.actions.getLocator(this.elements.searchInput.selector).nth(1);
                 break;
             default:
-                throw new Error(`Unknown column name: ${coulmnName}`);
+                throw new Error(`Unknown column name: ${columnName}`);
         }
-        await this.actions.waitForElementToBeVisible(searchInput, `${coulmnName} Search Input`);
-        await this.actions.hoverOverElement(searchInput, `${coulmnName} Search Input`);
+        await this.actions.waitForElementToBeVisible(searchInput, `${columnName} Search Input`);
+        await this.actions.hoverOverElement(searchInput, `${columnName} Search Input`);
     }
 
+    /**
+     * Selects a search option by its title.
+     * @param title The title of the search option to select.
+     */
     public async selectSearchOption(title: string): Promise<void> {
-        const searchOption = this.actions.getLocator(this.getSearchOptionByTitle(title)).nth(0);
+        const searchOption = this.actions.getLocator(commonActionPage.getElementByText(title)).nth(0);
         await this.actions.waitForElementToBeVisible(searchOption, `Search option "${title}"`);
         await this.actions.click(searchOption, `Search option "${title}"`);
     }
 
-    public async enterSearchValueForColumn(coulmnName: string, value: string): Promise<void> {
+    /**
+     * Enters a search value for a specific column.
+     * @param columnName The name of the column to enter the search value for.
+     * @param value The value to enter in the search input.
+     * @throws Error if the column name is unknown.
+     */
+    public async enterSearchValueForColumn(columnName: string, value: string): Promise<void> {
         let searchInput;
-        switch (coulmnName) {
+        switch (columnName) {
             case "ID":
                 searchInput = this.actions.getLocator(this.elements.searchTextBox.selector).nth(0);
                 break;
@@ -55,7 +66,7 @@ class GridHeaderSearchFiltersPage {
                 searchInput = this.actions.getLocator(this.elements.searchTextBox.selector).nth(1);
                 break;
             default:
-                throw new Error(`Unknown column name: ${coulmnName}`);
+                throw new Error(`Unknown column name: ${columnName}`);
         }
         await this.actions.waitForElementToBeVisible(searchInput, this.elements.searchTextBox.name);
         await this.actions.typeText(searchInput, value, this.elements.searchTextBox.name);
@@ -64,16 +75,25 @@ class GridHeaderSearchFiltersPage {
         await this.actions.waitForCustomDelay(timeouts.largest);
     }
 
-    public async clickResetOption(coulmnName: string): Promise<void> {
-        await this.clickSearchInput(coulmnName);
+    /**
+     * Clicks on the reset option in the search filters.
+     * @param columnName The name of the column to reset.
+     */
+    public async clickResetOption(columnName: string): Promise<void> {
+        await this.clickSearchInput(columnName);
         const resetOption = this.actions.getLocator(this.elements.reset.selector);
         await this.actions.waitForElementToBeVisible(resetOption, this.elements.reset.name);
         await this.actions.click(resetOption, this.elements.reset.name);
     }
 
-    public async getFirstIdText(coulmnName: string): Promise<string> {
+    /**
+     * Verifies that the search input is visible for a specific column.
+     * @param columnName The name of the column to check.
+     * @returns A boolean indicating whether the search input is visible.
+     */
+    public async getFirstIdText(columnName: string): Promise<string> {
         let columnIndex: number;
-        switch (coulmnName) {
+        switch (columnName) {
             case "ID":
                 columnIndex = 2;
                 break;
@@ -81,23 +101,33 @@ class GridHeaderSearchFiltersPage {
                 columnIndex = 3;
                 break;
             default:
-                throw new Error(`Unknown column name: ${coulmnName}`);
+                throw new Error(`Unknown column name: ${columnName}`);
         }
-        const firstCell = this.actions.getLocator(this.getRowCellSelector(columnIndex)).nth(0);
-        await this.actions.waitForElementToBeVisible(firstCell, `First ${coulmnName} cell`);
-        return await this.actions.getText(firstCell, `First ${coulmnName} cell`);
+        const firstCell = this.actions.getLocator(commonActionPage.getRowCellSelector(columnIndex)).nth(0);
+        await this.actions.waitForElementToBeVisible(firstCell, `First ${columnName} cell`);
+        return await this.actions.getText(firstCell, `First ${columnName} cell`);
     }
 
+    /**
+     * Gets the locator for a column header by its name.
+     * @param columnName The name of the column.
+     * @returns The XPath locator for the column header.
+     */
     public async getColumnCellTextsByIndex(index: number): Promise<string[]> {
-        const columnCellSelector = this.getRowCellSelector(index);
+        const columnCellSelector = commonActionPage.getRowCellSelector(index);
         const columnCells = this.actions.getLocator(columnCellSelector);
         await this.actions.waitForElementToBeVisible(columnCells.first(), `Column cell at index ${index}`);
         return await columnCells.allInnerTexts();
     }
 
-    public async getAndStoreAllRowCellTextsAfterSearch(coulmnName: string): Promise<string[]> {
+    /**
+     * gets stored row cell texts after a search.
+     * @param columnName The name of the column.
+     * @returns The XPath locator for the column header.
+     */
+    public async getAndStoreAllRowCellTextsAfterSearch(columnName: string): Promise<string[]> {
         let columnIndex: number;
-        switch (coulmnName) {
+        switch (columnName) {
             case "ID":
                 columnIndex = 2;
                 break;
@@ -105,14 +135,20 @@ class GridHeaderSearchFiltersPage {
                 columnIndex = 3;
                 break;
             default:
-                throw new Error(`Unknown column name: ${coulmnName}`);
+                throw new Error(`Unknown column name: ${columnName}`);
         }
         const rowCellTexts = await this.getColumnCellTextsByIndex(columnIndex);
         return rowCellTexts;
     }
 
-    public async verifyFilteredResults(expectedText: string, option: string, coulmnName: string): Promise<void> {
-        const rowCellTexts: string[] = await this.getAndStoreAllRowCellTextsAfterSearch(coulmnName);
+    /**
+     * Verifies that the search input is visible for a specific column.
+     * @param columnName The name of the column to check.
+     * @return A boolean indicating whether the search input is visible.
+     * @returns A boolean indicating whether the search input is visible.
+     */
+    public async verifyFilteredResults(expectedText: string, option: string, columnName: string): Promise<void> {
+        const rowCellTexts: string[] = await this.getAndStoreAllRowCellTextsAfterSearch(columnName);
         switch (option) {
             case "Contains":
                 rowCellTexts.includes(expectedText)
@@ -161,7 +197,7 @@ class GridHeaderSearchFiltersPage {
                 }
                 break;
             case "Equals":
-                const firstCell = await this.actions.getLocator(this.getRowCellSelector(2)).nth(0);
+                const firstCell = await this.actions.getLocator(commonActionPage.getRowCellSelector(2)).nth(0);
                 await this.actions.waitForElementToBeVisible(firstCell, `First cell after search`);
                 const text = await this.actions.getText(firstCell, `First cell text after search`);
                 await this.actions.assertEqual(text, expectedText, `Expected "${text}" to equal "${expectedText}"`);

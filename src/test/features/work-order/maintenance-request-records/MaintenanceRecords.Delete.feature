@@ -8,4 +8,4 @@ Feature: Maintenance Request - Delete Maintenance Request Record
     And the user verifies the maintenance record status
     And the user click on delete current maintenance Record
     Then the  Maintenance Request Records should be deleted successfully
-    And the user should not see the  Maintenance Request Records in the search results
+    And the user should not see the Maintenance Request Records in the search results

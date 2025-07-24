@@ -10,11 +10,6 @@ import { getFutureDateFormatted, getFutureDay } from '../../../helper/date/get.f
 
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
 
-Given('the user log into the application', async function () {
-    const credentials = await loginPage.loadExcelCredentials();
-    await loginPage.login(credentials.username);
-});
-
 When('the user navigates to the Work Order Records page', async function () {
     await homePage.navigateToCapitalAssetsRecordsPage(
         testData.homePageURL,
@@ -118,7 +113,7 @@ When('the user creates a new Work Order record from List view with a unique desc
     await workOrderPage.listViewWKO(generatedDescription);
 });
 
-When("the user upload media file", async function () {
+When("the user uploads media file", async function () {
     await workOrderPage.addMediaAndSelectRecord(testData.element_text.media_text, testData.icons.media_link_icon, filePath, testData.element_text.upload_text);
     await workOrderPage.setGeneralFields(testData.element_text.general_tab_text, getRandomString('digits', 10),
         { ddType: testData.dropdownSelections.map((item: any) => item.ddType) }

@@ -2,7 +2,7 @@ Feature: Happy Path Scenarios for MPulse Application
 
   @happyPath
   Scenario: User can successfully create and view a work order
-    Given the user log into the application
+    Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user creates a new Work Order with a unique description and uploads media

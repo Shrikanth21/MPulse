@@ -1,7 +1,7 @@
 Feature: Asset and Work Order Management in MPulse Application
 
   Background:
-    Given the user log into the application
+    Given the user logs into the application
     And the user selects a specific database
 
   @workOrderClose

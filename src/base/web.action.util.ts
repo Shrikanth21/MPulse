@@ -9,19 +9,54 @@ export class WebActions {
     this.page = page;
   }
 
+  /**
+   * Gets a locator for the specified element.
+   * @param selector The selector for the element to get.
+   * @returns The locator for the specified element.
+   */
   public getLocator(selector: string): Locator {
     return this.page.locator(selector);
   }
 
+  /**
+   * Gets a locator for the specified element inside an iframe.
+   * @param selector The selector for the element to get inside the iframe.
+   * @returns The locator for the specified element inside the iframe.
+   */
   public getLocatorInsideIframe(selector: string): Locator {
     return this.page.frameLocator('iframe').locator(selector);
   }
 
+  /**
+   * switches to the main frame of the page.
+   * @param locator The locator for the element to wait for.
+   * @param elementDescription Description of the element for logging.
+   */
+  public async switchToMainFrame(): Promise<void> {
+    try {
+      await this.page.mainFrame();
+      logger.info(`Switched to main frame successfully.`);
+    } catch (error) {
+      logger.error(`Failed to switch to main frame. Error: ${error}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Gets the currently active element on the page.
+   * @returns The locator for the currently active element.
+   */
   public async getActiveElement(): Promise<Locator> {
     const handle = await this.page.evaluateHandle(() => document.activeElement);
     return handle.asElement() ? this.page.locator(':focus') : this.page.locator('');
   }
 
+  /**
+   * Gets a locator for the specified element that is visible.
+   * @param selector The selector for the element to get.
+   * @param description Optional description for logging purposes.
+   * @returns The locator for the specified element that is visible.
+   */
   public getVisibleLocator(selector: string, description?: string): Locator {
     const locator = this.page.locator(selector).filter({ has: this.page.locator(':visible') });
     if (description) {
@@ -30,6 +65,11 @@ export class WebActions {
     return locator;
   }
 
+  /**
+   * Waits for the specified element to be visible.
+   * @param locator The locator for the element to wait for.
+   * @param elementDescription Description of the element for logging.
+   */
   public async hoverOverElement(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -42,6 +82,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Clicks on the specified element.
+   * @param locator The locator for the element to click.
+   * @param elementDescription Description of the element for logging.
+   */
   public async click(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -54,6 +99,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Scrolls to the specified element and clicks it.
+   * @param locator The locator for the element to scroll to and click.
+   * @param elementDescription Description of the element for logging.
+   */
   public async scrollToAndClick(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -67,6 +117,12 @@ export class WebActions {
     }
   }
 
+  /**
+   * Types text into the specified element.
+   * @param locator The locator for the element to type into.
+   * @param text The text to type into the element.
+   * @param elementDescription Description of the element for logging.
+   */
   public async typeText(locator: Locator, text: string, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -79,6 +135,12 @@ export class WebActions {
     }
   }
 
+  /**
+   * Clears the text in the specified element and types new text.
+   * @param locator The locator for the element to clear and type into.
+   * @param text The text to type into the element.
+   * @param elementDescription Description of the element for logging.
+   */
   public async clearAndTypeText(locator: Locator, text: string, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -92,6 +154,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Waits for the specified element to be present and visible.
+   * @param locator The locator for the element to wait for.
+   * @param elementDescription Description of the element for logging.
+   */
   public async scrollToElement(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -104,6 +171,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Double-clicks on the specified element.
+   * @param locator The locator for the element to double-click.
+   * @param elementDescription Description of the element for logging.
+   */
   public async doubleClick(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -116,6 +188,30 @@ export class WebActions {
     }
   }
 
+  /**
+   * click on an element using the evaluate method.
+   * @param locator The locator for the element to wait for.
+   * @param elementDescription Description of the element for logging.
+   */
+  public async clickButtonOnMainFrame(selector: string, description: string): Promise<void> {
+    try {
+      const mainFrame = this.page.mainFrame();
+      const button = mainFrame.locator(selector);
+      await button.waitFor({ state: 'visible' });
+      await button.scrollIntoViewIfNeeded();
+      await button.click();
+      logger.info(`Clicked on: ${description}`);
+    } catch (error) {
+      logger.error(`Failed to click on ${description}. Error: ${error}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Right-clicks on the specified element.
+   * @param locator The locator for the element to right-click.
+   * @param elementDescription Description of the element for logging.
+   */
   public async mouseHoverAndClick(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -129,6 +225,12 @@ export class WebActions {
     }
   }
 
+  /**
+   * Uploads a file to the specified element.
+   * @param locator The locator for the element to upload the file to.
+   * @param filePath The path of the file to upload.
+   * @param elementDescription Description of the element for logging.
+   */
   public async uploadFile(locator: Locator, filePath: string, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -141,6 +243,13 @@ export class WebActions {
     }
   }
 
+  /**
+   * Drags an element to a target element.
+   * @param sourceLocator The locator for the element to drag.
+   * @param targetLocator The locator for the target element to drop onto.
+   * @param sourceDescription Description of the source element for logging.
+   * @param targetDescription Description of the target element for logging.
+   */
   public async dragAndDrop(sourceLocator: Locator, targetLocator: Locator, sourceDescription: string, targetDescription: string): Promise<void> {
     try {
       await this.waitForElement(sourceLocator, sourceDescription);
@@ -154,6 +263,12 @@ export class WebActions {
     }
   }
 
+  /**
+   * Gets the text content of the specified element.
+   * @param locator The locator for the element to get text from.
+   * @param elementDescription Description of the element for logging.
+   * @returns The text content of the specified element.
+   */
   public async getText(locator: Locator, elementDescription: string): Promise<string> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -166,9 +281,14 @@ export class WebActions {
     }
   }
 
+  /**
+   * Handles alert popups.
+   * @param accept Whether to accept the alert.
+   * @param promptText The text to enter into the prompt, if applicable.
+   */
   public async handleAlertPopup(accept: boolean = true, promptText: string | null = null): Promise<void> {
     try {
-      this.page.on('dialog', async (dialog) => {
+      this.page.once('dialog', async (dialog) => {
         logger.info(`Alert popup detected with message: ${dialog.message()}`);
         if (promptText !== null) {
           await dialog.accept(promptText);
@@ -187,6 +307,9 @@ export class WebActions {
     }
   }
 
+  /**
+   * Performs a keyboard shortcut using the Robot framework.
+   */
   public async performKeyboardShortcutWithRobot(): Promise<void> {
     try {
       await this.page.keyboard.down('Control');
@@ -200,6 +323,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Performs a keyboard action on the specified element.
+   * @param key The key to press.
+   * @param elementDescription Optional description of the element for logging.
+   */
   public async performKeyboardAction(key: string, elementDescription?: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -211,6 +339,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Clicks on the specified element using the Actions API.
+   * @param locator The locator for the element to click.
+   * @param elementDescription Description of the element for logging.
+   */
   public async clickUsingActions(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -225,12 +358,16 @@ export class WebActions {
     }
   }
 
+  /**
+   * Validates the current URL of the page.
+   * @param expectedUrl The expected URL to validate against.
+   */
   public async validateCurrentUrl(expectedUrl: string): Promise<void> {
     try {
       await this.waitForDelay();
       await this.page.waitForLoadState('networkidle');
-      await this.page.waitForTimeout(3000);
-      await this.page.waitForURL(expectedUrl, { waitUntil: 'load', timeout: 20000 });
+      await this.waitForDelay();
+      await this.page.waitForURL(expectedUrl, { waitUntil: 'load', timeout: timeouts.large });
       logger.info(`Successfully validated current URL: ${expectedUrl}`);
     } catch (error) {
       logger.error(`Failed to validate current URL: ${expectedUrl} | Error: ${error}`);
@@ -238,10 +375,17 @@ export class WebActions {
     }
   }
 
+  /**
+   * Gets the CSS property value of the specified element.
+   * @param locator The locator for the element to get the CSS property from.
+   * @param property The CSS property to retrieve.
+   * @param elementDescription Description of the element for logging.
+   * @returns The value of the specified CSS property.
+   */
   public async getCSSProperty(locator: Locator, property: string, elementDescription: string): Promise<string> {
     try {
       await this.waitForElement(locator, elementDescription);
-      await this.page.waitForTimeout(timeouts.small);
+      await this.waitForDelay();
       const value = await locator.evaluate((el, prop) => {
         return window.getComputedStyle(el).getPropertyValue(prop);
       }, property);
@@ -253,14 +397,26 @@ export class WebActions {
     }
   }
 
+  /**
+   * Waits for a specified delay.
+   */
   public async waitForDelay(): Promise<void> {
     await this.page.waitForTimeout(timeouts.small);
   }
 
+  /**
+   * Waits for a custom delay.
+   * @param delayMs The delay in milliseconds.
+   */
   public async waitForCustomDelay(delayMs: number): Promise<void> {
     await this.page.waitForTimeout(delayMs);
   }
 
+  /**
+   * Waits for the specified element to be visible.
+   * @param locator The locator for the element to wait for.
+   * @param elementDescription Description of the element for logging.
+   */
   public async waitForElementToBeVisible(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -270,6 +426,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Waits for the specified element to be enabled.
+   * @param locator The locator for the element to wait for.
+   * @param elementDescription Description of the element for logging.
+   */
   public async waitForElementToBeEnabled(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -282,6 +443,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Waits for the specified element to be disabled.
+   * @param locator The locator for the element to wait for.
+   * @param elementDescription Description of the element for logging.
+   */
   public async waitForElementToBeDisabled(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForElement(locator, elementDescription);
@@ -294,6 +460,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Waits for the specified element to be hidden.
+   * @param locator The locator for the element to wait for.
+   * @param elementDescription Description of the element for logging.
+   */
   public async waitForElementToBeHidden(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -305,6 +476,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Waits for the specified element to be present in the DOM.
+   * @param locator The locator for the element to wait for.
+   * @param elementDescription Description of the element for logging.
+   */
   public async waitToBeVisible(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -316,6 +492,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Waits for the specified element to be present in the DOM.
+   * @param locator The locator for the element to wait for.
+   * @param elementDescription Description of the element for logging.
+   */
   public async waitForElement(locator: Locator, elementDescription: string): Promise<void> {
     try {
       await locator.isVisible({ timeout: timeouts.medium });
@@ -326,6 +507,12 @@ export class WebActions {
     }
   }
 
+  /**
+   * Waits for a specific condition to be met.
+   * @param conditionFn The function that returns a boolean indicating the condition.
+   * @param timeout The maximum time to wait for the condition in milliseconds.
+   * @param failureMessage Optional message to log if the condition is not met.
+   */
   public async waitForCondition(conditionFn: () => Promise<boolean>, timeout: number, failureMessage: string = 'Condition not met'): Promise<void> {
     const start = Date.now();
     try {
@@ -341,6 +528,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Waits for new dropdown options to load.
+   * @param locator The locator for the dropdown options.
+   * @param timeout The maximum time to wait for the options to load in milliseconds.
+   */
   public async waitForNewDropdownOptionsToLoad(locator: Locator, timeout: number): Promise<void> {
     try {
       const startTime = Date.now();
@@ -363,6 +555,12 @@ export class WebActions {
     }
   }
 
+  /**
+   * Checks if the specified element is visible.
+   * @param locator The locator for the element to check.
+   * @param elementDescription Description of the element for logging.
+   * @returns A boolean indicating whether the element is visible.
+   */
   public async isVisible(locator: Locator, elementDescription: string): Promise<boolean> {
     try {
       const isVisible = await locator.isVisible();
@@ -374,6 +572,12 @@ export class WebActions {
     }
   }
 
+  /**
+   * Asserts that the actual value is not equal to the expected value.
+   * @param actualValue The actual value to check.
+   * @param expectedValue The expected value to compare against.
+   * @param errorMessage Optional error message for the assertion failure.
+   */
   public async assertNotEqual(actualValue: string, expectedValue: string, errorMessage: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -385,6 +589,12 @@ export class WebActions {
     }
   }
 
+  /**
+   * Asserts that the actual value is equal to the expected value.
+   * @param actualValue The actual value to check.
+   * @param expectedValue The expected value to compare against.
+   * @param errorMessage Optional error message for the assertion failure.
+   */
   public async assertEqual(actualValue: string, expectedValue: string, errorMessage?: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -396,6 +606,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Asserts that the condition starts with true.
+   * @param condition The condition to check.
+   * @param message The message to log if the assertion passes.
+   */
   public async assertForStartWithTrue(condition: boolean, message: string): Promise<void> {
     if (condition) {
       console.info(`Assertion passed: ${message}`);
@@ -404,6 +619,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Asserts that the condition is true.
+   * @param condition The condition to check.
+   * @param message The message to log if the assertion passes.
+   */
   public async assertTrue(condition: boolean, message: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -415,6 +635,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Asserts that the condition is false.
+   * @param condition The condition to check.
+   * @param message The message to log if the assertion passes.
+   */
   public async assertFalse(condition: boolean, message: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -426,6 +651,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Asserts that the actual value contains the expected substring.
+   * @param actualValue The actual value to check.
+   * @param expectedSubstring The expected substring to check for.
+   */
   public async assertContains(actualValue: string, expectedSubstring: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -437,6 +667,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Asserts that the actual value does not contain the unexpected substring.
+   * @param actualValue The actual value to check.
+   * @param unexpectedSubstring The unexpected substring to check for.
+   */
   public async assertNotContain(actualValue: string, unexpectedSubstring: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -448,6 +683,11 @@ export class WebActions {
     }
   }
 
+  /**
+   * Asserts that the value is defined.
+   * @param value The value to check.
+   * @param message The message to log if the assertion passes.
+   */
   public async assertDefined(value: any, message: string): Promise<void> {
     try {
       await this.waitForDelay();
@@ -459,11 +699,17 @@ export class WebActions {
     }
   }
 
+  /**
+   * Checks if a checkbox is checked.
+   * @param locator The locator for the checkbox element.
+   * @param elementDescription Description of the checkbox for logging.
+   * @returns A boolean indicating whether the checkbox is checked.
+   */
   public async isCheckboxChecked(locator: Locator, elementDescription: string): Promise<boolean> {
     try {
       await this.waitForElement(locator, elementDescription);
       const ariaChecked = await locator.getAttribute('aria-checked');
-      const isChecked = ariaChecked === 'false';
+      const isChecked = ariaChecked === 'ture';
       logger.info(`Checkbox checked state for ${elementDescription}: ${isChecked}`);
       return isChecked;
     } catch (error) {

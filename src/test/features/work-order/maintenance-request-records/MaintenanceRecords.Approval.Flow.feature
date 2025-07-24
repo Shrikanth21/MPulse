@@ -1,7 +1,7 @@
 Feature: Maintenance Request - Create a record with Approval Flow
 
   Background:
-    Given the user log into the application
+    Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Maintenance Request Records page
     And the user creates a new Maintenance Request with a unique description

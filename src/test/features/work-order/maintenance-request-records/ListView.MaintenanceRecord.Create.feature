@@ -2,7 +2,7 @@ Feature: Maintenance Request - Create from List View
 
   @maintenanceRequest @mrListView @sanityMR
   Scenario: Create a Maintenance Request Record from List View
-    Given the user log into the application
+    Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Maintenance Request Records page
     And the user creates a new Maintenance Request with a unique description in the list view

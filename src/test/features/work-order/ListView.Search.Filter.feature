@@ -2,7 +2,7 @@ Feature: List View - Search and Filter Work Order Records
 
   @filterwko  @listView @e2e @sanityWKListView
   Scenario: Work Order - Filter operations with search conditions in list view
-    Given the user log into the application
+    Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user maximizes the Work Order Records list view display

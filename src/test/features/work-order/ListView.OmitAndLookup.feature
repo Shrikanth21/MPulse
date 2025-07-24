@@ -1,7 +1,7 @@
 Feature: List View - Omit and Lookup functionality
 
   Background:
-    Given the user log into the application
+    Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user maximizes the Work Order Records list view display

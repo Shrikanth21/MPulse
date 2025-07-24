@@ -17,13 +17,12 @@ Then(/^the  Maintenance Request Records should be deleted successfully$/, async 
     await deleteMaintenanceRecordsPage.verifyDeletedMRId(currentRecord);
 });
 
-Then(/^the user should not see the  Maintenance Request Records in the search results$/, async function () {
+Then(/^the user should not see the Maintenance Request Records in the search results$/, async function () {
     actions = new WebActions(this.page);
     await actions.waitForCustomDelay(timeouts.medium);
     await searchUpdateWorkOrderPage.searchWorkOrder(currentRecord);
     await deleteMaintenanceRecordsPage.verifyNoMatchesFoundMessage();
 });
-
 
 When(/^the user verifies the maintenance record status$/, async () => {
 	await deleteMaintenanceRecordsPage.verifyMRStatus();

@@ -98,7 +98,6 @@ Then('the user closes the Work Order and deletes the associated asset', async fu
     testData.element_text.yes_button,
     getFutureDay(2),
     testData.element_text.ok_button_text,
-    testData.element_text.input_ok_button,
     testData.icons.crossIcon,
     testData.element_text.continue_button_text
   );

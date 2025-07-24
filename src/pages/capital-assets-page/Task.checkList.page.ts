@@ -30,10 +30,19 @@ class TaskChecklistPage {
     private getEditIconByRow = (text: string): string => `${this.getElementByText(text)}/ancestor::div[@class='row panelHeader']//a[@title="Edit"]`;
     private getTaskMoreIcon = (text: string): string => `${this.getElementByText(text)}/ancestor::div[@class='row panelHeader']//i[contains(@class,'ellipsis')]`;
 
-    public async clickLinkByTitle(title: string): Promise<void> {
-        await this.actions.click(this.actions.getLocator(this.getLinkByTitle(title)), title);
+    /**
+     * Clicks on the eye icon to view task details.
+     * @param taskName The name of the task to view.
+     */
+    public async clickEyeIcon(taskName: string): Promise<void> {
+        await this.actions.click(this.actions.getLocator(this.getTaskSaveIcon(taskName)), `Eye Icon for: ${taskName}`);
     }
 
+    /**
+     * Clicks on the media more button to perform actions on media.
+     * @param taskName The name of the task.
+     * @param specialChar The special character to identify the task.
+     */
     public async performTaskChecklistActions(taskName: string, specialChar: string): Promise<void> {
         await this.actions.click(
             this.actions.getLocator(this.elements.eyeIcon.selector),
@@ -51,6 +60,11 @@ class TaskChecklistPage {
         );
     }
 
+    /**
+     * Enters text in the first checklist field.
+     * @param fieldName The name of the field to enter text in.
+     * @param text The text to enter.
+     */
     public async enterTextInFirstChecklistField(fieldName: string, text: string): Promise<void> {
         const cellLocator = this.actions.getLocator(this.getChecklistCell(fieldName));
         const inputLocator = this.actions.getLocator(this.getChecklistInput(fieldName));
@@ -58,6 +72,11 @@ class TaskChecklistPage {
         await this.actions.clearAndTypeText(inputLocator, text, `Checklist Field for: ${fieldName}`);
     }
 
+    /**
+     * Enters text in the second checklist field.
+     * @param fieldName The name of the field to enter text in.
+     * @param text The text to enter.
+     */
     public async enterTextInSecondChecklistField(fieldName: string, text: string): Promise<void> {
         const cellLocator = this.actions.getLocator(this.getChecklistCell(fieldName));
         const inputLocator = this.actions.getLocator(this.getChecklistInput(fieldName));
@@ -65,16 +84,27 @@ class TaskChecklistPage {
         await this.actions.typeText(inputLocator, text, `Checklist Field for: ${fieldName}`);
     }
 
+    /**
+     * Clicks on the save button by its text.
+     * @param text The text of the save button to click.
+     */
     public async clickSaveButtonByText(text: string): Promise<void> {
         const saveButtonLocator = this.actions.getLocator(this.getTaskSaveIcon(text));
         await this.actions.click(saveButtonLocator, `Save Button for: ${text}`);
     }
 
+    /**
+     * Clicks on the close button to close the task details.
+     */
     public async clickCloseButton(): Promise<void> {
         const closeButtonLocator = this.actions.getLocator(this.elements.closeButton.selector);
         await this.actions.click(closeButtonLocator, this.elements.closeButton.name);
     }
 
+    /**
+     * Uploads a file to the task checklist.
+     * @param filePath The path of the file to upload.
+     */
     public async completeTaskChecklist(
         taskName: string,
         specialChar: string,

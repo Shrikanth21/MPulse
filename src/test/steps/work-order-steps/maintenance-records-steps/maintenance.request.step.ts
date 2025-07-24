@@ -9,6 +9,7 @@ import { labelChangePage } from '../../../../pages/work-order-page/label.change.
 import { mrAutoConvertPage } from '../../../../pages/work-order-page/maintenance-request-records-pages/mr.auto.convert.page';
 import { workOrderPage } from '../../../../pages/work-order-page/WorkOrderPage.page';
 import * as path from 'path';
+import { commonActionPage } from '../../../../pages/common.action.page';
 
 const filePath = path.resolve(__dirname, '../../../../data/docs/MPulse.docx');
 
@@ -61,7 +62,6 @@ When(/^the user enables the checkbox for automatic request conversion$/, async (
     await mrAutoConvertPage.clickOnToAutomaticRequestConversionCheckbox();
 });
 
-
 When(/^the user navigates to the Maintenance Request record page after clicking the checkbox$/, async () => {
     await mrAutoConvertPage.navigateToMaintenanceRecordsPageFromOtherMenu(
         mrtestData.wkoMenuItemTitle,
@@ -108,7 +108,7 @@ When(/^the user creates a new Maintenance Request with a unique description in t
 
 When("the user upload media file on Maintenance Request page", async function () {
     await workOrderPage.addMediaAndSelectRecord(testData.element_text.media_text, testData.icons.media_link_icon, filePath, mrtestData.element_text.upload_text);
-    await workOrderPage.clickLinkByTitle(testData.icons.editIcon);
+    await commonActionPage.clickLinkByTitle(testData.icons.editIcon);
     await maintenanceRequestRecordsPage.setMrGeneralFields(
         mrtestData.element_text.general_tab_text,
         getRandomString('digits', 10),

@@ -1,10 +1,11 @@
 import { Then, When } from "@cucumber/cucumber";
 import { approvalFlowPage } from "../../../../pages/work-order-page/maintenance-request-records-pages/approval.flow.page";
 import mrtestData from '../../../../data/maintenance.records.json';
+import { commonActionPage } from "../../../../pages/common.action.page";
 
 When(/^the user Clicks on (.+) button$/, async (buttonName: string) => {
-    await approvalFlowPage.clickTabByText(mrtestData.element_text.general_tab_text);
-	await approvalFlowPage.clickElementByText(buttonName);
+    await commonActionPage.clickTabByText(mrtestData.element_text.general_tab_text);
+	await commonActionPage.clickElementByText(buttonName);
 });
 
 When(/^the user fills in the Reply-To email and CC email, then sends the email$/, async () => {
@@ -21,7 +22,7 @@ Then(/^the email should be sent successfully$/, async () => {
 
 Then(/^the user can see the Quit Waiting button is enabled$/, async () => {
     await approvalFlowPage.clickOnCloseButton();
-	await approvalFlowPage.verifyQuitWaitingButtonIsEnabled();
+	await approvalFlowPage.verifyQuitWaitingButtonState(true);
 });
 
 When(/^the user confirms the cancellation$/, async () => {

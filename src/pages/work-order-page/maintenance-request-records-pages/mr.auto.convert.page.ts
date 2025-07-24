@@ -3,6 +3,7 @@ import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
 import { workOrderPage } from "../WorkOrderPage.page";
 import { homePage } from "../../home-page/Home.page";
+import { commonActionPage } from "../../common.action.page";
 
 class MrAutoConvertPage {
 
@@ -22,46 +23,47 @@ class MrAutoConvertPage {
     dialogMessage: { selector: "//div[@class='dx-dialog-message']", name: "Dialog Message" },
   };
 
-  private getTabByText = (text: string): string => `//span[@class='dFlex']//span[text()='${text}']`;
-  private getElementByTitle = (title: string): string => `//a[@title='${title}']`;
-  private getTitleBySpan = (title: string): string => `//span[@title='${title}']`;
-
-  public async clickTabByText(text: string): Promise<void> {
-    const tabLocator = this.actions.getLocator(this.getTabByText(text));
-    await this.actions.waitForElementToBeVisible(tabLocator, `Tab: ${text}`);
-    await this.actions.click(tabLocator, `Tab: ${text}`);
-  }
-
-  public async clickOnSpanByTitle(title: string): Promise<void> {
-    const spanLocator = this.actions.getLocator(this.getTitleBySpan(title));
-    await this.actions.waitForElementToBeVisible(spanLocator, `Span: ${title}`);
-    await this.actions.click(spanLocator, `Span: ${title}`);
-  }
-
+  /**
+   * Navigates to the Maintenance Request Records page from another menu.
+   * @param menuItemTitle 
+   * @param subMenuItemTitle 
+   * @param expectedUrl 
+   */
   public async navigateToMaintenanceRecordsPageFromOtherMenu(
-          menuItemTitle: string,
-          subMenuItemTitle: string,
-          expectedUrl: string
-      ): Promise<void> {
-          await homePage.clickSideMenuIcon();
-          await this.clickOnSpanByTitle(menuItemTitle);
-          await homePage.clickLinkByTitle(subMenuItemTitle);
-          await homePage.validateCurrentUrl(expectedUrl);
-      }
+    menuItemTitle: string,
+    subMenuItemTitle: string,
+    expectedUrl: string
+  ): Promise<void> {
+    await homePage.clickSideMenuIcon();
+    await commonActionPage.clickOnSpanByTitle(menuItemTitle);
+    await homePage.clickLinkByTitle(subMenuItemTitle);
+    await this.actions.validateCurrentUrl(expectedUrl);
+  }
 
-      public async navigateToManagementWorkFlowPageFromOtherMenu(
-          menuItemTitle: string,
-          subMenuItemTitle: string,
-          subMenuItemTitles: string,
-          expectedUrl: string
-      ): Promise<void> {
-          await homePage.clickSideMenuIcon();
-          await this.clickOnSpanByTitle(menuItemTitle);
-          await homePage.clickLinkByTitle(subMenuItemTitle);
-          await homePage.clickCustomizationMenuByTitle(subMenuItemTitles);
-          await homePage.validateCurrentUrl(expectedUrl);
-      }
+  /**
+   * Navigates to the Management Workflow page from another menu.
+   * @param menuItemTitle 
+   * @param subMenuItemTitle 
+   * @param subMenuItemTitles 
+   * @param expectedUrl 
+   */
+  public async navigateToManagementWorkFlowPageFromOtherMenu(
+    menuItemTitle: string,
+    subMenuItemTitle: string,
+    subMenuItemTitles: string,
+    expectedUrl: string
+  ): Promise<void> {
+    await homePage.clickSideMenuIcon();
+    await commonActionPage.clickOnSpanByTitle(menuItemTitle);
+    await homePage.clickLinkByTitle(subMenuItemTitle);
+    await homePage.clickCustomizationMenuByTitle(subMenuItemTitles);
+    await this.actions.validateCurrentUrl(expectedUrl);
+  }
 
+  /**
+   * Clicks on the "Convert to Work Order" checkbox in the Maintenance Request Records page.
+   * This method first clicks the edit button to enable editing mode, then checks the checkbox if
+   */
   public async clickOnToAutomaticRequestConversionCheckbox(): Promise<void> {
     const editButton = this.actions.getLocator(this.elements.editButton.selector);
     await this.actions.waitForElementToBeVisible(editButton, this.elements.editButton.name);
@@ -71,18 +73,26 @@ class MrAutoConvertPage {
       await this.actions.click(this.actions.getLocator(this.elements.configAutoConvertMRtoWOCheckBox.selector), this.elements.configAutoConvertMRtoWOCheckBox.name);
     }
 
+    /**
+     * Clicks the "Save" button in the Maintenance Request Records page.
+     */
     const saveButton = this.actions.getLocator(this.elements.savebutton.selector);
     await this.actions.waitForElementToBeVisible(saveButton, this.elements.savebutton.name);
     await this.actions.click(saveButton, this.elements.savebutton.name);
   }
 
+  /**
+   * Links inventory to the Maintenance Request.
+   * @param title The title of the inventory item.
+   * @param buttonText The text of the button to click.
+   */
   public async linkInventoryToMaintenanceRequest(title: string, buttonText: string): Promise<void> {
-    await this.clickTabByText("Inventory");
+    await commonActionPage.clickTabByText("Inventory");
 
     const moreButton = this.actions.getLocator(this.elements.moreButton.selector);
     await this.actions.click(moreButton, this.elements.moreButton.name);
 
-    const linkInventory = this.actions.getLocator(this.getElementByTitle(title));
+    const linkInventory = this.actions.getLocator(commonActionPage.getElementByTitle(title));
     await this.actions.waitForElementToBeVisible(linkInventory, title);
     await this.actions.click(linkInventory, title);
 
@@ -91,6 +101,10 @@ class MrAutoConvertPage {
     await workOrderPage.clickInputButton(buttonText);
   }
 
+  /**
+   * Verifies the auto-conversion dialog text.
+   * @param text The expected dialog text.
+   */
   public async verifyAutoConvert(text: string): Promise<void> {
     const textElement = await this.actions.getLocator(this.elements.dialogMessage.selector);
     await this.actions.waitForElementToBeVisible(textElement, this.elements.dialogMessage.name);

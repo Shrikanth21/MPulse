@@ -2,7 +2,7 @@ Feature: List View - Custom Layouts for Work Order Records (without Grouping)
 
   @withoutgroup @customFilter @colorCode @listView @e2e @sanityWKListView
   Scenario: Manage custom layout with filters and color coding in Work Order Records without grouping
-    Given the user log into the application
+    Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user maximizes the Work Order Records list view display

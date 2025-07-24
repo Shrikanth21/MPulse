@@ -47,7 +47,7 @@ Before(async function (scenario) {
     javaScriptEnabled: true
   });
   page = await context.newPage();
-  page.on('dialog', async dialog => {
+  page.once('dialog', async dialog => {
     await dialog.accept();
   });
   this.page = page;

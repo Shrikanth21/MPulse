@@ -2,7 +2,7 @@ Feature: Work Order - Update Work Order Details
 
   @wko @updateWko @e2e @sanityWorkOrder
   Scenario: Create and modify a Work Order under Work Order Records
-    Given the user log into the application
+    Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user creates a new Work Order with a unique description and uploads media

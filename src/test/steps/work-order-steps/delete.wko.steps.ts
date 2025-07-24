@@ -10,7 +10,7 @@ let actions: WebActions;
 
 When(/^the user click on delete current Record$/, async () => {
     currentRecord = await deleteWOPage.getCurrentWorkOrderIdText();
-    await deleteWOPage.deletecurrentwo();
+    await deleteWOPage.deleteCurrentWO();
 });
 
 Then(/^the Work Order record should be deleted successfully$/, async () => {

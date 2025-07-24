@@ -1,6 +1,8 @@
 import { Page, selectors } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
+import { timeouts } from "../../../helper/timeouts-config";
+import { commonActionPage } from "../../common.action.page";
 
 class ApprovalFlowPage {
     private get currentPage(): Page {
@@ -12,76 +14,79 @@ class ApprovalFlowPage {
     }
 
     private elements = {
-        requesterEmail: { selector: "//div[@id='ReplyToRequester']//input[@class='dx-texteditor-input']", name: "Requester Email" },
+        toRequesterEmail: { selector: "//div[@id='ReplyToRequester']/descendant::div[@id='ToControl']//input", name: "To Requester Email" },
+        ccRequesterEmail: { selector: "//div[@id='ReplyToRequester']/descendant::div[@id='CCControl']//input", name: "CC Requester Email" },
         closeButton: { selector: "//button[@title='Click here to close']", name: "Close Button" },
         quitWaitingButton: { selector: "//div[@aria-label='Quit Waiting']", name: "Quit Waiting Button" },
         cancelConfirmation: { selector: "//body[@class='cke_editable cke_editable_themed cke_contents_ltr cke_show_borders']", name: "Cancel Confirmation" },
-        okButton: { selector: "//div[@id='OkButton']", name: "OK Button" },
+        okButton: { selector: "//div[@class='modal-dialog modal-md ui-draggable']//div[@aria-label='Ok']", name: "OK Button" },
         cancelRequestReasonHeader: { selector: "//div[@id='CancelRequestReason-header']", name: "Cancel Request Reason Header" },
     };
 
-    private getElementByText = (text: string): string => `//span[text()='${text}']`;
-    private getTabByText = (text: string): string => `//span[@class='dFlex']//span[text()='${text}']`;
-
-    public async clickElementByText(text: string): Promise<void> {
-        const fieldLocator = this.actions.getLocator(this.getElementByText(text));
-        await this.actions.waitForElementToBeVisible(fieldLocator, `Field: ${text}`);
-        await this.actions.click(fieldLocator, `Field: ${text}`);
-    }
-
-    public async clickTabByText(text: string): Promise<void> {
-        const tabLocator = this.actions.getLocator(this.getTabByText(text));
-        await this.actions.waitForElementToBeVisible(tabLocator, `Tab: ${text}`);
-        await this.actions.click(tabLocator, `Tab: ${text}`);
-    }
-
+    /**
+     * Sends an email to the requester with the provided details.
+     * @param replyToRequesterMail The email address to reply to the requester.
+     * @param ccReplyToRequesterMail The email address to CC in the reply.
+     * @param sendButton The text of the send button to click.
+     */
     public async sendEmailToRequester(replyToRequesterMail: string, ccReplyToRequesterMail: string, sendButton: string): Promise<void> {
-        const toMail = this.actions.getLocator(this.elements.requesterEmail.selector).nth(3);
-        await this.actions.waitForElementToBeVisible(toMail, this.elements.requesterEmail.name);
-        await this.actions.click(toMail, this.elements.requesterEmail.name);
-        await this.actions.typeText(toMail, replyToRequesterMail, this.elements.requesterEmail.name);
+        const toMail = this.actions.getLocator(this.elements.toRequesterEmail.selector);
+        await this.actions.waitForElementToBeVisible(toMail, this.elements.toRequesterEmail.name);
+        await this.actions.click(toMail, this.elements.toRequesterEmail.name);
+        await this.actions.typeText(toMail, replyToRequesterMail, this.elements.toRequesterEmail.name);
 
-        const ccMail = this.actions.getLocator(this.elements.requesterEmail.selector).nth(4);
-        await this.actions.waitForElementToBeVisible(ccMail, this.elements.requesterEmail.name);
-        await this.actions.click(ccMail, this.elements.requesterEmail.name);
-        await this.actions.typeText(ccMail, ccReplyToRequesterMail, this.elements.requesterEmail.name);
+        const ccMail = this.actions.getLocator(this.elements.ccRequesterEmail.selector);
+        await this.actions.waitForElementToBeVisible(ccMail, this.elements.ccRequesterEmail.name);
+        await this.actions.click(ccMail, this.elements.ccRequesterEmail.name);
+        await this.actions.typeText(ccMail, ccReplyToRequesterMail, this.elements.ccRequesterEmail.name);
 
-        await this.clickElementByText(sendButton);
+        await commonActionPage.clickElementByText(sendButton);
     }
 
+    /**
+     * Clicks on the close button to close the dialog.
+     */
     public async clickOnCloseButton(): Promise<void> {
         const closeBtn = this.actions.getLocator(this.elements.closeButton.selector);
         await this.actions.click(closeBtn, this.elements.closeButton.name);
     }
 
-    public async verifyQuitWaitingButtonIsEnabled(): Promise<void> {
+    /**
+     * Verifies if the Quit Waiting button is enabled or disabled.
+     * @param shouldBeEnabled Whether the button should be enabled (true) or disabled (false).
+     */
+    public async verifyQuitWaitingButtonState(shouldBeEnabled: boolean): Promise<void> {
         const quitWaitingBtn = this.actions.getLocator(this.elements.quitWaitingButton.selector);
-        await this.actions.waitForElementToBeEnabled(quitWaitingBtn, this.elements.quitWaitingButton.name);
+        if (shouldBeEnabled) {
+            await this.actions.waitForElementToBeEnabled(quitWaitingBtn, this.elements.quitWaitingButton.name);
+        } else {
+            await this.actions.waitForElementToBeDisabled(quitWaitingBtn, this.elements.quitWaitingButton.name);
+        }
     }
 
-    public async verifyQuitWaitingButtonIsDisabled(): Promise<void> {
-        const quitWaitingBtn = this.actions.getLocator(this.elements.quitWaitingButton.selector);
-        await this.actions.waitForElementToBeDisabled(quitWaitingBtn, this.elements.quitWaitingButton.name);
-    }
-
+    /**
+     * Verify the sent successfully message.
+     * @param sentSuccessfullyMsg The message to verify.
+     */
     public async verifySentSuccessfullyMsg(sentSuccessfullyMsg: string): Promise<void> {
-        const sentSuccessfullyMsgLocator = this.actions.getLocator(this.getElementByText(sentSuccessfullyMsg));
+        const sentSuccessfullyMsgLocator = this.actions.getLocator(commonActionPage.getElementByText(sentSuccessfullyMsg));
         const text = await this.actions.getText(sentSuccessfullyMsgLocator, `Text: ${sentSuccessfullyMsg}`);
         await this.actions.assertEqual(text, sentSuccessfullyMsg, `Text: ${sentSuccessfullyMsg} should be displayed`);
     }
 
+    /**
+     * Confirms the cancellation of a request by entering a reason and clicking OK.
+     * @param reasonText The reason for cancellation.
+     */
     public async confirmCancellation(reasonText: string): Promise<void> {
-        // const cancelConfirmationLocator = this.actions.getLocatorInsideIframe(this.elements.cancelConfirmation.selector);
-        // await this.actions.waitForElementToBeVisible(cancelConfirmationLocator, this.elements.cancelConfirmation.name);
-        // await this.actions.typeText(cancelConfirmationLocator, reasonText, this.elements.cancelConfirmation.name);
+        const cancelConfirmationLocator = this.actions.getLocatorInsideIframe(this.elements.cancelConfirmation.selector);
+        await this.actions.waitForElementToBeVisible(cancelConfirmationLocator, this.elements.cancelConfirmation.name);
+        await this.actions.typeText(cancelConfirmationLocator, reasonText, this.elements.cancelConfirmation.name);
 
-        const cancelRequestReasonHeaderLocator = this.actions.getLocator(this.elements.cancelRequestReasonHeader.selector);
-        await this.actions.waitForElementToBeVisible(cancelRequestReasonHeaderLocator, this.elements.cancelRequestReasonHeader.name);
-        await this.actions.click(cancelRequestReasonHeaderLocator, this.elements.cancelRequestReasonHeader.name);
-
-        const okButtonLocator = this.actions.getLocator(this.elements.okButton.selector);
+        await this.actions.click(cancelConfirmationLocator, this.elements.cancelConfirmation.name);
+        const okButtonLocator = this.actions.getVisibleLocator(this.elements.okButton.selector);
         await this.actions.waitForElementToBeVisible(okButtonLocator, this.elements.okButton.name);
-        await this.actions.click(okButtonLocator, this.elements.okButton.name);
+        await this.actions.mouseHoverAndClick(okButtonLocator, this.elements.okButton.name);
     }
 }
 
