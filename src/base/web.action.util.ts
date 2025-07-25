@@ -100,6 +100,23 @@ export class WebActions {
   }
 
   /**
+   * Clicks on the specified element with an offset.
+   * @param locator The locator for the element to click.
+   * @param elementDescription Description of the element for logging.
+   * @param offset The offset position to click at.
+   */
+  public async offsetClick(locator: Locator, elementDescription: string, offset: { x: number; y: number }): Promise<void> {
+    try {
+      await this.waitForElement(locator, elementDescription);
+      await locator.click({ position: offset });
+      logger.info(`Successfully performed offset click on element: ${elementDescription} at x: ${offset.x}, y: ${offset.y}`);
+    } catch (error) {
+      logger.error(`Failed to perform offset click on element: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  /**
    * Scrolls to the specified element and clicks it.
    * @param locator The locator for the element to scroll to and click.
    * @param elementDescription Description of the element for logging.

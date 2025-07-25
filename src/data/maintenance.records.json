@@ -36,6 +36,7 @@
     "crossIcon_title": "Click here to close"
   },
   "element_text": {
+    "inventory_tab_text": "Inventory",
     "got_it_btn": "GOT IT",
     "link_button": "Link",
     "ok_button_text": "OK",

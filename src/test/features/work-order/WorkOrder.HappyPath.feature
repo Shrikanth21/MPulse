@@ -24,7 +24,7 @@ Feature: Happy Path Scenarios for MPulse Application
     When the user maximizes the Work Order Records list view display
     And the user click on workorderID
     Then the Work Order record should be sorted successfully
-    And the user minimize the Work Order Records list view display
+    And the user minimizes the list view display
     
     When the user click on delete current Record
     Then the Work Order record should be deleted successfully

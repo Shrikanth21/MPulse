@@ -6,6 +6,7 @@
   "customizationLanguageUrl": "https://dev.mpulse9.com/#/main/language/Language",
   "workOrderRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/WorkOrderRecords/",
   "workflowWorkOrderUrl": "https://dev.mpulse9.com/#/main/workOrders/WorkOrders",
+  "requisitionRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/RequisitionRecords/",
   "menuItemWorkTitle": "Work Orders",
   "subMenuItemWorkTitle": "Work Order Records",
   "managementToolButton": "Management Tools",
@@ -17,6 +18,8 @@
   "customizationSubMenuItemTitle": "Customization",
   "workflowSubMenuItemTitle": "WorkFlow",
   "buildingMenueText": "Building Records",
+  "inventoryMenuTitle": "Inventory",
+  "requisitionMenuTitle": "Requisition Records",
   "create_wko": "Create Work Order",
   "general_field": "Date Opened",
   "languageMenuItem": "Language",
@@ -48,9 +51,15 @@
     "open_status_text": "Open",
     "closed_status_text": "Closed",
     "pending_status_text": "Pending",
+    "backorder_status_text": "Backorder",
+    "back_order_text": "Back Order",
     "got_it_btn": "GOT IT",
     "wor": "Work Order Records",
+    "save_button_text": "Save",
+    "upload_text": "Upload",
     "link_button": "Link",
+    "requisition_status_text": "Requisition Status",
+    "close_requisition_text": "Close Requisition",
     "ok_button_text": "OK",
     "replace_button": "Replace",
     "input_ok_button": "Ok",
@@ -63,7 +72,10 @@
     "dashboard_text": "Dashboard",
     "timeSheetDetails_text": "Time Sheet Details",
     "general_tab_text": "General",
+    "supplier_tab_text": "Supplier",
+    "financial_tab_text": "Financial",
     "hoursField_text": "0.00",
+    "quantity_received_text": "10.00",
     "hours": "2"
   },
   "CheckListFields_data": {
@@ -86,7 +98,17 @@
       "cost": "100"
     }
   ],
-
+  "dropdownSelections": [
+    {
+      "ddType": "Supplier"
+    },
+    {
+      "ddType": "SupplierState"
+    },
+    {
+      "ddType": "SupplierCountry"
+    }
+  ],
   "customization": {
     "recordAreaDropdownValues": {
       "work_Orders": "Work Orders",
@@ -112,5 +134,5 @@
     "fresdb959_inappdev": "FRESHDB959_INAPPDEV",
     "automation_freshdb": "AutomationFreshDB"
   },
-  "db_name": "FreshDBSep"
+  "db_name": "INAPP_PNS"
 }

@@ -17,7 +17,7 @@ Then('the Work Order record should be sorted successfully', async function () {
     await gridPage.verifySortedWorkOrderId(beforesortedText);
 });
 
-Then(/^the user minimize the Work Order Records list view display$/, async () => {
+Then(/^the user minimizes the list view display$/, async () => {
     await gridPage.clickOnSideBarExpander();
     await gridPage.clickOnSideBarCollapse();
 });

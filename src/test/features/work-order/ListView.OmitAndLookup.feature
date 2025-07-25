@@ -15,7 +15,7 @@ Feature: List View - Omit and Lookup functionality
     Then the omitted Work Order should not appear in the Omitted Records section
     And the user clicks the Reset option
     And the user clicks on the "View All" button
-    And the user minimize the Work Order Records list view display
+    And the user minimizes the list view display
 
   @lookupRecord @listView @e2e @omitAndLookup @sanityWKListView
   Scenario: Work Order - Lookup and isolate a record in list view
@@ -23,4 +23,4 @@ Feature: List View - Omit and Lookup functionality
     When the user clicks on the "Lookup" button
     Then only the selected Work Order should be visible in the list
     And the user clicks on the "View All" button
-    And the user minimize the Work Order Records list view display
+    And the user minimizes the list view display

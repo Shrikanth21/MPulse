@@ -8,4 +8,4 @@ Feature: List View - Sorting Work Order Records
     And the user maximizes the Work Order Records list view display
     When the user click on workorderID
     Then the Work Order record should be sorted successfully
-    And the user minimize the Work Order Records list view display
+    And the user minimizes the list view display

@@ -17,6 +17,7 @@ class CommonActionPage {
         sideBarExpander: { selector: "[class='sideBarExpander']", name: "Sidebar Expander" },
         editButton: { selector: "//a[@title='Edit']//i[@class='fa fa-pencil-alt']", name: "Edit Button" },
         saveButton: { selector: '#save-work-order', name: "Save Button" },
+        maximizeButton: { selector: '[title="Maximize"]', name: "Maximize Button" },
     }
     getElementByText = (text: string): string => `//span[text()='${text}']`;
     getTabByText = (text: string): string => `//span[@class='dFlex']//span[text()='${text}']`;
@@ -32,6 +33,8 @@ class CommonActionPage {
     getRowCellSelector = (index: number): string => `//td[contains(@aria-describedby,'dx-col') and @aria-colindex='${index}']`;
     getLabelByTitle = (layoutName: string): string => `//label[@title='${layoutName}']`;
     getButtonByText = (btnText: string): string => `//button[normalize-space()='${btnText}']`;
+    getElementByDivId = (divId: string): string => `//div[@id='${divId}']`;
+    getElementByButtonTitle = (buttonTitle: string): string => `//button[@title='${buttonTitle}']`;
 
 
     /**
@@ -82,6 +85,35 @@ class CommonActionPage {
         await this.actions.waitForElementToBeVisible(saveButtonLocator, this.elements.saveButton.name);
         await this.actions.click(saveButtonLocator, this.elements.saveButton.name);
         await this.actions.waitForCustomDelay(timeouts.medium);
+    }
+ 
+    /**
+     * Click on edit button
+     */
+    public async clickEditButton(): Promise<void> {
+        const editButtonLocator = this.actions.getLocator(this.elements.editButton.selector);
+        await this.actions.waitForElementToBeVisible(editButtonLocator, this.elements.editButton.name);
+        await this.actions.click(editButtonLocator, this.elements.editButton.name);
+    }
+
+    /**
+     * Clicks on a div element by its ID.
+     * @param divId The ID of the div to click.
+     */
+    public async clickByDivId(divId: string): Promise<void> {
+        const divLocator = this.actions.getLocator(this.getElementByDivId(divId));
+        await this.actions.waitForElementToBeVisible(divLocator, `Div: ${divId}`);
+        await this.actions.click(divLocator, `Div: ${divId}`);
+    }
+
+    /**
+     * Clicks on a button by its title.
+     * @param buttonTitle The title of the button to click.
+     */
+    public async clickButtonByTitle(buttonTitle: string): Promise<void> {
+        const buttonLocator = this.actions.getLocator(this.getElementByButtonTitle(buttonTitle));
+        await this.actions.waitForElementToBeVisible(buttonLocator, `Button: ${buttonTitle}`);
+        await this.actions.click(buttonLocator, `Button: ${buttonTitle}`);
     }
 
 }

@@ -26,4 +26,4 @@ Feature: List View - Custom Layouts for Work Order Records (with Grouping)
     And the user expands the last customized group to view its Work Orders
     Then the Work Orders with status "Closed" should be highlighted with the specified color
     Then the user deletes the created layout
-    And the user minimize the Work Order Records list view display
+    And the user minimizes the list view display

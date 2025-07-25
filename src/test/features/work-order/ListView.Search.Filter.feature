@@ -31,4 +31,4 @@ Feature: List View - Search and Filter Work Order Records
     And the user enters a value in the search field in "Ends with" option edit box
     Then the "Ends with" filtered results should be displayed
     And the user clicks the Reset option
-    And the user minimize the Work Order Records list view display
+    And the user minimizes the list view display

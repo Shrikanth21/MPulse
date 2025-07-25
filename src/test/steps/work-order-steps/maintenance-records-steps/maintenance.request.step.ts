@@ -72,6 +72,7 @@ When(/^the user navigates to the Maintenance Request record page after clicking 
 
 When(/^the user link inventory to the Maintenance Request$/, async () => {
     await mrAutoConvertPage.linkInventoryToMaintenanceRequest(
+        mrtestData.element_text.inventory_tab_text,
         mrtestData.icons.media_link_icon,
         testData.element_text.link_button
     );

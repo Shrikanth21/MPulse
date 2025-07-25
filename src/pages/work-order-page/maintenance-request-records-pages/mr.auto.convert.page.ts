@@ -86,8 +86,8 @@ class MrAutoConvertPage {
    * @param title The title of the inventory item.
    * @param buttonText The text of the button to click.
    */
-  public async linkInventoryToMaintenanceRequest(title: string, buttonText: string): Promise<void> {
-    await commonActionPage.clickTabByText("Inventory");
+  public async linkInventoryToMaintenanceRequest(tabText: string, title: string, buttonText: string): Promise<void> {
+    await commonActionPage.clickTabByText(tabText);
 
     const moreButton = this.actions.getLocator(this.elements.moreButton.selector);
     await this.actions.click(moreButton, this.elements.moreButton.name);

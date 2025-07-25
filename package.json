@@ -6,11 +6,11 @@
   "scripts": {
     "test": "cucumber-js test & npx ts-node index.ts",
     "test-parallel": "cucumber-js features/create.wko.feature --parallel 2 & npx ts-node src/helper/index.ts",
-    
     "sanity": "<----------------sanity Suite------------------------------------->",
     "wko-e2e-test": "cucumber-js features/**/*.feature --tags @sanityWorkOrder & npx ts-node src/helper/index.ts",
     "wkoListView-e2e": "cucumber-js features/ListView.feature --tags @sanityWKListView & npx ts-node src/helper/index.ts",
     "mr-e2e-test": "cucumber-js features/MaintenanceRecords.feature --tags @sanityMR & npx ts-node src/helper/index.ts",
+    "por-e2e-test": "cucumber-js features/PorRequisition.feature --tags @sanityPOR & npx ts-node src/helper/index.ts",
 
     "div1": "-------------------------Work Order Records-------------------------------------------------",
     "wko-test": "cucumber-js features/wko.feature --tags @wko & npx ts-node src/helper/index.ts",
@@ -33,7 +33,10 @@
     "mr-auto-convert": "cucumber-js features/MaintenanceRecords.AutoConvert.feature --tags @mrAutoConvert & npx ts-node src/helper/index.ts",
     "mr-list-view": "cucumber-js features/MaintenanceRecords.ListView.feature --tags @mrListView & npx ts-node src/helper/index.ts",
     "mr-delete-test": "cucumber-js features/MaintenanceRecords.Delete.feature --tags @deleteMrRecord & npx ts-node src/helper/index.ts",
-    "mr-approval-flow": "cucumber-js features/MaintenanceRecords.Approval.Flow.feature --tags @replyToRequester & npx ts-node src/helper/index.ts"
+    "mr-approval-flow": "cucumber-js features/MaintenanceRecords.Approval.Flow.feature --tags @replyToRequester & npx ts-node src/helper/index.ts",
+    "div4": "-------------------------Purchase Order Requisition Records-------------------------------------------------",
+    "por-create-requisition": "cucumber-js features/PorRequisition.Create.feature --tags @createPOR & npx ts-node src/helper/index.ts",
+    "listView-por-requisition": "cucumber-js features/PorRequisition.ListView.feature --tags @createPORListView & npx ts-node src/helper/index.ts"
   },
   "keywords": [
     "pw",
@@ -53,6 +56,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.9.0",
     "winston": "^3.17.0",
     "xlsx": "^0.18.5"
   }

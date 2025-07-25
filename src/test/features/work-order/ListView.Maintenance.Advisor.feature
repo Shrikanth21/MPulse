@@ -20,7 +20,7 @@ Feature: List View - Maintenance Advisor for Work Order Records
     When the user clicks on the Settings icon again
     And the user navigates to the Color Code Layouts tab
     And the user creates a color code for the status "Closed" with a specific color
-    And the user minimize the Work Order Records list view display
+    And the user minimizes the list view display
     When the user navigates to the Maintenance Advisor module
     Then the user should see the Maintenance Advisor dashboard
     When the user sets the desired layout in Maintenance Advisor
