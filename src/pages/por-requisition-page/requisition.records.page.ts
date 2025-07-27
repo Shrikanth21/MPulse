@@ -183,12 +183,6 @@ class RequisitionRecordsPage {
         await commonActionPage.clickTabByText(tabName);
         await commonActionPage.clickEditButton();
         await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType);
-        await this.actions.offsetClick(
-            this.actions.getLocator(commonActionPage.elements.saveButton.selector),
-            commonActionPage.elements.saveButton.name,
-            { x: 10, y: 10 }
-        );
-        await commonActionPage.clickEditButton();
         await this.fillSupplierDetails();
         await commonActionPage.clickSaveButton();
     }
