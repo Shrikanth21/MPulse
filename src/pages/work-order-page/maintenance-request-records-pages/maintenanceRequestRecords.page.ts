@@ -147,7 +147,7 @@ class MaintenanceRequestRecordsPage {
         yesConvert: string,
         yesButton: string
     ): Promise<void> {
-        await commonActionPage.clickButtonByTitle(convertText);
+        await commonActionPage.clickBySpanText(convertText);
         await commonActionPage.clickElementByText(yesConvert);
         await commonActionPage.clickElementByText(yesButton);
     }
