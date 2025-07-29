@@ -18,13 +18,15 @@ class CommonActionPage {
         editButton: { selector: "//a[@title='Edit']//i[@class='fa fa-pencil-alt']", name: "Edit Button" },
         saveButton: { selector: '#save-work-order', name: "Save Button" },
         maximizeButton: { selector: '[title="Maximize"]', name: "Maximize Button" },
+        descriptionInput: { selector: "//div[@fieldname='RecordDescription']//input", name: "Description Input" },
+        addNewRecordButton: { selector: "//div[@class='action-menu-items']/descendant::a[@title='Add new record']", name: "Add New Record Button" },
     }
     getElementByText = (text: string): string => `//span[text()='${text}']`;
     getTabByText = (text: string): string => `//span[@class='dFlex']//span[text()='${text}']`;
     getElementByTitle = (title: string): string => `//a[@title='${title}']`;
     getTitleBySpan = (title: string): string => `//span[@title='${title}']`;
     getSpanByTitle = (title: string): string => `//span[@title='${title}']`;
-    getCustomDivByTitle = (title: string): string => `//div[@title='${title}']`;
+    getCustomDivByTitle = (title: string): string => `//div[contains(@title,'${title}')]`;
     getColumnCellByTitle = (title: string): string => `//div[text()='${title}']`;
     getTabByTitle = (tabTeading: string): string => `//li[@title='${tabTeading}']`;
     getValueDivByTitle = (title: string): string => `//div[@title='${title}' and contains(@class, 'dx-item-content')]`;
@@ -35,6 +37,7 @@ class CommonActionPage {
     getButtonByText = (btnText: string): string => `//button[normalize-space()='${btnText}']`;
     getElementByDivId = (divId: string): string => `//div[@id='${divId}']`;
     getElementByButtonTitle = (buttonTitle: string): string => `//button[@title='${buttonTitle}']`;
+    getElementByLabelText = (labelText: string): string => `//label[normalize-space()='${labelText}']`;
 
 
     /**
@@ -86,7 +89,7 @@ class CommonActionPage {
         await this.actions.click(saveButtonLocator, this.elements.saveButton.name);
         await this.actions.waitForCustomDelay(timeouts.medium);
     }
- 
+
     /**
      * Click on edit button
      */
@@ -116,6 +119,54 @@ class CommonActionPage {
         await this.actions.click(buttonLocator, `Button: ${buttonTitle}`);
     }
 
+    /**
+     * Enters a description in the description input field.
+     * @param description The description text to enter.
+     */
+    public async enterDescription(description: string): Promise<void> {
+        const descriptionLocator = this.actions.getLocator(this.elements.descriptionInput.selector);
+        await this.actions.waitForElementToBeVisible(descriptionLocator, this.elements.descriptionInput.name);
+        await this.actions.typeText(descriptionLocator, description, this.elements.descriptionInput.name);
+    }
+
+    /**
+     * Clicks on a div element by its title.
+     * @param title The title of the div to click on.
+     */
+    public async clickByDivTitle(title: string): Promise<void> {
+        const divLocator = this.actions.getLocator(this.getCustomDivByTitle(title)).nth(0);
+        await this.actions.waitForElementToBeVisible(divLocator, `Div: ${title}`);
+        await this.actions.click(divLocator, `Div: ${title}`);
+    }
+
+    /**
+     * Clicks on the "Add New Record" button to create a new record.
+     */
+    public async clickAddNewRecordButton(): Promise<void> {
+        const addNewRecordButtonLocator = this.actions.getLocator(this.elements.addNewRecordButton.selector);
+        await this.actions.waitForElementToBeVisible(addNewRecordButtonLocator, this.elements.addNewRecordButton.name);
+        await this.actions.click(addNewRecordButtonLocator, this.elements.addNewRecordButton.name);
+    }
+
+    /**
+     * Clicks on a span element by its title.
+     * @param title The title of the span to click on.
+     */
+    public async clickBySpanTitle(title: string): Promise<void> {
+        const spanLocator = this.actions.getLocator(this.getSpanByTitle(title));
+        await this.actions.waitForElementToBeVisible(spanLocator, `Span: ${title}`);
+        await this.actions.click(spanLocator, `Span: ${title}`);
+    }
+
+    /**
+     * Clicks on a span element by its text content.
+     * @param text The text content of the span to click on.
+     */
+    public async clickBySpanText(text: string): Promise<void> {
+        const spanLocator = this.actions.getLocator(this.getElementByText(text));
+        await this.actions.waitForElementToBeVisible(spanLocator, `Span: ${text}`);
+        await this.actions.click(spanLocator, `Span: ${text}`);
+    }
 }
 
 export const commonActionPage = new CommonActionPage();

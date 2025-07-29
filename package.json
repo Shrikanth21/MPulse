@@ -36,7 +36,9 @@
     "mr-approval-flow": "cucumber-js features/MaintenanceRecords.Approval.Flow.feature --tags @replyToRequester & npx ts-node src/helper/index.ts",
     "div4": "-------------------------Purchase Order Requisition Records-------------------------------------------------",
     "por-create-requisition": "cucumber-js features/PorRequisition.Create.feature --tags @createPOR & npx ts-node src/helper/index.ts",
-    "listView-por-requisition": "cucumber-js features/PorRequisition.ListView.feature --tags @createPORListView & npx ts-node src/helper/index.ts"
+    "listView-por-requisition": "cucumber-js features/PorRequisition.ListView.feature --tags @createPORListView & npx ts-node src/helper/index.ts",
+    "div5": "-------------------------Cycle Count Records-------------------------------------------------",
+    "cyc-create-convert-close": "cucumber-js features/cycle-count-records/CYC-Create.Convert.Close.feature --tags @createCycleCount & npx ts-node src/helper/index.ts"
   },
   "keywords": [
     "pw",

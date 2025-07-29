@@ -68,7 +68,7 @@ class MaintenanceRequestRecordsPage {
     public async enterDescriptionAfterConvert(description: string): Promise<void> {
         const editButton = this.actions.getLocator(commonActionPage.elements.editButton.selector);
         await this.actions.click(editButton, commonActionPage.elements.editButton.name);
-        await workOrderPage.enterDescription(description);
+        await commonActionPage.enterDescription(description);
         await commonActionPage.clickSaveButton();
     }
     /**
@@ -81,7 +81,7 @@ class MaintenanceRequestRecordsPage {
         description: string,
     ): Promise<void> {
         await commonActionPage.clickLinkByTitle(addButtonTitle);
-        await workOrderPage.enterDescription(description);
+        await commonActionPage.enterDescription(description);
     }
 
     /**
@@ -147,7 +147,7 @@ class MaintenanceRequestRecordsPage {
         yesConvert: string,
         yesButton: string
     ): Promise<void> {
-        await commonActionPage.clickElementByText(convertText);
+        await commonActionPage.clickButtonByTitle(convertText);
         await commonActionPage.clickElementByText(yesConvert);
         await commonActionPage.clickElementByText(yesButton);
     }

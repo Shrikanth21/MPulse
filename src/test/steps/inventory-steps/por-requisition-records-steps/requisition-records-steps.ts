@@ -1,10 +1,10 @@
 import { Then, When } from "@cucumber/cucumber";
-import { requisitionRecordsPage } from "../../../pages/por-requisition-page/requisition.records.page";
-import testData from '../../../data/testData.json';
-import { workOrderPage } from "../../../pages/work-order-page/WorkOrderPage.page";
-import { imgFilePath } from "../../../helper/files/read.excel.file";
-import { mrAutoConvertPage } from "../../../pages/work-order-page/maintenance-request-records-pages/mr.auto.convert.page";
-import { commonActionPage } from "../../../pages/common.action.page";
+import { requisitionRecordsPage } from "../../../../pages/Inventory-pages/por-requisition-page/requisition.records.page";
+import testData from '../../../../data/testData.json';
+import { workOrderPage } from "../../../../pages/work-order-page/WorkOrderPage.page";
+import { imgFilePath } from "../../../../helper/files/read.excel.file";
+import { mrAutoConvertPage } from "../../../../pages/work-order-page/maintenance-request-records-pages/mr.auto.convert.page";
+import { commonActionPage } from "../../../../pages/common.action.page";
 
 When(/^the user navigates to the Requisition Records page$/, async () => {
 	await requisitionRecordsPage.navigateToRequisitionRecordsPage(

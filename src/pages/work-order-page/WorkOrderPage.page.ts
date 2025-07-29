@@ -15,7 +15,6 @@ class WorkOrderPage {
     }
 
     private elements = {
-        descriptionInput: { selector: "//div[@fieldname='RecordDescription']//input", name: "Description Input" },
         editButton: { selector: '#edit-work-order', name: "Edit Button" },
         mediaMoreButton: { selector: "//div[contains(@class,'media')]//div[@class='moreBtn']", name: "Media More Button" },
         taskLinkRow: { selector: "(//div[@class='dx-datagrid-content']//table)[2]//tr[2]", name: "Task Link Row" },
@@ -86,16 +85,6 @@ class WorkOrderPage {
     public async clickUploadMediaLink(): Promise<void> {
         const elementLocator = this.actions.getLocator(this.elements.getLinkByTitle.selector);
         await this.actions.click(elementLocator, this.elements.getLinkByTitle.name);
-    }
-
-    /**
-     * Enters a description in the description input field.
-     * @param description The description text to enter.
-     */
-    public async enterDescription(description: string): Promise<void> {
-        const descriptionLocator = this.actions.getLocator(this.elements.descriptionInput.selector);
-        await this.actions.waitForElementToBeVisible(descriptionLocator, this.elements.descriptionInput.name);
-        await this.actions.typeText(descriptionLocator, description, this.elements.descriptionInput.name);
     }
 
     /**
@@ -229,7 +218,7 @@ class WorkOrderPage {
         await commonActionPage.clickLinkByTitle(dropdownOption);
         await commonActionPage.clickLinkByTitle(createOption);
         await this.currentPage.waitForTimeout(timeouts.medium);
-        await this.enterDescription(description);
+        await commonActionPage.enterDescription(description);
         await commonActionPage.clickSaveButton();
     }
 
@@ -369,7 +358,7 @@ class WorkOrderPage {
     public async createWorkOrder(addButtonTitle: string, description: string, mediaButtonText: string, mediaLinkTitle: string, mediaFilePath: string, btnTitle: string, recordText: string): Promise<void> {
         await this.currentPage.waitForTimeout(timeouts.large);
         await commonActionPage.clickLinkByTitle(addButtonTitle);
-        await this.enterDescription(description);
+        await commonActionPage.enterDescription(description);
         await this.uploadMediaFile(mediaButtonText, mediaLinkTitle, mediaFilePath, btnTitle);
         await commonActionPage.clickSaveButton();
         await this.selectByElementText(recordText);

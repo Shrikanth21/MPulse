@@ -7,6 +7,8 @@
   "workOrderRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/WorkOrderRecords/",
   "workflowWorkOrderUrl": "https://dev.mpulse9.com/#/main/workOrders/WorkOrders",
   "requisitionRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/RequisitionRecords/",
+  "cycleCountRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/CycleCount/",
+  "openScheduledMaintenancePageURL": "https://dev.mpulse9.com/#/main/openScheduledMaintenance/",
   "menuItemWorkTitle": "Work Orders",
   "subMenuItemWorkTitle": "Work Order Records",
   "managementToolButton": "Management Tools",
@@ -20,6 +22,7 @@
   "buildingMenueText": "Building Records",
   "inventoryMenuTitle": "Inventory",
   "requisitionMenuTitle": "Requisition Records",
+  "cycle_count_records_title": "Cycle Count Records",
   "create_wko": "Create Work Order",
   "general_field": "Date Opened",
   "languageMenuItem": "Language",
@@ -60,6 +63,11 @@
     "link_button": "Link",
     "requisition_status_text": "Requisition Status",
     "close_requisition_text": "Close Requisition",
+    "count_type_text": "Filtered Set",
+    "filtered_population_label": "No Of Items",
+    "scheduledMaintenanceTitle": "Scheduled Maintenance",
+    "openScheduledMaintenanceTitle": "Open Scheduled Maintenance",
+    "today_date": "This Week",
     "ok_button_text": "OK",
     "replace_button": "Replace",
     "input_ok_button": "Ok",
@@ -74,6 +82,7 @@
     "general_tab_text": "General",
     "supplier_tab_text": "Supplier",
     "financial_tab_text": "Financial",
+    "cycle_count_tab_text": "Cycle Count",
     "hoursField_text": "0.00",
     "quantity_received_text": "10.00",
     "hours": "2"
@@ -98,6 +107,12 @@
       "cost": "100"
     }
   ],
+  "cyc_filter_data": {
+    "field": "Inventory ID#",
+    "operator": "Equal",
+    "value": "PRT",
+    "condition": "And"
+  },
   "dropdownSelections": [
     {
       "ddType": "Supplier"
@@ -107,6 +122,17 @@
     },
     {
       "ddType": "SupplierCountry"
+    }
+  ],
+  "cycleCountDropdownSelections": [
+    {
+      "ddType": "LK_WKOGROUP"
+    },
+    {
+      "ddType": "LK_WKOTYPE"
+    },
+    {
+      "ddType": "LK_GENPRIOR"
     }
   ],
   "customization": {
@@ -134,5 +160,5 @@
     "fresdb959_inappdev": "FRESHDB959_INAPPDEV",
     "automation_freshdb": "AutomationFreshDB"
   },
-  "db_name": "FreshDBSep"
+  "db_name": "INAPP_PNS"
 }

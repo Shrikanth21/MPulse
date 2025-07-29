@@ -1,13 +1,13 @@
 import { Page } from "@playwright/test";
-import { getPage } from "../../base/base";
-import { WebActions } from "../../base/web.action.util";
-import { homePage } from "../home-page/Home.page";
-import { commonActionPage } from "../common.action.page";
-import { generateSupplierFormData } from "../../helper/requisition.supplier.details";
-import { timeouts } from "../../helper/timeouts-config";
-import { mrAutoConvertPage } from "../work-order-page/maintenance-request-records-pages/mr.auto.convert.page";
-import { maintenanceRequestRecordsPage } from "../work-order-page/maintenance-request-records-pages/maintenanceRequestRecords.page";
-import { workOrderPage } from "../work-order-page/WorkOrderPage.page";
+import { getPage } from "../../../base/base";
+import { WebActions } from "../../../base/web.action.util";
+import { homePage } from "../../home-page/Home.page";
+import { commonActionPage } from "../../common.action.page";
+import { generateSupplierFormData } from "../../../helper/requisition.supplier.details";
+import { timeouts } from "../../../helper/timeouts-config";
+import { mrAutoConvertPage } from "../../work-order-page/maintenance-request-records-pages/mr.auto.convert.page";
+import { maintenanceRequestRecordsPage } from "../../work-order-page/maintenance-request-records-pages/maintenanceRequestRecords.page";
+import { workOrderPage } from "../../work-order-page/WorkOrderPage.page";
 
 class RequisitionRecordsPage {
     private get currentPage(): Page {
