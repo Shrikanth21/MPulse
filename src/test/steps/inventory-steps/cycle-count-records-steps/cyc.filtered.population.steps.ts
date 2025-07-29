@@ -10,6 +10,7 @@ import { getFutureDateFormatted } from "../../../../helper/date/get.future.date"
 import { commonActionPage } from "../../../../pages/common.action.page";
 
 let createdCycId: string;
+let createdCycCount: string;
 
 When(/^the user navigates to the Cycle Count Records page$/, async () => {
     await requisitionRecordsPage.navigateToRequisitionRecordsPage(
@@ -43,6 +44,7 @@ Then(/^the user should see the filtered population of items$/, async () => {
 });
 
 Then(/^the user should be able to create a new Cycle Count Record successfully$/, async () => {
+    createdCycCount = await cycleCountRecordsPage.getCount();
     await cycleCountRecordsPage.verifyCycleCountRecordCreated(generatedCycleCountRecordDescription);
 });
 
@@ -68,7 +70,7 @@ Then(/^the user should see the created Cycle Count Record in the search results$
 });
 
 When(/^the user select the searched record and convert to Work Order$/, async () => {
-    await maintenanceRequestRecordsPage.clickOnConvertWorkOrderButton(
+    await cycleCountRecordsPage.clickOnConvertWorkOrderButton(
         mrtestData.element_text.convert_wko_order,
         mrtestData.element_text.yes_convert,
         mrtestData.element_text.yes_button,
@@ -77,6 +79,7 @@ When(/^the user select the searched record and convert to Work Order$/, async ()
 
 Then(/^the user should see the Work Order created from Cycle Count Record$/, async () => {
     await cycleCountRecordsPage.verifyInventorySelectedForCounting(testData.element_text.cycle_count_tab_text);
+    await cycleCountRecordsPage.verifyInventoryCount(createdCycCount);
 });
 
 When(/^the user closes the converted Work Order record$/, async () => {

@@ -25,10 +25,27 @@ class CycleCountRecordsPage {
         searchTextBox: { selector: "//tr[@class='dx-row dx-column-lines dx-datagrid-filter-row']//input[@role='textbox']", name: "Search Text Box" },
         searchedId: { selector: "//a[@class='dx-link ng-scope']", name: "Searched ID" },
         inventorySelectedForCounting: { selector: "//span[@title='Inventory selected for counting']", name: "Inventory Selected For Counting Span" },
+        numberOfItem: { selector: "//div[@class='form-group-control-wrap-inner']/child::span[@class='form-editor ng-binding']", name: "Number Of Item" },
+        cycleCountLinks: { selector: "//datagrid[@id='CycleCount']/descendant::tr/descendant::a", name: "Cycle Count Links" },
     }
 
+    /**
+     * Gets the created cycle count ID.
+     * @returns The created cycle count ID.
+     */
     public async getCreatedCycId(): Promise<string> {
         return await this.actions.getText(this.actions.getLocator(this.elements.cycId.selector), this.elements.cycId.name);
+    }
+
+    /**
+     * Gets the count of items.
+     * @returns The count of items.
+     */
+    public async getCount(): Promise<string> {
+        const countLocator = this.actions.getLocator(this.elements.numberOfItem.selector);
+        await this.actions.waitForElementToBeVisible(countLocator, this.elements.numberOfItem.name);
+        const countText = await this.actions.getText(countLocator, this.elements.numberOfItem.name);
+        return countText;
     }
 
     /**
@@ -61,6 +78,21 @@ class CycleCountRecordsPage {
         await commonActionPage.enterDescription(description);
         await this.selectCountType(countType);
         await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType);
+    }
+
+    /**
+     * Clicks on the "Convert to Work Order" button.
+     * @param convertText The text of the button to click.
+     * @param yesConvert The text of the confirmation button to click.
+     */
+    public async clickOnConvertWorkOrderButton(
+        convertText: string,
+        yesConvert: string,
+        yesButton: string
+    ): Promise<void> {
+        await commonActionPage.clickButtonByTitle(convertText);
+        await commonActionPage.clickElementByText(yesConvert);
+        await commonActionPage.clickElementByText(yesButton);
     }
 
     /**
@@ -177,6 +209,23 @@ class CycleCountRecordsPage {
         const inventoryLocator = this.actions.getLocator(this.elements.inventorySelectedForCounting.selector);
         await this.actions.assertTrue(await inventoryLocator.isVisible(), this.elements.inventorySelectedForCounting.name);
     }
+
+    /**
+     * Verifies the number of inventory items.
+     * @param count The expected number of inventory items.
+     */
+    public async verifyInventoryCount(expectedCount: string): Promise<void> {
+        const selector = this.elements.cycleCountLinks.selector;
+        await this.currentPage.waitForSelector(selector, { state: 'visible' });
+        const countLocator = this.currentPage.locator(selector);
+        const actualCount = await countLocator.count();
+        await this.actions.assertEqual(
+            actualCount.toString().trim(),
+            expectedCount.trim(),
+            `Inventory Count Mismatch: Expected ${expectedCount.trim()}, Actual ${actualCount}`
+        );
+    }
+
 }
 
 export const cycleCountRecordsPage = new CycleCountRecordsPage();
