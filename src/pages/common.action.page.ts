@@ -76,8 +76,8 @@ class CommonActionPage {
      */
     public async clickLinkByTitle(title: string): Promise<void> {
         const elementLocator = this.actions.getLocator(this.getElementByTitle(title)).nth(0);
-        await this.actions.waitForElementToBeVisible(elementLocator, title);
-        await this.actions.click(elementLocator, title);
+        await this.actions.waitForElementToBeVisible(elementLocator, `Link: ${title}`);
+        await this.actions.click(elementLocator, `Link: ${title}`);
     }
 
     /**

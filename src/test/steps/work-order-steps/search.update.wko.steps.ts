@@ -1,6 +1,6 @@
 import { Then, When } from "@cucumber/cucumber";
 import { searchUpdateWorkOrderPage } from "../../../pages/work-order-page/search.update.wko.page";
-import { generatedEqTaskDescription } from "../../../helper/get.different.description";
+import { updatedDescription } from "../../../helper/get.different.description";
 import { WebActions } from "../../../base/web.action.util";
 import { timeouts } from "../../../helper/timeouts-config";
 
@@ -30,7 +30,7 @@ When(/^the user click on edit button$/, async () => {
 });
 
 Then(/^the user change the description of the Work Order$/, async () => {
-    await searchUpdateWorkOrderPage.enterNewDescription(generatedEqTaskDescription);
+    await searchUpdateWorkOrderPage.enterNewDescription(updatedDescription);
 });
 
 Then(/^the changes should be saved successfully$/, async () => {

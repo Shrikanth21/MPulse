@@ -23,10 +23,7 @@ When('the user navigates to the Maintenance Request Records page', async functio
 });
 
 When('the user creates a new Maintenance Request with a unique description', async function () {
-    await maintenanceRequestRecordsPage.createMaintenanceRecord(
-        mrtestData.icons.plusIcon,
-        generatedMaintenanceRecordDescription,
-    );
+    await maintenanceRequestRecordsPage.createMaintenanceRecord(generatedMaintenanceRecordDescription);
     await maintenanceRequestRecordsPage.setMrGeneralFields(
         mrtestData.element_text.general_tab_text,
         getRandomString('digits', 10),
@@ -35,7 +32,7 @@ When('the user creates a new Maintenance Request with a unique description', asy
 });
 
 Then(/^the Maintenance Order status should be (.+)$/, async (status: string) => {
-	await maintenanceRequestRecordsPage.validateElementText(status);
+    await maintenanceRequestRecordsPage.validateElementText(status);
 });
 
 When('the user convert a Maintenance Request into new work order with a unique description', async function () {
@@ -93,17 +90,17 @@ When(/^the user navigates to the Maintenance Request record page after creation$
 });
 
 Then(/^uncheck the checkbox for automatic request conversion$/, async () => {
-   await mrAutoConvertPage.navigateToManagementWorkFlowPageFromOtherMenu(
-       testData.managementToolsMenue,
-       mrtestData.workFLow,
-       mrtestData.workOrderTitle,
-       testData.workflowWorkOrderUrl
-   );
+    await mrAutoConvertPage.navigateToManagementWorkFlowPageFromOtherMenu(
+        testData.managementToolsMenue,
+        mrtestData.workFLow,
+        mrtestData.workOrderTitle,
+        testData.workflowWorkOrderUrl
+    );
     await mrAutoConvertPage.clickOnToAutomaticRequestConversionCheckbox();
 });
 
 When(/^the user creates a new Maintenance Request with a unique description in the list view$/, async () => {
-	await maintenanceRequestRecordsPage.listViewMRO(generatedMaintenanceRecordDescription);
+    await maintenanceRequestRecordsPage.listViewMRO(generatedMaintenanceRecordDescription);
 });
 
 
@@ -122,10 +119,10 @@ When("the user upload media file on maintenance request page", async function ()
 });
 
 Then(/^the user convert a Maintenance Request into new work order in the list view$/, async () => {
-	await maintenanceRequestRecordsPage.clickOnListViewConvertWorkOrderBtn(
-		mrtestData.element_text.yes_convert,
-		mrtestData.element_text.yes_button
-	);
+    await maintenanceRequestRecordsPage.clickOnListViewConvertWorkOrderBtn(
+        mrtestData.element_text.yes_convert,
+        mrtestData.element_text.yes_button
+    );
 });
 
 Then('the converted Work Order record from List view should be delete successfully', async function () {
