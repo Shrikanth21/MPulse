@@ -51,7 +51,7 @@ class GridPage {
      * Clicks on the column header to sort by Work Order ID.
      */
     public async clickColumnHeader(): Promise<void> {
-        await this.actions.waitForCustomDelay(timeouts.medium);
+        await this.actions.waitForCustomDelay(timeouts.large);
         const sortbyid = this.actions.getLocator(this.Elements.sortingWorkOrderByID.selector);
         await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.sortingWorkOrderByID.name);
         await this.actions.click(sortbyid, this.Elements.sortingWorkOrderByID.name);

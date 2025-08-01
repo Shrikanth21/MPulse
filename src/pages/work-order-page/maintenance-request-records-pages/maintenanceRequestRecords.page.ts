@@ -77,10 +77,9 @@ class MaintenanceRequestRecordsPage {
      * @param description The description of the maintenance record to create.
      */
     public async createMaintenanceRecord(
-        addButtonTitle: string,
         description: string,
     ): Promise<void> {
-        await commonActionPage.clickLinkByTitle(addButtonTitle);
+        commonActionPage.clickAddNewRecordButton();
         await commonActionPage.enterDescription(description);
     }
 
@@ -94,10 +93,11 @@ class MaintenanceRequestRecordsPage {
         tabName: string,
         value: string,
         dropdownSelections: { ddType: string[] },
+        divTitle: string
     ): Promise<void> {
         await commonActionPage.clickElementByText(tabName);
         await this.enterNumbersInput(value);
-        await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType);
+        await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
         await commonActionPage.clickSaveButton();
         await this.clickOnConfirmButton();
     }
@@ -131,6 +131,7 @@ class MaintenanceRequestRecordsPage {
         await this.actions.typeText(this.actions.getLocator(this.elements.mroInput.selector).nth(0), description, `WKO Description: ${description}`);
         await this.actions.click(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
         const OkButton = this.actions.getLocator(this.elements.okButton.selector);
+        await this.actions.waitForElementToBeVisible(OkButton, this.elements.okButton.name);
         await this.actions.click(OkButton, this.elements.okButton.name);
         await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
         const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);

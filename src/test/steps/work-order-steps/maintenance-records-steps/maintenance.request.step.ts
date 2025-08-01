@@ -27,7 +27,8 @@ When('the user creates a new Maintenance Request with a unique description', asy
     await maintenanceRequestRecordsPage.setMrGeneralFields(
         mrtestData.element_text.general_tab_text,
         getRandomString('digits', 10),
-        { ddType: mrtestData.mrrequestdropdownSelections.map((item: any) => item.ddType) }
+        { ddType: mrtestData.mrrequestdropdownSelections.map((item: any) => item.ddType) },
+        mrtestData.maintenanceRequestSubMenuItemTitle
     );
 });
 
@@ -110,7 +111,8 @@ When("the user upload media file on Maintenance Request page", async function ()
     await maintenanceRequestRecordsPage.setMrGeneralFields(
         mrtestData.element_text.general_tab_text,
         getRandomString('digits', 10),
-        { ddType: mrtestData.mrrequestdropdownSelections.map((item: any) => item.ddType) }
+        { ddType: mrtestData.mrrequestdropdownSelections.map((item: any) => item.ddType) },
+        mrtestData.maintenanceRequestSubMenuItemTitle
     );
 });
 

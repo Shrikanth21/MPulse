@@ -61,6 +61,8 @@ After(async function () {
   } catch (error) {
     logger.error('Error during logout:', error);
   }
+  await this.page?.close();
+  await this.context?.close();
 });
 
 BeforeStep(async function (step) {
@@ -78,7 +80,7 @@ AfterStep(async function (step) {
 });
 
 AfterAll(async () => {
-  await browser.close();
+  await browser?.close();
 });
 
 export function getPage(): Page {

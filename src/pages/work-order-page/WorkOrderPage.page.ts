@@ -104,6 +104,7 @@ class WorkOrderPage {
     public async clickEditIconForField(fieldName: string): Promise<void> {
         const editIconLocator = this.actions.getLocator(this.getEditIcon(fieldName));
         await this.actions.waitForElementToBeVisible(editIconLocator, `Edit Icon for Field: ${fieldName}`);
+        await this.actions.scrollToElement(editIconLocator, `Edit Icon for Field: ${fieldName}`);
         await this.actions.click(editIconLocator, `Edit Icon for Field: ${fieldName}`);
         const activeElement = await this.actions.getActiveElement();
         await activeElement.evaluate(el => el.tagName);
@@ -369,11 +370,11 @@ class WorkOrderPage {
      * @param ddType The type of the dropdown.
      * @returns 
      */
-    public async selectDropdownValues(ddType: string): Promise<void> {
+    public async selectDropdownValues(ddType: string, title: string): Promise<void> {
         const dropdownLocator = this.actions.getLocator(this.getdropdownById(ddType));
         await this.actions.click(dropdownLocator, `Dropdown: ${ddType}`);
         const optionsLocator = this.actions.getLocator('//div[contains(@class, "dx-item-content") and @title]');
-        await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 5000);
+        await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
         const validTitles: string[] = [];
         const count = await optionsLocator.count();
         for (let i = 0; i < count; i++) {
@@ -385,12 +386,13 @@ class WorkOrderPage {
         }
         if (validTitles.length === 0) {
             console.warn(`No valid options found in the dropdown: ${ddType}. Leaving it empty.`);
+            await commonActionPage.clickByDivTitle(title);
             return;
         }
         const selectedTitle = validTitles[0];
         const selectedLocator = this.actions.getLocator(this.getDDvalueByTitle(selectedTitle));
         await selectedLocator.hover();
-        await selectedLocator.waitFor({ state: 'visible', timeout: 5000 });
+        await selectedLocator.waitFor({ state: 'visible', timeout: 3000 });
         await this.actions.click(selectedLocator, `Selecting "${selectedTitle}" from ${ddType}`);
     }
 
@@ -410,7 +412,7 @@ class WorkOrderPage {
                 }
             }
             return false;
-        }, 5000, 'Dropdown options with non-empty titles to appear');
+        }, 3000, 'Dropdown options with non-empty titles to appear');
         const count = await locator.count();
         const optionTitles: string[] = [];
         for (let i = 0; i < count; i++) {
@@ -427,13 +429,13 @@ class WorkOrderPage {
      * Selects multiple values from dropdowns.
      * @param ddTypes The types of the dropdowns.
      */
-    public async selectMultipleDropdownValues(ddTypes: string[]): Promise<void> {
+    public async selectMultipleDropdownValues(ddTypes: string[], title: string): Promise<void> {
         const seenTitles: Set<string> = new Set();
         for (const ddType of ddTypes) {
             const dropdownLocator = this.actions.getLocator(this.getdropdownById(ddType));
             await this.actions.click(dropdownLocator, `Dropdown: ${ddType}`);
             const optionsLocator = this.actions.getLocator('//div[contains(@class, "dx-item-content") and @title]');
-            await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 5000);
+            await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
             const newTitles: string[] = [];
             const count = await optionsLocator.count();
             for (let i = 0; i < count; i++) {
@@ -449,14 +451,15 @@ class WorkOrderPage {
                 }
             }
             if (newTitles.length === 0) {
-                await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 5000);
+                await commonActionPage.clickByDivTitle(title);
+                await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
                 console.warn(`No valid options found in the dropdown: ${ddType}. Leaving it empty.`);
                 continue;
             }
             const selectedTitle = newTitles[0];
             const selectedLocator = this.actions.getLocator(this.getDDvalueByTitle(selectedTitle));
             await selectedLocator.hover();
-            await selectedLocator.waitFor({ state: 'visible', timeout: 5000 });
+            await selectedLocator.waitFor({ state: 'visible', timeout: 2000 });
             await this.actions.click(selectedLocator, `Selecting "${selectedTitle}" from ${ddType}`);
         }
     }
@@ -514,12 +517,13 @@ class WorkOrderPage {
     public async setGeneralFields(
         tabName: string,
         phoneNumber: string,
-        dropdownSelections: { ddType: string[] }
+        dropdownSelections: { ddType: string[] },
+        divTitle: string
     ): Promise<void> {
         await this.clickElementByText(tabName);
         await this.clickEditButton();
         await this.actions.waitForCustomDelay(timeouts.medium);
-        await this.selectMultipleDropdownValues(dropdownSelections.ddType);
+        await this.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
         await this.setPhoneNumber(phoneNumber);
         await commonActionPage.clickSaveButton();
     }
@@ -532,8 +536,7 @@ class WorkOrderPage {
         const elementLocator = this.actions.getLocator(this.getElementByText(elementText));
         await this.actions.waitForElementToBeVisible(elementLocator, `Waiting for Element: ${elementText}`);
         const actualText = await this.actions.getText(elementLocator, `Element: ${elementText}`);
-        await this.actions.waitForCustomDelay(timeouts.largest);
-        expect(actualText).toEqual(elementText);
+        await this.actions.assertEqual(actualText, elementText, `Element text mismatch: ${actualText} !== ${elementText}`);
     }
 
     /**
@@ -582,7 +585,7 @@ class WorkOrderPage {
     public async selectByElementText(radioButtonText: string): Promise<void> {
         const radioButtonLocator = this.actions.getLocator(this.getEleByText(radioButtonText));
         await this.actions.waitForElementToBeVisible(radioButtonLocator, `Radio Button: ${radioButtonText}`);
-        await this.actions.waitForCustomDelay(timeouts.medium);
+        await this.actions.waitForCustomDelay(timeouts.large);
         await this.actions.click(radioButtonLocator, `Radio Button: ${radioButtonText}`);
     }
 
@@ -687,7 +690,6 @@ class WorkOrderPage {
         for (const label of labels) {
             const labelLocator = this.actions.getLocator(this.getByLabel(label));
             await this.actions.click(labelLocator, `Label: ${label}`);
-            await this.actions.waitForDelay();
             const editIconLocator = this.actions.getLocator(this.getEditIconByLabel(label));
             await this.actions.waitForElementToBeVisible(editIconLocator, `Edit Icon for Label: ${label}`);
             await this.actions.click(editIconLocator, `Edit Icon for Label: ${label}`);
@@ -695,10 +697,12 @@ class WorkOrderPage {
             switch (label) {
                 case 'Hold Reason':
                     const dropdownValueLocator = this.actions.getLocator(this.getDDvalueByTitle(ddValue));
+                    await this.actions.waitForElementToBeVisible(dropdownValueLocator, `Dropdown Value: ${ddValue}`);
                     await this.actions.click(dropdownValueLocator, `Dropdown Value: ${ddValue}`);
                     break;
 
                 case 'Hold Until':
+                    await this.actions.waitForElementToBeVisible(labelLocator, `Dropdown Value: ${label}`);
                     await this.actions.click(labelLocator, `Clicking Hold Until Label: ${label}`);
                     await this.selectHoldDate(day);
                     break;
@@ -760,6 +764,7 @@ class WorkOrderPage {
         const locator = await this.actions.getLocator(this.elements.cancelPopupTextInputModal.selector);
         await this.actions.waitForElementToBeVisible(locator, this.elements.cancelPopupTextInputModal.name);
         await this.actions.typeText(locator, day, this.elements.cancelPopupTextInputModal.name);
+        await this.actions.waitForElementToBeVisible(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
         await this.actions.click(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
     }
 

@@ -88,16 +88,12 @@ class MrAutoConvertPage {
    */
   public async linkInventoryToMaintenanceRequest(tabText: string, title: string, buttonText: string): Promise<void> {
     await commonActionPage.clickTabByText(tabText);
-
     const moreButton = this.actions.getLocator(this.elements.moreButton.selector);
     await this.actions.click(moreButton, this.elements.moreButton.name);
-
     const linkInventory = this.actions.getLocator(commonActionPage.getElementByTitle(title));
     await this.actions.waitForElementToBeVisible(linkInventory, title);
     await this.actions.click(linkInventory, title);
-
     await workOrderPage.selectRowInLinkAssetPopupIfVisible();
-
     await workOrderPage.clickInputButton(buttonText);
   }
 

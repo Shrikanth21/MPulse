@@ -92,10 +92,11 @@ class RequisitionRecordsPage {
      */
     public async createRequisitionWithMandatoryFields(
         dropdownSelections: { ddType: string[] },
-        addButtonTitle: string
+        addButtonTitle: string,
+        divTitle: string
     ): Promise<void> {
         await commonActionPage.clickLinkByTitle(addButtonTitle);
-        await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType);
+        await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
         await this.fillSupplierDetails();
         await commonActionPage.clickSaveButton();
     }
@@ -179,10 +180,10 @@ class RequisitionRecordsPage {
      * @param tabName The name of the tab to activate.
      * @param dropdownSelections The dropdown selections to make.
      */
-    public async fillMandatoryFields(tabName: string, dropdownSelections: { ddType: string[] }): Promise<void> {
+    public async fillMandatoryFields(tabName: string, dropdownSelections: { ddType: string[] }, divTitle: string): Promise<void> {
         await commonActionPage.clickTabByText(tabName);
         await commonActionPage.clickEditButton();
-        await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType);
+        await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
         await this.fillSupplierDetails();
         await commonActionPage.clickSaveButton();
     }

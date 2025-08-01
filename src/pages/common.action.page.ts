@@ -26,7 +26,8 @@ class CommonActionPage {
     getElementByTitle = (title: string): string => `//a[@title='${title}']`;
     getTitleBySpan = (title: string): string => `//span[@title='${title}']`;
     getSpanByTitle = (title: string): string => `//span[@title='${title}']`;
-    getCustomDivByTitle = (title: string): string => `//div[contains(@title,'${title}')]`;
+    getDivByTitle = (title: string): string => `//div[contains(@title,'${title}')]`;;
+    getCustomDivByTitle = (title: string): string => `//div[@title='${title}']`;
     getColumnCellByTitle = (title: string): string => `//div[text()='${title}']`;
     getTabByTitle = (tabTeading: string): string => `//li[@title='${tabTeading}']`;
     getValueDivByTitle = (title: string): string => `//div[@title='${title}' and contains(@class, 'dx-item-content')]`;
@@ -134,7 +135,7 @@ class CommonActionPage {
      * @param title The title of the div to click on.
      */
     public async clickByDivTitle(title: string): Promise<void> {
-        const divLocator = this.actions.getLocator(this.getCustomDivByTitle(title)).nth(0);
+        const divLocator = this.actions.getLocator(this.getDivByTitle(title)).nth(0);
         await this.actions.waitForElementToBeVisible(divLocator, `Div: ${title}`);
         await this.actions.click(divLocator, `Div: ${title}`);
     }

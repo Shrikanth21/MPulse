@@ -8,6 +8,7 @@ import { generatedBuildingTaskDescription, generatedDescription, generatedEqTask
 import { workOrderPage } from '../../../pages/work-order-page/WorkOrderPage.page';
 import { getFutureDay } from '../../../helper/date/get.future.date';
 import { taskChecklistPage } from '../../../pages/capital-assets-page/Task.checkList.page';
+import test from 'playwright/test';
 
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
 

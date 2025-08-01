@@ -19,6 +19,7 @@ When(/^the user navigates to the Requisition Records page$/, async () => {
 When(/^the user creates a new Purchase Order Requisition with a mandatory fields$/, async () => {
 	await requisitionRecordsPage.createRequisitionWithMandatoryFields(
 		{ ddType: testData.dropdownSelections.map((item: any) => item.ddType) },
+		testData.requisitionMenuTitle,
 		testData.icons.plusIcon
 	);
 });
@@ -81,7 +82,8 @@ When(/^the user closes the created Purchase Order Requisition record from List v
 When(/^the user fill the mandatory fields$/, async () => {
 	await requisitionRecordsPage.fillMandatoryFields(
 		testData.element_text.supplier_tab_text,
-		{ ddType: testData.dropdownSelections.map((item: any) => item.ddType) }
+		{ ddType: testData.dropdownSelections.map((item: any) => item.ddType) },
+		testData.requisitionMenuTitle
 	);
 });
 

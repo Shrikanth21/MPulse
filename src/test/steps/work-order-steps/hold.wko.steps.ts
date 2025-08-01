@@ -42,7 +42,8 @@ When(
     await workOrderPage.setGeneralFields(
       testData.element_text.general_tab_text,
       getRandomString("digits", 10),
-      { ddType: testData.dropdownSelections.map((item: any) => item.ddType) }
+      { ddType: testData.dropdownSelections.map((item: any) => item.ddType) },
+      testData.subMenuItemTitle
     );
   }
 );
@@ -106,9 +107,7 @@ When(
 );
 
 When("the user hold the created Work Order record", async function () {
-  actions = new WebActions(this.page);
   await workOrderPage.clickButtonByText(testData.element_text.general_tab_text);
-  await actions.performKeyboardShortcutWithRobot();
   await workOrderPage.holdWKO(
     testData.element_text.status_text,
     testData.element_text.status_text,
@@ -118,7 +117,6 @@ When("the user hold the created Work Order record", async function () {
     getFutureDateFormatted(2),
     testData.element_text.save_button_text
   );
-  //await workOrderPage.clickSaveButton();
 });
 
 Then("the Work Order record should be hold successfully", async function () {

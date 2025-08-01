@@ -36,8 +36,8 @@ When('the user create a new Work Order with a unique description and upload medi
     await workOrderPage.setGeneralFields(
         testData.element_text.general_tab_text,
         getRandomString('digits', 10),
-        { ddType: testData.dropdownSelections.map((item: any) => item.ddType) }
-
+        { ddType: testData.dropdownSelections.map((item: any) => item.ddType) },
+        testData.subMenuItemTitle
     );
 });
 
