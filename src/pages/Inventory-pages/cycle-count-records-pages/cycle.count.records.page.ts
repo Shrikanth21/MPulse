@@ -27,6 +27,7 @@ class CycleCountRecordsPage {
         inventorySelectedForCounting: { selector: "//span[@title='Inventory selected for counting']", name: "Inventory Selected For Counting Span" },
         numberOfItem: { selector: "//div[@class='form-group-control-wrap-inner']/child::span[@class='form-editor ng-binding']", name: "Number Of Item" },
         cycleCountLinks: { selector: "//datagrid[@id='CycleCount']/descendant::tr/descendant::a", name: "Cycle Count Links" },
+        itemsToCountInput: { selector: "//div[@id='CCOUNTITEMSTOCOUNT']/descendant::input", name: "Items To Count Input" },
     }
 
     /**
@@ -72,12 +73,13 @@ class CycleCountRecordsPage {
     public async createCycleCountRecord(
         description: string,
         countType: string,
-        dropdownSelections: { ddType: string[] }
+        dropdownSelections: { ddType: string[] },
+        divTitle: string
     ): Promise<void> {
         commonActionPage.clickAddNewRecordButton();
         await commonActionPage.enterDescription(description);
         await this.selectCountType(countType);
-        await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType);
+        await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
     }
 
     /**
@@ -226,6 +228,35 @@ class CycleCountRecordsPage {
         );
     }
 
+    /**
+     * Selects the constant population for cycle count.
+     * @param countType 
+     * @param randomSampleOption 
+     * @param ccountItemsToCount 
+     * @param counts
+     */
+    public async selectConstantPopulation(countType: string, randomSampleOption: string, counts: string): Promise<void> {
+        await this.selectCountType(countType);
+        await commonActionPage.clickByDivId("CCOUNTRANDOMTYPE");
+        await commonActionPage.clickByDivTitle(randomSampleOption);
+        const textEl = await this.actions.getLocator(this.elements.itemsToCountInput.selector);
+        await this.actions.waitForElementToBeVisible(textEl, this.elements.itemsToCountInput.name);
+        await this.actions.typeText(textEl, counts, this.elements.itemsToCountInput.name);
+    }
+
+    /**
+     * Verifies the constant population settings.
+     * @param randomSampleOptions The random sample options to verify.
+     * @param howManyItemsToCount The number of items to count to verify.
+     */
+    public async verifyConstantPopulation(randomSampleOptions: string, howManyItemsToCount: string): Promise<void> {
+        await this.actions.waitForElementToBeVisible(
+            this.actions.getLocator(commonActionPage.getElementByText(randomSampleOptions)),
+            `Random Sample Options: ${randomSampleOptions}`);
+        await this.actions.waitForElementToBeVisible(
+            this.actions.getLocator(commonActionPage.getElementByText(howManyItemsToCount)),
+            `Cycle Count Items To Count: ${howManyItemsToCount}`);
+    }
 }
 
 export const cycleCountRecordsPage = new CycleCountRecordsPage();

@@ -25,8 +25,9 @@ When(/^the user navigates to the Cycle Count Records page$/, async () => {
 When(/^the user creates a new Cycle Count Record with unique description and mandatory fields$/, async () => {
     await cycleCountRecordsPage.createCycleCountRecord(
         generatedCycleCountRecordDescription,
-        testData.element_text.count_type_text,
-        { ddType: testData.cycleCountDropdownSelections.map((item: any) => item.ddType) }
+        testData.element_text.filtered_set_count_type_text,
+        { ddType: testData.cycleCountDropdownSelections.map((item: any) => item.ddType) },
+        testData.cycle_count_records_title
     );
 });
 
@@ -93,3 +94,20 @@ When(/^the user closes the converted Work Order record$/, async () => {
         getFutureDateFormatted(2)
     );
 });
+
+When(/^the user proceeds to the population step by choosing Constant population$/, async () => {
+    await cycleCountRecordsPage.selectConstantPopulation(
+        testData.element_text.constant_population_count_type_text,
+        testData.element_text.random_sample_count_type_text,
+        testData.element_text.number_of_items
+    );
+});
+
+
+Then(/^the user should see the constant population of items$/, async () => {
+	await cycleCountRecordsPage.verifyConstantPopulation(
+        testData.element_text.random_sample_options,
+        testData.element_text.how_many_items_to_count
+    );
+});
+
