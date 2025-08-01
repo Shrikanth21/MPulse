@@ -1,6 +1,6 @@
 Feature: CYC - Create a CYC record with Filtered population -Covert to WKO-Close
 
-  @CYC @createCycleCount @sanityCYC
+  @CYC @cycFilteredPopulation @sanityCYC
   Scenario: Create a CYC record with Filtered population and Convert to WKO and Close
     Given the user logs into the application
     And the user selects a specific database
