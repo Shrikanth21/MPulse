@@ -5,6 +5,9 @@ import { workOrderPage } from "../../../../pages/work-order-page/WorkOrderPage.p
 import { imgFilePath } from "../../../../helper/files/read.excel.file";
 import { mrAutoConvertPage } from "../../../../pages/work-order-page/maintenance-request-records-pages/mr.auto.convert.page";
 import { commonActionPage } from "../../../../pages/common.action.page";
+import path from "path";
+
+const filePath = path.resolve(__dirname, '../../../../data/docs/MPulse.docx');
 
 When(/^the user navigates to the Requisition Records page$/, async () => {
 	await requisitionRecordsPage.navigateToRequisitionRecordsPage(
@@ -29,7 +32,7 @@ Then(/^the Purchase Order Requisition status should be Open$/, async () => {
 
 
 When(/^the user uploads a media file in the Purchase Order Requisition$/, async () => {
-	await workOrderPage.addMediaAndSelectRecord(testData.element_text.media_text, testData.icons.media_link_icon, imgFilePath, testData.element_text.upload_text);
+	await workOrderPage.addMediaAndSelectRecord(testData.element_text.media_text, testData.icons.media_link_icon, filePath, testData.element_text.upload_text);
 });
 
 When(/^the user links inventory to the Purchase Order Requisition$/, async () => {
