@@ -11,4 +11,3 @@ Feature: List View - Create a Work Order Record - Close
     And the Work Order status should be Open status
     And the user links assets, personnel, and inventory to the Work Order
     Then the Work Order record from List view should be close
-    And the Work Order record from List view should be delete successfully

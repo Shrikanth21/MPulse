@@ -11,7 +11,7 @@ Feature: List View - Maintenance Advisor for Work Order Records
     When the user clicks on the add Layout button
     And the user enters a unique name for the layout
     And the user selects the required columns
-    Then the layout should be visible in dropdown lists
+    Then the layout should be visible in dropdown list
     And the layout should be applied and required columns should be visible
     When the user clicks on the Settings icon again
     And the user navigate to the custom filter Layouts tab

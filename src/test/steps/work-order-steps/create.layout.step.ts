@@ -1,9 +1,12 @@
 import { Then, When } from "@cucumber/cucumber";
 import { createFilterPage } from "../../../pages/work-order-page/create.filter.page";
-import { generatedLayoutName } from "../../../helper/get.different.description";
+import { generateDescription } from "../../../helper/get.different.description";
 import filterOptinData from "../../../data/custom.filter.data.json";
 import logger from "../../../helper/loggs/logger";
 import { withGroupFilterPage } from "../../../pages/work-order-page/create.filter.withGroup.page";
+import { maintenanceAdvisorPage } from "../../../pages/work-order-page/maintenance.advisor.page";
+
+const layoutName = generateDescription('Layout', '_Automation');
 
 When(/^the user clicks on the Settings icon$/, async () => {
     await createFilterPage.clickOnCustomizeButton();
@@ -18,7 +21,7 @@ When(/^the user clicks on the add Layout button$/, async () => {
 });
 
 When(/^the user enters a unique name for the layout$/, async () => {
-    await createFilterPage.enterLayoutName(generatedLayoutName);
+    await createFilterPage.enterLayoutName(layoutName);
 });
 
 // When(/^the user selected the required columns: Asset Type, dateDue, createdBy, Othercost, Status$/, async () => {
@@ -45,9 +48,8 @@ When(/^the user selects the required columns$/, async () => {
     await createFilterPage.clickOnApplyButton();
 });
 
-
 Then(/^the layout should be visible in dropdown list$/, async () => {
-    await createFilterPage.verifyLayoutCreatedSuccessfully(generatedLayoutName);
+    await createFilterPage.verifyLayoutCreatedSuccessfully(layoutName);
 });
 
 Then(/^the layout should be applied and required columns should be visible$/, async () => {
@@ -129,7 +131,7 @@ Then(/^the Work Orders with status "([^"]*)" should be highlighted with the spec
 
 Then(/^the user deletes the created layout$/, async () => {
     await createFilterPage.clickOnDeleteCurrentRecord();
-    await createFilterPage.verifyLayoutDeleted(generatedLayoutName);
+    await createFilterPage.verifyLayoutDeleted(layoutName);
 });
 
 When(/^the user clicks on the Group checkbox$/, async () => {
@@ -148,4 +150,33 @@ Then(/^the grouped column header for "([^"]*)" should be visible$/, async (colum
 
 When(/^the user expands the last customized group to view its Work Orders$/, async () => {
     await withGroupFilterPage.expandCreatedByGroup();
+});
+
+When(/^the user navigates to the Maintenance Advisor module$/, async () => {
+    await maintenanceAdvisorPage.navigateToPages(filterOptinData.maintenanceAdvisor.maintenance_advisor_title);
+});
+
+Then(/^the user should see the Maintenance Advisor dashboard$/, async () => {
+    await maintenanceAdvisorPage.verifyPageTitle(filterOptinData.maintenanceAdvisor.maintenance_advisor_title);
+});
+
+When(/^the user sets the desired layout in Maintenance Advisor$/, async () => {
+    await maintenanceAdvisorPage.selectSavedLayout(layoutName);
+});
+
+When(/^the user navigates to the dashboard view$/, async () => {
+    await maintenanceAdvisorPage.navigateToPages(filterOptinData.maintenanceAdvisor.dashboard_title);
+});
+
+
+Then(/^the color code for each record should be displayed correctly$/, async () => {
+    await maintenanceAdvisorPage.verifyMaintenanceAdvisorColorCodeApplied(filterOptinData.customColorItem.Yellow);
+});
+
+Then(/^the records appearing should match the expected criteria for the layout$/, async () => {
+    await maintenanceAdvisorPage.verifyDraggableBlockHeadExists(layoutName);
+});
+
+Then(/^the user remove the Maintenance Advisor layout$/, async () => {
+    await maintenanceAdvisorPage.removeLayout();
 });

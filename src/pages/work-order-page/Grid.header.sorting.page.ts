@@ -1,25 +1,36 @@
-import { Page } from "@playwright/test";
+import test, { Page } from "@playwright/test";
 import { WebActions } from "../../base/web.action.util";
 import { getPage } from "../../base/base";
 import { timeouts } from "../../helper/timeouts-config";
 import { commonActionPage } from "../common.action.page";
+import testData from '../../data/testData.json';
 
 class GridPage {
 
-  private get currentPage(): Page {
+    private get currentPage(): Page {
         return getPage();
     }
 
     private get actions(): WebActions {
         return new WebActions(this.currentPage);
     }
-    
+
     private Elements = {
         sortingWorkOrderByID: { selector: '//div[@dx-data-grid="listviewgrid"]/descendant::div[text()="ID#"]', name: 'sort workorder by id' },
         beforeWorkOrderID: { selector: "//td[contains(@aria-describedby,'dx-col') and @aria-colindex='2']", name: 'first workID' },
         maximizeButton: { selector: '[title="Maximize"]', name: "Maximize Button" },
         sideBarCollapse: { selector: "//div[@class='sideBarExOptions']//i[@class='fas fa-chevron-left']", name: "Sidebar Collapse Icon" },
+        sortUpIcon: { selector: "//span[@class='dx-sort dx-sort-up']", name: "Sort Up Icon" },
     };
+
+    /**
+     * Clicks on the sort up icon to sort the work order records in ascending order.
+     */
+    public async clickOnSortUpIcon(): Promise<void> {
+        const sortUpIcon = this.actions.getLocator(this.Elements.sortUpIcon.selector);
+        await this.actions.waitForElementToBeVisible(sortUpIcon, this.Elements.sortUpIcon.name);
+        await this.actions.click(sortUpIcon, this.Elements.sortUpIcon.name);
+    }
 
     /**
      * Gets the text of the current work order ID.
@@ -52,9 +63,16 @@ class GridPage {
      */
     public async clickColumnHeader(): Promise<void> {
         await this.actions.waitForCustomDelay(timeouts.large);
-        const sortbyid = this.actions.getLocator(this.Elements.sortingWorkOrderByID.selector);
-        await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.sortingWorkOrderByID.name);
-        await this.actions.click(sortbyid, this.Elements.sortingWorkOrderByID.name);
+        if (testData.db_name === 'FreshDBSep') {
+            const sortbyid = this.actions.getLocator(this.Elements.sortingWorkOrderByID.selector);
+            await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.sortingWorkOrderByID.name);
+            await this.actions.click(sortbyid, this.Elements.sortingWorkOrderByID.name);
+            await this.clickOnSortUpIcon();
+        } else {
+            const sortbyid = this.actions.getLocator(this.Elements.sortingWorkOrderByID.selector);
+            await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.sortingWorkOrderByID.name);
+            await this.actions.click(sortbyid, this.Elements.sortingWorkOrderByID.name);
+        }
         await this.currentPage.waitForTimeout(timeouts.largest);
     }
 
@@ -77,6 +95,7 @@ class GridPage {
         await this.actions.waitForElementToBeVisible(afteresortedwoID, this.Elements.beforeWorkOrderID.name);
         const aftereSortedwoID = await afteresortedwoID.innerText();
         console.log(`Before sorted Work Order ID: ${beforesortedText} and After sorted Work Order ID: ${aftereSortedwoID}`);
+        await this.actions.waitForCustomDelay(timeouts.medium);
         await this.actions.assertNotEqual(
             aftereSortedwoID,
             beforesortedText,

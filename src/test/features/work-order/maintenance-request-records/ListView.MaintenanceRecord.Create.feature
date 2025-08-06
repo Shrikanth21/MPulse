@@ -13,5 +13,6 @@ Feature: Maintenance Request - Create from List View
     And the user maximizes the Work Order Records list view display
     And the user convert a Maintenance Request into new work order in the list view
     Then the Work Order status should be Open status
-    And the converted Work Order record from List view should be delete successfully
-    
+    And the user links assets, personnel, and inventory to the Work Order
+    And the user closes the created Work Order record
+    Then the Work Order record should be closed successfully

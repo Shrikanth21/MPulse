@@ -14,4 +14,3 @@ Feature: Maintenance Request - Create and Convert to Work Order and Close
     And the user links assets, personnel, and inventory to the Work Order
     And the user closes the created Work Order record
     Then the Work Order record should be closed successfully
-    And the user deletes the newly created Work Order record

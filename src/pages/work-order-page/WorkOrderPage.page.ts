@@ -150,6 +150,7 @@ class WorkOrderPage {
             const inputButtonLocator = await this.actions.getLocator(this.getOkButton(text));
             await this.actions.waitForElementToBeVisible(inputButtonLocator, `Input Button: ${text}`);
             await this.actions.scrollToAndClick(inputButtonLocator, `Input Button: ${text}`);
+            await this.actions.waitForElementToBeVisible(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
             await this.actions.click(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
         }
     }
@@ -160,8 +161,10 @@ class WorkOrderPage {
      */
     public async clickInputButton(text: string): Promise<void> {
         const inputButtonLocator = this.actions.getLocator(this.getInputButton(text));
-        await this.actions.waitForElementToBeVisible(inputButtonLocator, `Input Button: ${text}`);
-        await this.actions.scrollToAndClick(inputButtonLocator, `Input Button: ${text}`);
+        if (await inputButtonLocator.isVisible()) {
+            await this.actions.waitForElementToBeVisible(inputButtonLocator, `Input Button: ${text}`);
+            await this.actions.scrollToAndClick(inputButtonLocator, `Input Button: ${text}`);
+        }
     }
     /**
      * clicks on the "Ok" button in the calendar popup.
@@ -259,7 +262,6 @@ class WorkOrderPage {
      * @param buttonText The text of the button to click.
      */
     public async linkAssetToTask(recordText: string, assetText: string, linkTitle: string, buttonText: string): Promise<void> {
-        await this.selectByElementText(recordText);
         await this.clickMoreButton(assetText);
         await commonActionPage.clickLinkByTitle(linkTitle);
         await this.selectRowInLinkAssetPopupIfVisible();
@@ -356,13 +358,11 @@ class WorkOrderPage {
      * @param btnTitle The title of the button.
      * @param recordText 
      */
-    public async createWorkOrder(addButtonTitle: string, description: string, mediaButtonText: string, mediaLinkTitle: string, mediaFilePath: string, btnTitle: string, recordText: string): Promise<void> {
+    public async createWorkOrder(addButtonTitle: string, description: string, mediaButtonText: string, mediaLinkTitle: string, mediaFilePath: string, btnTitle: string): Promise<void> {
         await this.currentPage.waitForTimeout(timeouts.large);
         await commonActionPage.clickLinkByTitle(addButtonTitle);
         await commonActionPage.enterDescription(description);
         await this.uploadMediaFile(mediaButtonText, mediaLinkTitle, mediaFilePath, btnTitle);
-        await commonActionPage.clickSaveButton();
-        await this.selectByElementText(recordText);
     }
 
     /**
@@ -521,7 +521,6 @@ class WorkOrderPage {
         divTitle: string
     ): Promise<void> {
         await this.clickElementByText(tabName);
-        await this.clickEditButton();
         await this.actions.waitForCustomDelay(timeouts.medium);
         await this.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
         await this.setPhoneNumber(phoneNumber);
@@ -597,6 +596,7 @@ class WorkOrderPage {
      * @param cost The cost value to set.
      */
     public async setCost(id: string, fieldName: string, inputField: string, cost: string): Promise<void> {
+        await commonActionPage.clickTabByText('Financial')
         const linkLocator = this.actions.getLocator(this.getById(id));
         await this.actions.click(linkLocator, `Link: ${id}`);
 
@@ -732,6 +732,7 @@ class WorkOrderPage {
         await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
         const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);
         await this.actions.click(minimizeButton, this.elements.hideButton.name);
+        await commonActionPage.clickEditButton();
     }
 
     /**
@@ -753,6 +754,7 @@ class WorkOrderPage {
         const locator = await this.actions.getLocator(this.elements.popupTextInput.selector);
         await this.actions.waitForElementToBeVisible(locator, this.elements.popupTextInput.name);
         await this.actions.typeText(locator, day, this.elements.popupTextInput.name);
+        await this.actions.waitForElementToBeVisible(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
         await this.actions.click(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
     }
 

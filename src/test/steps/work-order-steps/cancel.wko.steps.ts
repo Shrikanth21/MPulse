@@ -5,13 +5,14 @@ import { WebActions } from '../../../base/web.action.util';
 import { loginPage } from '../../../pages/login-page/Login.page';
 import { homePage } from '../../../pages/home-page/Home.page';
 import { workOrderPage } from '../../../pages/work-order-page/WorkOrderPage.page';
-import { generatedDescription } from '../../../helper/get.different.description';
+import { generateDescription } from '../../../helper/get.different.description';
 import { getRandomString } from '../../../helper/get-random-string';
 import { getFutureDateFormatted, getFutureDay } from '../../../helper/date/get.future.date';
 import { timeouts } from '../../../helper/timeouts-config';
 
 let actions: WebActions;
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
+const description = generateDescription('Work Order', '_Automation');
 
 Given('the user login to the application', async function () {
     const credentials = await loginPage.loadExcelCredentials();
@@ -30,9 +31,9 @@ When('the user navigate to the Work Order Records page', async function () {
 });
 
 When('the user create a new Work Order with a unique description and upload media', async function () {
-    await workOrderPage.createWorkOrder(testData.icons.plusIcon, generatedDescription, testData.element_text.media_text,
+    await workOrderPage.createWorkOrder(testData.icons.plusIcon, description, testData.element_text.media_text,
         testData.icons.media_link_icon,
-        filePath, testData.element_text.upload_text, generatedDescription);
+        filePath, testData.element_text.upload_text);
     await workOrderPage.setGeneralFields(
         testData.element_text.general_tab_text,
         getRandomString('digits', 10),
@@ -56,7 +57,7 @@ When('the user assign future due date to the Work Order', async function () {
 });
 
 When('the user links asset, personnel, and inventory to the Work Order', async function () {
-    await workOrderPage.linkAssetToTask(generatedDescription,
+    await workOrderPage.linkAssetToTask(description,
         testData.wo_info.assetAssignedToTask,
         testData.icons.asset_link_icon,
         testData.element_text.replace_button
@@ -84,7 +85,7 @@ When('the user links asset, personnel, and inventory to the Work Order', async f
         testData.element_text.hours,
         testData.icons.crossIcon_title
     );
-    await workOrderPage.selectByElementText(generatedDescription);
+    await workOrderPage.selectByElementText(description);
     await workOrderPage.setFinancialFields(testData.costFields);
 
 });

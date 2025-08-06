@@ -2,6 +2,7 @@ import { Page } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
 import { commonActionPage } from "../common.action.page";
+import { timeouts } from "../../helper/timeouts-config";
 
 class SearchUpdateWorkOrderPage {
     private get currentPage(): Page {
@@ -58,7 +59,9 @@ class SearchUpdateWorkOrderPage {
      */
     public async verifySearchResult(beforeSearchResultText: string): Promise<void> {
         const afterSearchResultTextEl = this.actions.getLocator(this.elements.getClickonTask.selector);
+        await this.actions.waitForElementToBeVisible(afterSearchResultTextEl, this.elements.getClickonTask.name);
         const afterSearchResultText = await this.actions.getText(afterSearchResultTextEl, this.elements.getClickonTask.name);
+        await this.actions.waitForCustomDelay(timeouts.medium);
         await this.actions.assertEqual(afterSearchResultText, beforeSearchResultText);
     }
 

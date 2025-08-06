@@ -78,7 +78,7 @@ class CreateFilterPage {
             await this.actions.assertEqual(columnTitle, title, `Column with title ${title} is not visible`);
         }
     }
-    
+
     /**
      * Clicks on the customize button to open the customization modal.
      */
@@ -151,6 +151,7 @@ class CreateFilterPage {
         await this.actions.waitForElementToBeVisible(layoutEntryInputLocator, this.elements.expandGridDropdownIcon.name);
         await this.actions.click(layoutEntryInputLocator, this.elements.expandGridDropdownIcon.name);
         const layoutOptionLocator = this.actions.getLocator(commonActionPage.getCustomDivByTitle(layoutName));
+        await this.actions.waitForElementToBeVisible(layoutOptionLocator, `Element is visible`)
         const layoutTitle = await this.actions.getText(layoutOptionLocator, this.elements.expandGridDropdownIcon.name);
         await this.actions.assertEqual(layoutTitle, layoutName, `${layoutName} is not present in the dropdown`);
         await this.actions.click(layoutEntryInputLocator, this.elements.expandGridDropdownIcon.name);
@@ -357,12 +358,18 @@ class CreateFilterPage {
      * Selects a record area from the dropdown.
      * @param text The text of the record area to select.
      */
-    public async verifyColorCodeApplied(color: string): Promise<void> {
-        const colorCodeFilterInput = this.actions.getLocator(this.elements.dataRows.selector).nth(0);
-        await this.actions.waitForElementToBeVisible(colorCodeFilterInput, this.elements.dataRows.name);
-        await this.actions.waitForCustomDelay(timeouts.medium);
-        const appliedColor = await this.actions.getCSSProperty(colorCodeFilterInput, 'background-color', this.elements.dataRows.name);
-        await this.actions.assertEqual(appliedColor, color, `Color code for ${color} is not applied correctly`);
+    public async verifyColorCodeApplied(expectedColor: string): Promise<void> {
+        const firstRow = this.actions.getLocator(this.elements.dataRows.selector).nth(0);
+        await this.actions.waitForElementToBeVisible(firstRow, this.elements.dataRows.name);
+        await this.actions.waitFor(async () => {
+            const color = await this.actions.getCSSProperty(firstRow, 'background-color', this.elements.dataRows.name);
+            return color === expectedColor;
+        }, {
+            timeout: timeouts.large,
+            message: `Expected background color '${expectedColor}' not applied in time.`,
+        });
+        const appliedColor = await this.actions.getCSSProperty(firstRow, 'background-color', this.elements.dataRows.name);
+        await this.actions.assertEqual(appliedColor, expectedColor, `Color code for ${expectedColor} is not applied correctly`);
     }
 }
 

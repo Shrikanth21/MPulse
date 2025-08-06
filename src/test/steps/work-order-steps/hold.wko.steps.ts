@@ -36,8 +36,7 @@ When(
       testData.element_text.media_text,
       testData.icons.media_link_icon,
       filePath,
-      testData.element_text.upload_text,
-      generatedDescription
+      testData.element_text.upload_text
     );
     await workOrderPage.setGeneralFields(
       testData.element_text.general_tab_text,
@@ -73,7 +72,7 @@ When(
       testData.element_text.replace_button
     );
 
-    await workOrderPage.selectByElementText(generatedDescription);
+    //await workOrderPage.selectByElementText(generatedDescription);
 
 
     await workOrderPage.linkPersonnelToAsset(
@@ -81,7 +80,6 @@ When(
       testData.icons.personnel_link_icon,
       testData.element_text.link_button
     );
-    await workOrderPage.selectByElementText(generatedDescription);
 
     await workOrderPage.linkInventoryToAsset(
       testData.wo_info.inventoryAssignedToAsset,
@@ -89,7 +87,6 @@ When(
       testData.element_text.link_button,
       testData.element_text.input_ok_button
     );
-    await workOrderPage.selectByElementText(generatedDescription);
 
 
     await workOrderPage.setEmployeeActualHours(
@@ -101,7 +98,6 @@ When(
       testData.element_text.hours,
       testData.icons.crossIcon_title
     );
-    await workOrderPage.selectByElementText(generatedDescription);
     await workOrderPage.setFinancialFields(testData.costFields);
   }
 );

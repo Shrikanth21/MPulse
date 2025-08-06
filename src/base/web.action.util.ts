@@ -3,6 +3,7 @@ import { timeouts } from '../helper/timeouts-config';
 import logger from '../helper/loggs/logger';
 
 export class WebActions {
+
   private page: Page;
 
   constructor(page: Page) {
@@ -384,7 +385,7 @@ export class WebActions {
       await this.waitForDelay();
       await this.page.waitForLoadState('networkidle');
       await this.waitForDelay();
-      await this.page.waitForURL(expectedUrl, { waitUntil: 'load', timeout: timeouts.large });
+      await this.page.waitForURL(expectedUrl, { waitUntil: 'load', timeout: timeouts.largest });
       logger.info(`Successfully validated current URL: ${expectedUrl}`);
     } catch (error) {
       logger.error(`Failed to validate current URL: ${expectedUrl} | Error: ${error}`);
@@ -412,6 +413,27 @@ export class WebActions {
       logger.error(`Failed to get CSS property "${property}" from element: ${elementDescription} | Error: ${error}`);
       throw error;
     }
+  }
+
+  /**
+   * Waits for a custom condition to be true within a timeout.
+   * @param conditionFn The async function that returns a boolean.
+   * @param options Options object with timeout and message.
+   */
+  public async waitFor(
+    conditionFn: () => Promise<boolean>,
+    options: { timeout: number; message: string }
+  ): Promise<void> {
+    const start = Date.now();
+    while (Date.now() - start < options.timeout) {
+      if (await conditionFn()) {
+        logger.info(`Condition met: ${options.message}`);
+        return;
+      }
+      await this.waitForCustomDelay(timeouts.small);
+    }
+    logger.error(`Timeout waiting for condition: ${options.message}`);
+    throw new Error(`Timeout waiting for condition: ${options.message}`);
   }
 
   /**

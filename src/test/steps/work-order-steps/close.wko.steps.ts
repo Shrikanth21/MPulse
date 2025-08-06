@@ -1,14 +1,14 @@
-import { Given, When, Then } from '@cucumber/cucumber';
+import { When, Then } from '@cucumber/cucumber';
 import testData from '../../../data/close.wko.json';
 import * as path from 'path';
-import { loginPage } from '../../../pages/login-page/Login.page';
 import { homePage } from '../../../pages/home-page/Home.page';
 import { workOrderPage } from '../../../pages/work-order-page/WorkOrderPage.page';
-import { generatedDescription } from '../../../helper/get.different.description';
+import { generateDescription } from '../../../helper/get.different.description';
 import { getRandomString } from '../../../helper/get-random-string';
 import { getFutureDateFormatted, getFutureDay } from '../../../helper/date/get.future.date';
 
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
+const description = generateDescription('Work Order', '_Automation');
 
 When('the user navigates to the Work Order Records page', async function () {
     await homePage.navigateToCapitalAssetsRecordsPage(
@@ -20,8 +20,8 @@ When('the user navigates to the Work Order Records page', async function () {
 });
 
 When('the user creates a new Work Order with a unique description and uploads media', async function () {
-    await workOrderPage.createWorkOrder(testData.icons.plusIcon, generatedDescription, testData.element_text.media_text,
-        testData.icons.media_link_icon, filePath, testData.element_text.upload_text, generatedDescription);
+    await workOrderPage.createWorkOrder(testData.icons.plusIcon, description, testData.element_text.media_text,
+        testData.icons.media_link_icon, filePath, testData.element_text.upload_text);
     await workOrderPage.setGeneralFields(
         testData.element_text.general_tab_text,
         getRandomString('digits', 10),
@@ -50,19 +50,19 @@ When('the user assign a future due date to the Work Order', async function () {
 });
 
 When('the user links assets, personnel, and inventory to the Work Order', async function () {
-    await workOrderPage.linkAssetToTask(generatedDescription,
+    await workOrderPage.linkAssetToTask(description,
         testData.wo_info.assetAssignedToTask,
         testData.icons.asset_link_icon,
         testData.element_text.replace_button
     );
-    await workOrderPage.selectByElementText(generatedDescription);
+    await workOrderPage.selectByElementText(description);
 
     await workOrderPage.linkPersonnelToAsset(
         testData.wo_info.personnelAssignedToAsset,
         testData.icons.personnel_link_icon,
         testData.element_text.link_button
     );
-    await workOrderPage.selectByElementText(generatedDescription);
+    await workOrderPage.selectByElementText(description);
 
     await workOrderPage.linkInventoryToAsset(
         testData.wo_info.inventoryAssignedToAsset,
@@ -70,7 +70,7 @@ When('the user links assets, personnel, and inventory to the Work Order', async 
         testData.element_text.link_button,
         testData.element_text.input_ok_button
     );
-    await workOrderPage.selectByElementText(generatedDescription);
+    await workOrderPage.selectByElementText(description);
 
     await workOrderPage.setEmployeeActualHours(
         testData.wo_info.personnelAssignedToAsset,
@@ -84,7 +84,7 @@ When('the user links assets, personnel, and inventory to the Work Order', async 
 });
 
 When('the user closes the created Work Order record', async function () {
-    await workOrderPage.selectByElementText(generatedDescription);
+    await workOrderPage.selectByElementText(description);
     await workOrderPage.setFinancialFields(testData.costFields);
 
     await workOrderPage.closeWorkOrder(
@@ -111,7 +111,7 @@ Then('the user deletes the newly created Work Order record', async function () {
  */
 
 When('the user creates a new Work Order record from List view with a unique description', async function () {
-    await workOrderPage.listViewWKO(generatedDescription);
+    await workOrderPage.listViewWKO(description);
 });
 
 When("the user uploads media file", async function () {

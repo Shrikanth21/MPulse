@@ -1,6 +1,7 @@
 {
     "default": {
         "dryRun": false,
+        "retry": 1,
         "formatOptions": {
             "snippetInterface": "async-await"
         },

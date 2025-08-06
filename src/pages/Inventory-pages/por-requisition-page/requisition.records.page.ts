@@ -92,10 +92,9 @@ class RequisitionRecordsPage {
      */
     public async createRequisitionWithMandatoryFields(
         dropdownSelections: { ddType: string[] },
-        addButtonTitle: string,
         divTitle: string
     ): Promise<void> {
-        await commonActionPage.clickLinkByTitle(addButtonTitle);
+        await commonActionPage.clickAddNewRecordButton();
         await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
         await this.fillSupplierDetails();
         await commonActionPage.clickSaveButton();
