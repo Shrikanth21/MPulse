@@ -21,6 +21,9 @@ const options = {
   columnLayout: 1,
   screenshotsDirectory: 'reports/',
   failedSummaryReport: true,
+  brandTitle: "MPulse QA Automation",
+  name: "MPulse Cucumber Report",
+  pageTitle: "MPulse Cucumber Report",
   metadata: {
     browser: `<span style="color: #a72828ff; font-weight: bold;">${process.env.browser}</span>`,
     app_url: `<span style="color: #a72e28ff; font-weight: bold;">${process.env.app_url}</span>`,
