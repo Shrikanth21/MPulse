@@ -7,7 +7,7 @@ Feature: Maintenance Request - Create and Convert to Work Order and Close
     When the user navigates to the Maintenance Request Records page
     And the user creates a new Maintenance Request with a unique description
     Then the Maintenance Order status should be Pending
-    When the user convert a Maintenance Request into new work order with a unique description
+    When the user convert a Maintenance Request into new work order
     And the user uploads media file
     Then the uploaded image should be visible
     And the Work Order status should be Open status

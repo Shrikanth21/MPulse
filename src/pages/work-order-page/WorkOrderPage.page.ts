@@ -330,7 +330,9 @@ class WorkOrderPage {
      * @param buttonText The text of the button to click.
      */
     public async clickButtonByText(buttonText: string): Promise<void> {
-        await this.actions.click(this.actions.getLocator(this.getElementByText(buttonText)), `${buttonText} Button`);
+        const buttonLocator = this.actions.getLocator(this.getElementByText(buttonText));
+        await this.actions.waitForElementToBeVisible(buttonLocator, `Button: ${buttonText}`);
+        await this.actions.click(buttonLocator, `Button: ${buttonText}`);
     }
 
     /**

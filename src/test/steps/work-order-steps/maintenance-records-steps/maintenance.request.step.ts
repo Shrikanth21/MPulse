@@ -36,13 +36,13 @@ Then(/^the Maintenance Order status should be (.+)$/, async (status: string) => 
     await maintenanceRequestRecordsPage.validateElementText(status);
 });
 
-When('the user convert a Maintenance Request into new work order with a unique description', async function () {
+When('the user convert a Maintenance Request into new work order', async function () {
     await maintenanceRequestRecordsPage.clickOnConvertWorkOrderButton(
         mrtestData.element_text.convert_wko_order,
         mrtestData.element_text.yes_convert,
         mrtestData.element_text.yes_button,
     );
-    await maintenanceRequestRecordsPage.enterDescriptionAfterConvert(generatedDescription);
+    await commonActionPage.clickEditButton();
 });
 
 

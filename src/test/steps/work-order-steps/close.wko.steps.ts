@@ -6,6 +6,7 @@ import { workOrderPage } from '../../../pages/work-order-page/WorkOrderPage.page
 import { generateDescription } from '../../../helper/get.different.description';
 import { getRandomString } from '../../../helper/get-random-string';
 import { getFutureDateFormatted, getFutureDay } from '../../../helper/date/get.future.date';
+import { commonActionPage } from '../../../pages/common.action.page';
 
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
 const description = generateDescription('Work Order', '_Automation');
@@ -55,14 +56,12 @@ When('the user links assets, personnel, and inventory to the Work Order', async 
         testData.icons.asset_link_icon,
         testData.element_text.replace_button
     );
-    await workOrderPage.selectByElementText(description);
 
     await workOrderPage.linkPersonnelToAsset(
         testData.wo_info.personnelAssignedToAsset,
         testData.icons.personnel_link_icon,
         testData.element_text.link_button
     );
-    await workOrderPage.selectByElementText(description);
 
     await workOrderPage.linkInventoryToAsset(
         testData.wo_info.inventoryAssignedToAsset,
@@ -70,7 +69,6 @@ When('the user links assets, personnel, and inventory to the Work Order', async 
         testData.element_text.link_button,
         testData.element_text.input_ok_button
     );
-    await workOrderPage.selectByElementText(description);
 
     await workOrderPage.setEmployeeActualHours(
         testData.wo_info.personnelAssignedToAsset,
@@ -84,7 +82,7 @@ When('the user links assets, personnel, and inventory to the Work Order', async 
 });
 
 When('the user closes the created Work Order record', async function () {
-    await workOrderPage.selectByElementText(description);
+    await commonActionPage.clickTabByText('Financial');
     await workOrderPage.setFinancialFields(testData.costFields);
 
     await workOrderPage.closeWorkOrder(

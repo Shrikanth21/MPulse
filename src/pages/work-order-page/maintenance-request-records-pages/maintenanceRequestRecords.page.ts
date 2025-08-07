@@ -45,9 +45,11 @@ class MaintenanceRequestRecordsPage {
             const popupText = await this.actions.getText(textLocator, this.elements.dialogMessage.name);
             if (popupText === 'OK') {
                 const fieldLocator = this.actions.getLocator(this.elements.dialogMessage.selector);
+                await this.actions.waitForElementToBeVisible(fieldLocator, `Field: ${this.elements.dialogMessage.name}`);
                 await this.actions.click(fieldLocator, `Field: ${this.elements.dialogMessage.name}`);
             } else if (popupText === 'Yes') {
                 const fieldLocator = this.actions.getLocator(this.elements.dialogMessage.selector).nth(0);
+                await this.actions.waitForElementToBeVisible(fieldLocator, `Field: ${this.elements.dialogMessage.name}`);
                 await this.actions.click(fieldLocator, `Field: ${this.elements.dialogMessage.name}`);
             }
         }
@@ -69,7 +71,6 @@ class MaintenanceRequestRecordsPage {
         const editButton = this.actions.getLocator(commonActionPage.elements.editButton.selector);
         await this.actions.click(editButton, commonActionPage.elements.editButton.name);
         await commonActionPage.enterDescription(description);
-        await commonActionPage.clickSaveButton();
     }
     /**
      * creates a new maintenance record with the specified description.
