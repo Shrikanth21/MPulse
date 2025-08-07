@@ -63,16 +63,10 @@ class GridPage {
      */
     public async clickColumnHeader(): Promise<void> {
         await this.actions.waitForCustomDelay(timeouts.large);
-        if (testData.db_name === 'FreshDBSep') {
-            const sortbyid = this.actions.getLocator(this.Elements.sortingWorkOrderByID.selector);
-            await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.sortingWorkOrderByID.name);
-            await this.actions.click(sortbyid, this.Elements.sortingWorkOrderByID.name);
-            await this.clickOnSortUpIcon();
-        } else {
-            const sortbyid = this.actions.getLocator(this.Elements.sortingWorkOrderByID.selector);
-            await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.sortingWorkOrderByID.name);
-            await this.actions.click(sortbyid, this.Elements.sortingWorkOrderByID.name);
-        }
+        const sortbyid = this.actions.getLocator(this.Elements.sortingWorkOrderByID.selector);
+        await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.sortingWorkOrderByID.name);
+        await this.actions.click(sortbyid, this.Elements.sortingWorkOrderByID.name);
+        await this.clickOnSortUpIcon();
         await this.currentPage.waitForTimeout(timeouts.largest);
     }
 
