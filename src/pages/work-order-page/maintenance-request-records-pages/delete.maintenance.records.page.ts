@@ -2,8 +2,7 @@ import { Page } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
 import { timeouts } from "../../../helper/timeouts-config";
-import { approvalFlowPage } from "./approval.flow.page";
-import { deleteWOPage } from "../delete.wko.page";
+import { deleteWOPage } from "../Delete.Wko.page";
 import { commonActionPage } from "../../common.action.page";
 
 class DeleteMaintenanceRecordsPage {
@@ -33,6 +32,7 @@ class DeleteMaintenanceRecordsPage {
      */
     public async getCurrentMRRecordIdText(): Promise<string> {
         const beforesortedwoID = this.actions.getLocator(this.Elements.getMRId.selector);
+        await this.actions.waitForElementToBeVisible(beforesortedwoID, this.Elements.getMRId.name);
         return await this.actions.getText(beforesortedwoID, this.Elements.getMRId.name);
     }
 
@@ -42,6 +42,7 @@ class DeleteMaintenanceRecordsPage {
      */
     public async verifyMRStatus(): Promise<string> {
         const requestStatusLocator = this.actions.getLocator(this.Elements.requestStatus.selector);
+        await this.actions.waitForElementToBeVisible(requestStatusLocator, this.Elements.requestStatus.name);
         return await this.actions.getText(requestStatusLocator, this.Elements.requestStatus.name);
     }
 

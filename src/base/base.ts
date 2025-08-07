@@ -15,7 +15,7 @@ BeforeAll(async () => {
     path: `${process.cwd()}/config/.env.${process.env.environment ?? 'qa'}`
   });
 
-  const browserType = process.env.browser ?? 'chrome';
+  const browserType = process.env.browser ?? process.env.browser!;
 
   switch (browserType.toLowerCase()) {
     case 'chrome':
@@ -24,11 +24,11 @@ BeforeAll(async () => {
       break;
     case 'firefox':
     case 'ff':
-      browser = await firefox.launch({ headless: false, args: ['--start-maximized'] });
+      browser = await firefox.launch({ headless: true, args: ['--start-maximized'] });
       break;
     case 'edge':
     case 'msedge':
-      browser = await chromium.launch({ headless: false, channel: 'msedge', args: ['--start-maximized'] });
+      browser = await chromium.launch({ headless: true, channel: 'msedge', args: ['--start-maximized'] });
       break;
     default:
       throw new Error(`Invalid browser type "${browserType}" provided`);

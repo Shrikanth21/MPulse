@@ -25,6 +25,7 @@ class DeleteWOPage {
      */
     public async getCurrentWorkOrderIdText(): Promise<string> {
         const beforesortedwoID = this.actions.getLocator(this.Elements.getWorkOrderId.selector);
+        await this.actions.waitForElementToBeVisible(beforesortedwoID, this.Elements.getWorkOrderId.name);
         return await this.actions.getText(beforesortedwoID, this.Elements.getWorkOrderId.name);
     }
 
@@ -33,6 +34,7 @@ class DeleteWOPage {
      */
     public async deleteCurrentWO(): Promise<void> {
         const deletewolocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
+        await this.actions.waitForElementToBeVisible(deletewolocator, this.Elements.deleteWOPage.name);
         await this.actions.click(deletewolocator, this.Elements.deleteWOPage.name);
         const continueButtonEL = this.actions.getLocator(this.Elements.continueButton.selector);
         await this.actions.click(continueButtonEL, this.Elements.continueButton.name);

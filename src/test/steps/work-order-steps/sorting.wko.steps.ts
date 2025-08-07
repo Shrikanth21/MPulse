@@ -1,5 +1,5 @@
 import { Then, When } from "@cucumber/cucumber";
-import { gridPage } from "../../../pages/work-order-page/grid.header.sorting.page";
+import { gridPage } from "../../../pages/work-order-page/Grid.header.sorting.page";
 
 let beforesortedText: string;
 

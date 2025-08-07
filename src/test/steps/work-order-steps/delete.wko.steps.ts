@@ -3,7 +3,7 @@ import logger from "../../../helper/loggs/logger";
 import { searchUpdateWorkOrderPage } from "../../../pages/work-order-page/search.update.wko.page";
 import { timeouts } from "../../../helper/timeouts-config";
 import { WebActions } from "../../../base/web.action.util";
-import { deleteWOPage } from "../../../pages/work-order-page/delete.wko.page";
+import { deleteWOPage } from "../../../pages/work-order-page/Delete.Wko.page";
 
 let currentRecord: string;
 let actions: WebActions;

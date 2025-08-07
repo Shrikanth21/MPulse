@@ -4,7 +4,6 @@ import testData from '../../../../data/testData.json';
 import mrtestData from '../../../../data/maintenance.records.json';
 import { generatedCycleCountRecordDescription } from "../../../../helper/get.different.description";
 import { cycleCountRecordsPage } from "../../../../pages/Inventory-pages/cycle-count-records-pages/cycle.count.records.page";
-import { maintenanceRequestRecordsPage } from "../../../../pages/work-order-page/maintenance-request-records-pages/maintenanceRequestRecords.page";
 import { workOrderPage } from "../../../../pages/work-order-page/WorkOrderPage.page";
 import { getFutureDateFormatted } from "../../../../helper/date/get.future.date";
 import { commonActionPage } from "../../../../pages/common.action.page";
@@ -103,11 +102,9 @@ When(/^the user proceeds to the population step by choosing Constant population$
     );
 });
 
-
 Then(/^the user should see the constant population of items$/, async () => {
-	await cycleCountRecordsPage.verifyConstantPopulation(
+    await cycleCountRecordsPage.verifyConstantPopulation(
         testData.element_text.random_sample_options,
         testData.element_text.how_many_items_to_count
     );
 });
-
