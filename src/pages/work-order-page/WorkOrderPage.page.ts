@@ -150,7 +150,7 @@ class WorkOrderPage {
             const inputButtonLocator = await this.actions.getLocator(this.getOkButton(text));
             await this.actions.waitForElementToBeVisible(inputButtonLocator, `Input Button: ${text}`);
             await this.actions.scrollToAndClick(inputButtonLocator, `Input Button: ${text}`);
-            await this.actions.waitForElementToBeVisible(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
+            await this.actions.waitForClickable(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
             await this.actions.click(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
         }
     }
@@ -344,9 +344,13 @@ class WorkOrderPage {
      */
     public async uploadMediaFile(mediaButtonText: string, linkIconTitle: string, filePath: string, btnText: string): Promise<void> {
         await this.clickButtonByText(mediaButtonText);
+        await this.actions.waitForClickable(this.actions.getLocator(this.elements.mediaMoreButton.selector), this.elements.mediaMoreButton.name);
         await this.actions.click(this.actions.getLocator(this.elements.mediaMoreButton.selector), this.elements.mediaMoreButton.name);
+        await this.actions.waitForClickable(this.actions.getLocator(this.elements.getLinkByTitle.selector), `Link: ${linkIconTitle}`);
         await this.actions.click(this.actions.getLocator(this.elements.getLinkByTitle.selector), `Second Occurrence of Link: ${linkIconTitle}`);
+        await this.actions.waitForElementToBeVisible(this.actions.getLocator(this.elements.fileInput.selector), this.elements.fileInput.name);
         await this.actions.uploadFile(this.actions.getLocator(this.elements.fileInput.selector), filePath, 'Media File Upload');
+        await this.actions.waitForClickable(this.actions.getLocator(this.getButtonByTitle(btnText)), `${btnText} Button`);
         await this.actions.click(this.actions.getLocator(this.getButtonByTitle(btnText)), `${btnText} Button`);
     }
 
@@ -691,20 +695,21 @@ class WorkOrderPage {
         await this.changeWKOstatus(fieldName, editIconForField, radioButtonText);
         for (const label of labels) {
             const labelLocator = this.actions.getLocator(this.getByLabel(label));
+            await this.actions.waitForClickable(labelLocator, `Label: ${label}`);
             await this.actions.click(labelLocator, `Label: ${label}`);
             const editIconLocator = this.actions.getLocator(this.getEditIconByLabel(label));
-            await this.actions.waitForElementToBeVisible(editIconLocator, `Edit Icon for Label: ${label}`);
+            await this.actions.waitForClickable(editIconLocator, `Edit Icon for Label: ${label}`);
             await this.actions.click(editIconLocator, `Edit Icon for Label: ${label}`);
 
             switch (label) {
                 case 'Hold Reason':
                     const dropdownValueLocator = this.actions.getLocator(this.getDDvalueByTitle(ddValue));
-                    await this.actions.waitForElementToBeVisible(dropdownValueLocator, `Dropdown Value: ${ddValue}`);
+                    await this.actions.waitForClickable(dropdownValueLocator, `Dropdown Value: ${ddValue}`);
                     await this.actions.click(dropdownValueLocator, `Dropdown Value: ${ddValue}`);
                     break;
 
                 case 'Hold Until':
-                    await this.actions.waitForElementToBeVisible(labelLocator, `Dropdown Value: ${label}`);
+                    await this.actions.waitForClickable(labelLocator, `Dropdown Value: ${label}`);
                     await this.actions.click(labelLocator, `Clicking Hold Until Label: ${label}`);
                     await this.selectHoldDate(day);
                     break;
@@ -756,7 +761,7 @@ class WorkOrderPage {
         const locator = await this.actions.getLocator(this.elements.popupTextInput.selector);
         await this.actions.waitForElementToBeVisible(locator, this.elements.popupTextInput.name);
         await this.actions.typeText(locator, day, this.elements.popupTextInput.name);
-        await this.actions.waitForElementToBeVisible(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
+        await this.actions.waitForClickable(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
         await this.actions.click(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
     }
 
@@ -768,7 +773,7 @@ class WorkOrderPage {
         const locator = await this.actions.getLocator(this.elements.cancelPopupTextInputModal.selector);
         await this.actions.waitForElementToBeVisible(locator, this.elements.cancelPopupTextInputModal.name);
         await this.actions.typeText(locator, day, this.elements.cancelPopupTextInputModal.name);
-        await this.actions.waitForElementToBeVisible(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
+        await this.actions.waitForClickable(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
         await this.actions.click(this.actions.getLocator(this.elements.okButton.selector), this.elements.okButton.name);
     }
 

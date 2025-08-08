@@ -466,6 +466,26 @@ export class WebActions {
   }
 
   /**
+ * Waits for the specified element to be clickable.
+ * @param locator The Playwright Locator for the element to wait for.
+ * @param elementDescription Description of the element for logging.
+ */
+public async waitForClickable(locator: Locator, elementDescription: string): Promise<void> {
+  try {
+    await locator.waitFor({ state: 'visible' });
+    await this.page.waitForFunction(
+      (el) => el && !el.hasAttribute('disabled'),
+      await locator.elementHandle()
+    );
+    logger.info(`Element is clickable: ${elementDescription}`);
+  } catch (error) {
+    logger.error(`Element not clickable: ${elementDescription} | Error: ${error}`);
+    throw error;
+  }
+}
+
+
+  /**
    * Waits for the specified element to be enabled.
    * @param locator The locator for the element to wait for.
    * @param elementDescription Description of the element for logging.
