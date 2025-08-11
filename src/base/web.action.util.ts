@@ -1,6 +1,6 @@
 import { Locator, Page, expect } from '@playwright/test';
 import { timeouts } from '../helper/timeouts-config';
-import logger from '../helper/loggs/logger';
+import logger from '../helper/logger';
 
 export class WebActions {
 
@@ -472,7 +472,7 @@ export class WebActions {
  */
 public async waitForClickable(locator: Locator, elementDescription: string): Promise<void> {
   try {
-    await locator.waitFor({ state: 'visible' });
+    await locator.waitFor({ state: 'visible', timeout: timeouts.large });
     await this.page.waitForFunction(
       (el) => el && !el.hasAttribute('disabled'),
       await locator.elementHandle()
@@ -768,7 +768,7 @@ public async waitForClickable(locator: Locator, elementDescription: string): Pro
     try {
       await this.waitForElement(locator, elementDescription);
       const ariaChecked = await locator.getAttribute('aria-checked');
-      const isChecked = ariaChecked === 'ture';
+      const isChecked = ariaChecked === 'true';
       logger.info(`Checkbox checked state for ${elementDescription}: ${isChecked}`);
       return isChecked;
     } catch (error) {

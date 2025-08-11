@@ -3,7 +3,6 @@ import { WebActions } from "../../base/web.action.util";
 import { getPage } from "../../base/base";
 import { timeouts } from "../../helper/timeouts-config";
 import { commonActionPage } from "../common.action.page";
-import testData from '../../data/testData.json';
 
 class GridPage {
 

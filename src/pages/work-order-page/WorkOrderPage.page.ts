@@ -38,7 +38,7 @@ class WorkOrderPage {
         closeWorkOrderButton: { selector: "//button[text()='Close Work Order']", name: "Close Work Order Button" },
         yesSpan: { selector: "//span[text()='Yes']", name: "Yes Span" },
         docxFormatIcon: { selector: 'img[alt="DOCX Format"][src*="docx.svg"]', name: "DOCX Format Icon" },
-        okButton: { selector: "//input[@value='Ok']", name: "Ok Button" },
+        okButton: { selector: "//input[@ng-click='clickedOkButton()']", name: "Ok Button" },
         cancelReasonSave: { selector: "//div[@id='Save']", name: "Cancel Reason Save" },
         reasonForCancellationLabel: { selector: "//label[@title='Reason for Cancellation']", name: "Reason for Cancellation Label" },
         popupOverlay: { selector: "//div[@class='dx-overlay-content dx-popup-normal dx-popup-draggable dx-resizable dx-dropdowneditor-overlay-flipped']", name: "Popup Overlay" },
@@ -56,7 +56,7 @@ class WorkOrderPage {
     private getPopupCalendarDate = (day: string): string => `((//div[contains(@class, 'dx-calendar-body')])[2]//span[text()='${day}'])[1]`;
     private getMoreButton = (text: string): string => `${this.getElementByText(text)}/parent::div/following-sibling::div//div[@class='moreBtn']`;
     private getEditIcon = (text: string): string => `${this.getElementByText(text)}/ancestor::div[contains(@class, 'activeEditor')]//span[contains(@class, 'editor') and @title='Edit Field']`;
-    private getdropdownById = (id: string): string => `//div[@id='${id}']`;
+    private getDropdownById = (id: string): string => `//div[@id='${id}']`;
     private getDDvalueByTitle = (title: string): string => `//div[@title='${title}']`;
     private getEleByText = (text: string): string => `//div[text()='${text}']`;
     private getLinkByTitleText = (title: string): string => `//div[@id='linkPopupGridContainer']//table//tbody//tr//td//div[@title='${title}']`;
@@ -377,7 +377,7 @@ class WorkOrderPage {
      * @returns 
      */
     public async selectDropdownValues(ddType: string, title: string): Promise<void> {
-        const dropdownLocator = this.actions.getLocator(this.getdropdownById(ddType));
+        const dropdownLocator = this.actions.getLocator(this.getDropdownById(ddType));
         await this.actions.click(dropdownLocator, `Dropdown: ${ddType}`);
         const optionsLocator = this.actions.getLocator('//div[contains(@class, "dx-item-content") and @title]');
         await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
@@ -438,7 +438,7 @@ class WorkOrderPage {
     public async selectMultipleDropdownValues(ddTypes: string[], title: string): Promise<void> {
         const seenTitles: Set<string> = new Set();
         for (const ddType of ddTypes) {
-            const dropdownLocator = this.actions.getLocator(this.getdropdownById(ddType));
+            const dropdownLocator = this.actions.getLocator(this.getDropdownById(ddType));
             await this.actions.click(dropdownLocator, `Dropdown: ${ddType}`);
             const optionsLocator = this.actions.getLocator('//div[contains(@class, "dx-item-content") and @title]');
             await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
@@ -667,7 +667,7 @@ class WorkOrderPage {
      * @param editIconForField The edit icon for the field.
      * @param radioButtonText The text of the radio button to select.
      */
-    public async changeWKOstatus(fieldName: string, editIconForField: string, radioButtonText: string): Promise<void> {
+    public async changeWkoStatus(fieldName: string, editIconForField: string, radioButtonText: string): Promise<void> {
         await this.clickElementByText(fieldName);
         await this.clickEditIconForField(editIconForField);
         await this.selectByElementText(radioButtonText);
@@ -692,7 +692,7 @@ class WorkOrderPage {
         day: string,
         btnText: string
     ): Promise<void> {
-        await this.changeWKOstatus(fieldName, editIconForField, radioButtonText);
+        await this.changeWkoStatus(fieldName, editIconForField, radioButtonText);
         for (const label of labels) {
             const labelLocator = this.actions.getLocator(this.getByLabel(label));
             await this.actions.waitForClickable(labelLocator, `Label: ${label}`);

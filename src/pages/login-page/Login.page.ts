@@ -2,7 +2,7 @@ import { expect, Page } from '@playwright/test';
 import { getPage } from '../../base/base';
 import { WebActions } from '../../base/web.action.util';
 import { readExcelFile } from '../../helper/files/read.excel.file';
-import logger from '../../helper/loggs/logger';
+import logger from '../../helper/logger';
 import { timeouts } from '../../helper/timeouts-config';
 
 
@@ -40,6 +40,7 @@ class LoginPage {
    */
   public async clickLoginButton(): Promise<void> {
     const loginButtonLocator = this.actions.getLocator(this.Elements.loginButton.selector);
+    await this.actions.waitForElementToBeVisible(loginButtonLocator, this.Elements.loginButton.name);
     await this.actions.click(loginButtonLocator, this.Elements.loginButton.name);
   }
 

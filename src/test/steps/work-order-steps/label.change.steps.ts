@@ -5,7 +5,7 @@ import { labelChangePage } from "../../../pages/work-order-page/label.change.pag
 When(/^the user navigates to the customization page and selects language options$/, async () => {
     await labelChangePage.navigateToManagementToolCustomizationPage(
         testData.element_text.got_it_btn,
-        testData.managementToolsMenue,
+        testData.managementToolsMenu,
         testData.customizationSubMenuItemTitle,
         testData.languageMenuItem,
         testData.customizationLanguageUrl
@@ -33,8 +33,8 @@ Then(/^the record text should reflect the updated label$/, async () => {
 
 When(/^the user navigates back to the customization page and selects language options after changing the label$/, async () => {
     await labelChangePage.navigateToCustomizationPageFromOtherMenu(
-        testData.managementToolsMenue,
-        testData.managementToolsMenue,
+        testData.managementToolsMenu,
+        testData.managementToolsMenu,
         testData.customizationSubMenuItemTitle,
         testData.languageMenuItem,
         testData.customizationLanguageUrl

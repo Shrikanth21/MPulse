@@ -9,7 +9,7 @@ Feature: Work Order - Create Work Order Record with Status
     And the Work Order status should be Open
     #And the user assign a future due date to the Work Order
 
-  @wko @closeWko @sanityWorkOrder
+  @wko @closeWko @sanityWorkOrder @e2e
   Scenario: Create a Work Order Record - Link/Enter all the Fields & Close
     When the user links assets, personnel, and inventory to the Work Order
     And the user closes the created Work Order record

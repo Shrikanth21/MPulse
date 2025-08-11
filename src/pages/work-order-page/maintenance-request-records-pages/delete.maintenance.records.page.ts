@@ -2,8 +2,8 @@ import { Page } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
 import { timeouts } from "../../../helper/timeouts-config";
-import { deleteWOPage } from "../Delete.Wko.page";
 import { commonActionPage } from "../../common.action.page";
+import { deleteWOPage } from "../delete.wko.page";
 
 class DeleteMaintenanceRecordsPage {
     private get currentPage(): Page {
@@ -15,7 +15,7 @@ class DeleteMaintenanceRecordsPage {
     }
 
     private Elements = {
-        deleteWOPage: { selector: "//i[@class='far fa-times-circle']", name: 'Delete workorder page cross button' },
+        deleteWOPage: { selector: "//i[@class='far fa-times-circle']", name: 'Delete work order page cross button' },
         continueButton: { selector: "//span[normalize-space()='Continue']", name: 'Continue button on Alert window' },
         getMRId: { selector: "//span[@id='ID']", name: 'Maintenance Request ID' },
         noMatchesFound: { selector: "//div[contains(text(),'No matches found.')]", name: 'No matches found message' },
@@ -31,9 +31,9 @@ class DeleteMaintenanceRecordsPage {
      * @returns The text of the Maintenance Request record ID.
      */
     public async getCurrentMRRecordIdText(): Promise<string> {
-        const beforesortedwoID = this.actions.getLocator(this.Elements.getMRId.selector);
-        await this.actions.waitForElementToBeVisible(beforesortedwoID, this.Elements.getMRId.name);
-        return await this.actions.getText(beforesortedwoID, this.Elements.getMRId.name);
+        const beforeSortedWoID = this.actions.getLocator(this.Elements.getMRId.selector);
+        await this.actions.waitForElementToBeVisible(beforeSortedWoID, this.Elements.getMRId.name);
+        return await this.actions.getText(beforeSortedWoID, this.Elements.getMRId.name);
     }
 
     /**
@@ -63,21 +63,21 @@ class DeleteMaintenanceRecordsPage {
             await this.actions.waitForElementToBeVisible(maintenanceRequestRecordsLink, this.Elements.maintenanceRequestRecordsLink.name);
             await this.actions.click(maintenanceRequestRecordsLink, this.Elements.maintenanceRequestRecordsLink.name);
             await this.currentPage.waitForTimeout(timeouts.large);
-            const deletemrlocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
-            await this.actions.click(deletemrlocator, this.Elements.deleteWOPage.name);
+            const deleteMrLocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
+            await this.actions.click(deleteMrLocator, this.Elements.deleteWOPage.name);
             const continueButtonEL = this.actions.getLocator(this.Elements.continueButton.selector);
             await this.actions.click(continueButtonEL, this.Elements.continueButton.name);
             await this.actions.waitForCustomDelay(timeouts.medium);
         } else if (requestStatusText === 'Pending' || requestStatusText === 'Cancel') {
-            const deletemrlocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
-            await this.actions.click(deletemrlocator, this.Elements.deleteWOPage.name);
+            const deleteMrLocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
+            await this.actions.click(deleteMrLocator, this.Elements.deleteWOPage.name);
             const continueButtonEL = this.actions.getLocator(this.Elements.continueButton.selector);
             await this.actions.click(continueButtonEL, this.Elements.continueButton.name);
             await this.actions.waitForCustomDelay(timeouts.medium);
         } else if (requestStatusText === 'Waiting for Reply') {
             await commonActionPage.clickElementByText(text)
-            const deletemrlocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
-            await this.actions.click(deletemrlocator, this.Elements.deleteWOPage.name);
+            const deleteMrLocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
+            await this.actions.click(deleteMrLocator, this.Elements.deleteWOPage.name);
             const continueButtonEL = this.actions.getLocator(this.Elements.continueButton.selector);
             await this.actions.click(continueButtonEL, this.Elements.continueButton.name);
             await this.actions.waitForCustomDelay(timeouts.medium);
@@ -104,6 +104,7 @@ class DeleteMaintenanceRecordsPage {
      * Verifies that the "No matches found" message is displayed.
      */
     public async verifyNoMatchesFoundMessage(): Promise<void> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
         const noMatchesFoundLocator = this.actions.getLocator(this.Elements.noMatchesFound.selector);
         await this.actions.waitForElementToBeVisible(noMatchesFoundLocator, this.Elements.noMatchesFound.name);
     }

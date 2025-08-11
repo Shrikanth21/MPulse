@@ -10,7 +10,7 @@ Feature: Maintenance Request - Create a record with Approval Flow
     Then the uploaded image should be visible
     When the user link inventory to the Maintenance Request
 
-  @mrApprovalFlow @replyToRequester @quitWaiting @sanityMR
+  @mrApprovalFlow @replyToRequester @quitWaiting @sanityMR @e2e
   Scenario: Create Maintenance Request with Approval Flow and Reply to Requester
     When the user Clicks on Reply To Requester button
     And the user fills in the Reply-To email and CC email, then sends the email
@@ -20,7 +20,7 @@ Feature: Maintenance Request - Create a record with Approval Flow
     When the user Clicks on Quit Waiting button
     Then the Maintenance Order status should be Pending
 
-  @mrApprovalFlow @cancelRequest @sanityMR
+  @mrApprovalFlow @cancelRequest @sanityMR @e2e
   Scenario: Create Maintenance Request with Approval Flow and Cancel Request
     When the user Clicks on Cancel Request button
     And the user confirms the cancellation

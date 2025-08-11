@@ -1,6 +1,6 @@
 Feature: Maintenance Request - Create from List View
 
-  @maintenanceRequest @mrListView @sanityMR
+  @maintenanceRequest @mrListView @sanityMR @e2e
   Scenario: Create a Maintenance Request Record from List View
     Given the user logs into the application
     And the user selects a specific database

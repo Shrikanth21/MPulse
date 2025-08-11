@@ -29,7 +29,6 @@ When('the user creates a new Work Order with a unique description and uploads me
         { ddType: testData.dropdownSelections.map((item: any) => item.ddType) },
         testData.subMenuItemTitle
     );
-
 });
 
 Then('the Work Order status should be Open', async function () {
@@ -84,7 +83,6 @@ When('the user links assets, personnel, and inventory to the Work Order', async 
 When('the user closes the created Work Order record', async function () {
     await commonActionPage.clickTabByText('Financial');
     await workOrderPage.setFinancialFields(testData.costFields);
-
     await workOrderPage.closeWorkOrder(
         testData.element_text.close_wko_text,
         testData.element_text.yes_button,

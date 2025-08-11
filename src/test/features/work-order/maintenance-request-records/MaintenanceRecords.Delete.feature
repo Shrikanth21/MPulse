@@ -1,6 +1,6 @@
 Feature: Maintenance Request - Delete Maintenance Request Record
 
-  @deleteMrRecord @sanityMR
+  @deleteMrRecord @sanityMR @e2e
   Scenario: Delete Maintenance Request Record for all statuses
     Given the user logs into the application
     And the user selects a specific database

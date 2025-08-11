@@ -1,7 +1,7 @@
 import { expect, Locator, Page, selectors } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
-import logger from "../../helper/loggs/logger";
+import logger from "../../helper/logger";
 import { timeouts } from "../../helper/timeouts-config";
 import { commonActionPage } from "../common.action.page";
 

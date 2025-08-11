@@ -39,6 +39,7 @@ class CommonActionPage {
     getElementByDivId = (divId: string): string => `//div[@id='${divId}']`;
     getElementByButtonTitle = (buttonTitle: string): string => `//button[@title='${buttonTitle}']`;
     getElementByLabelText = (labelText: string): string => `//label[normalize-space()='${labelText}']`;
+    getElementByLinkText = (text: string): string => `//a[normalize-space()='${text}']`;
 
 
     /**
@@ -167,6 +168,16 @@ class CommonActionPage {
         const spanLocator = this.actions.getLocator(this.getElementByText(text));
         await this.actions.waitForElementToBeVisible(spanLocator, `Span: ${text}`);
         await this.actions.click(spanLocator, `Span: ${text}`);
+    }
+
+    /**
+     * Clicks on a link element by its text content.
+     * @param text The text content of the link to click on.
+     */
+    public async clickByLinkText(text: string): Promise<void> {
+        const linkLocator = this.actions.getLocator(this.getElementByLinkText(text));
+        await this.actions.waitForElementToBeVisible(linkLocator, `Link: ${text}`);
+        await this.actions.click(linkLocator, `Link: ${text}`);
     }
 }
 

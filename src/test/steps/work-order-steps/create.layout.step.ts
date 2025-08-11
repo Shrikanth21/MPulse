@@ -2,7 +2,7 @@ import { Then, When } from "@cucumber/cucumber";
 import { createFilterPage } from "../../../pages/work-order-page/create.filter.page";
 import { generateDescription } from "../../../helper/get.different.description";
 import filterOptinData from "../../../data/custom.filter.data.json";
-import logger from "../../../helper/loggs/logger";
+import logger from "../../../helper/logger";
 import { withGroupFilterPage } from "../../../pages/work-order-page/create.filter.withGroup.page";
 import { maintenanceAdvisorPage } from "../../../pages/work-order-page/maintenance.advisor.page";
 

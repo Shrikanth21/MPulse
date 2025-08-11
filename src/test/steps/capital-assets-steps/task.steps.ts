@@ -14,7 +14,7 @@ When('the user accesses the Building Records section', async function () {
         testData.homePageURL,
         testData.element_text.got_it_btn,
         testData.menuItemTitle,
-        testData.buildingMenueText,
+        testData.buildingMenuText,
         testData.buildingRecordsPageURL
     );
 });

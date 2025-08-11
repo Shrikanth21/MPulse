@@ -49,7 +49,7 @@ When('the user convert a Maintenance Request into new work order', async functio
 When(/^the user navigates to the workflow page and selects work order options$/, async () => {
     await labelChangePage.navigateToManagementToolCustomizationPage(
         testData.element_text.got_it_btn,
-        testData.managementToolsMenue,
+        testData.managementToolsMenu,
         testData.workflowSubMenuItemTitle,
         testData.workOrderTitle,
         testData.workflowWorkOrderUrl
@@ -92,7 +92,7 @@ When(/^the user navigates to the Maintenance Request record page after creation$
 
 Then(/^uncheck the checkbox for automatic request conversion$/, async () => {
     await mrAutoConvertPage.navigateToManagementWorkFlowPageFromOtherMenu(
-        testData.managementToolsMenue,
+        testData.managementToolsMenu,
         mrtestData.workFLow,
         mrtestData.workOrderTitle,
         testData.workflowWorkOrderUrl

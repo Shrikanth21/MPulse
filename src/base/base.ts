@@ -1,7 +1,7 @@
 import { setDefaultTimeout, Before, After, BeforeAll, AfterAll, Status, BeforeStep, AfterStep } from '@cucumber/cucumber';
 import { Browser, BrowserContext, Page, chromium, firefox } from 'playwright';
 import dotenv from 'dotenv';
-import logger, { setLoggerForScenario } from '../helper/loggs/logger';
+import logger, { setLoggerForScenario } from '../helper/logger';
 import { logoutPage } from '../pages/login-page/Logout.page';
 
 setDefaultTimeout(1000 * 60 * 2);
@@ -15,7 +15,7 @@ BeforeAll(async () => {
     path: `${process.cwd()}/config/.env.${process.env.environment ?? 'qa'}`
   });
 
-  const browserType = process.env.browser ?? process.env.browser!;
+  const browserType = process.env.browser!;
 
   switch (browserType.toLowerCase()) {
     case 'chrome':
@@ -30,6 +30,11 @@ BeforeAll(async () => {
     case 'msedge':
       browser = await chromium.launch({ headless: true, channel: 'msedge', args: ['--start-maximized'] });
       break;
+    case 'webkit':
+      browser = await chromium.launch({ headless: true, args: ['--start-maximized'] });
+      break;
+    case 'safari':
+      throw new Error('Safari is not supported by Playwright for automation');
     default:
       throw new Error(`Invalid browser type "${browserType}" provided`);
   }

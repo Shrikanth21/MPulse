@@ -11,7 +11,6 @@
     "wkoListView-e2e": "cucumber-js features/ListView.feature --tags @sanityWKListView & npx ts-node src/helper/index.ts",
     "mr-e2e-test": "cucumber-js features/MaintenanceRecords.feature --tags @sanityMR & npx ts-node src/helper/index.ts",
     "por-e2e-test": "cucumber-js features/PorRequisition.feature --tags @sanityPOR & npx ts-node src/helper/index.ts",
-
     "div1": "-------------------------Work Order Records-------------------------------------------------",
     "wko-test": "cucumber-js features/wko.feature --tags @wko & npx ts-node src/helper/index.ts",
     "wko-close-wko-test": "cucumber-js features/close.wko.feature --tags @closeWko & npx ts-node src/helper/index.ts",
@@ -51,6 +50,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "^10.9.0",
     "@playwright/test": "^1.40.1",
+    "@types/node": "^24.2.1",
     "cross-env": "^7.0.3",
     "cucumber-html-reporter": "^7.1.1",
     "dotenv": "^16.3.2",

@@ -30,8 +30,9 @@ class HomePage {
    */
   public async clickButtonByText(buttonText: string): Promise<void> {
     const buttonLocator = this.actions.getLocator(this.getElementByText(buttonText));
-    if(await buttonLocator.isVisible()){
-    await this.actions.click(buttonLocator, `Button: ${buttonText}`);
+    if (await buttonLocator.isVisible()) {
+      await this.actions.waitForClickable(buttonLocator, `Button: ${buttonText}`);
+      await this.actions.click(buttonLocator, `Button: ${buttonText}`);
     }
   }
 

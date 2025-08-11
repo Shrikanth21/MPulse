@@ -13,7 +13,7 @@ class DeleteWOPage {
     }
 
     private Elements = {
-        deleteWOPage: { selector: "//i[@class='far fa-times-circle']", name: 'Delete workorder page cross button' },
+        deleteWOPage: { selector: "//i[@class='far fa-times-circle']", name: 'Delete work order page cross button' },
         continueButton: { selector: "//span[normalize-space()='Continue']", name: 'Continue button on Alert window' },
         getWorkOrderId: { selector: "//div[contains(@class,'textTruncate')]//span[@id='ID']", name: 'Work Order ID' },
         noMatchesFound: { selector: "//div[contains(text(),'No matches found.')]", name: 'No matches found message' },
@@ -24,18 +24,19 @@ class DeleteWOPage {
      * @returns The text of the Work Order ID.
      */
     public async getCurrentWorkOrderIdText(): Promise<string> {
-        const beforesortedwoID = this.actions.getLocator(this.Elements.getWorkOrderId.selector);
-        await this.actions.waitForElementToBeVisible(beforesortedwoID, this.Elements.getWorkOrderId.name);
-        return await this.actions.getText(beforesortedwoID, this.Elements.getWorkOrderId.name);
+        await this.actions.waitForCustomDelay(timeouts.medium);
+        const beforeSortedWoID = this.actions.getLocator(this.Elements.getWorkOrderId.selector);
+        await this.actions.waitForElementToBeVisible(beforeSortedWoID, this.Elements.getWorkOrderId.name);
+        return await this.actions.getText(beforeSortedWoID, this.Elements.getWorkOrderId.name);
     }
 
     /**
      * Deletes the current Work Order.
      */
     public async deleteCurrentWO(): Promise<void> {
-        const deletewolocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
-        await this.actions.waitForElementToBeVisible(deletewolocator, this.Elements.deleteWOPage.name);
-        await this.actions.click(deletewolocator, this.Elements.deleteWOPage.name);
+        const deleteWoLocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
+        await this.actions.waitForElementToBeVisible(deleteWoLocator, this.Elements.deleteWOPage.name);
+        await this.actions.click(deleteWoLocator, this.Elements.deleteWOPage.name);
         const continueButtonEL = this.actions.getLocator(this.Elements.continueButton.selector);
         await this.actions.click(continueButtonEL, this.Elements.continueButton.name);
         await this.currentPage.waitForTimeout(timeouts.large);
@@ -75,6 +76,7 @@ class DeleteWOPage {
      * Verifies that the "No matches found" message is displayed.
      */
     public async verifyNoMatchesFoundMessage(): Promise<void> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
         const noMatchesFoundLocator = this.actions.getLocator(this.Elements.noMatchesFound.selector);
         await this.actions.waitForElementToBeVisible(noMatchesFoundLocator, this.Elements.noMatchesFound.name);
     }

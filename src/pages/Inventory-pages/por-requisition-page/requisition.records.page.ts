@@ -5,9 +5,8 @@ import { homePage } from "../../home-page/Home.page";
 import { commonActionPage } from "../../common.action.page";
 import { generateSupplierFormData } from "../../../helper/requisition.supplier.details";
 import { timeouts } from "../../../helper/timeouts-config";
-import { mrAutoConvertPage } from "../../work-order-page/maintenance-request-records-pages/mr.auto.convert.page";
-import { maintenanceRequestRecordsPage } from "../../work-order-page/maintenance-request-records-pages/maintenanceRequestRecords.page";
 import { workOrderPage } from "../../work-order-page/WorkOrderPage.page";
+import { th } from "@faker-js/faker/.";
 
 class RequisitionRecordsPage {
     private get currentPage(): Page {
@@ -25,11 +24,21 @@ class RequisitionRecordsPage {
         closeBackOrderDetailsButton: { selector: "//div[@id='BackOrderDetails-header']/descendant::i", name: "Close BackOrder Details Button" },
         zeroQuantityText: { selector: "//div[@id='BackOrderDetails']/descendant::tr//td//div[text()='0.00']", name: "Zero Quantity Text" },
         saveButton: { selector: "//div[@id='BackOrderDetails']/descendant::a[@title='Save']", name: "Save Button" },
-        recivedQuantityText: (quantity: string): string => `//div[@id='InventoryList']/descendant::div[text()='${quantity}']`,
+        receivedQuantityText: (quantity: string): string => `//div[@id='InventoryList']/descendant::div[text()='${quantity}']`,
         maximizeButton: { selector: '[title="Maximize"]', name: "Maximize Button" },
         plusIcon: { selector: '//div[@ng-show="listviewdisplaystatus"]/descendant::div[@class="action-menu-items"]/descendant::a[@title="Add new record"]', name: "Add New Record Icon" },
         saveIcon: { selector: "//div[@ng-show='listviewdisplaystatus']/descendant::a[@title='Save']", name: "Save Icon" },
         hideButton: { selector: '[title="Hide"]', name: "Hide Button" },
+        moreButton: { selector: "//div[@class='row panelHeader']/descendant::div[@class='moreBtn']", name: "More Button" },
+        editRecordButton: { selector: "//li[@ng-click='showEditMode()']", name: "Edit Record Button" },
+        receivedOneQuantityText: { selector: "//tr/following::td/following::div[text()='1.00']", name: "Received Quantity 1.00 Text" },
+        dxLink: { selector: "//a[@class='dx-link ng-scope']", name: "DX Link" },
+        stockAreaListRows: { selector: "//gridcontrol[@id='StockAreaList']/descendant::tr[contains(@class,'dx-row dx-data')]/descendant::td", name: "Stock Area List Rows" },
+        stockedItemCheckbox: { selector: '//div[@id="StockedItem" and @aria-checked="false"]', name: "Stocked Item Unchecked Checkbox" },
+        editField: { selector: "//div[@id='StockAreaTab']/descendant::span[@title='Edit Field']", name: "Edit Field Icon" },
+        financialInputField: { selector: "//div[@id='FinancialTab']/descendant::input[@class='dx-texteditor-input']", name: "Financial Input Field" },
+        financialSaveButton: { selector: "//div[@id='FinancialTab']/descendant::a[@title='Save']", name: "Financial Save Button" },
+        stockAreaInputField: { selector: "//div[@id='StockedItem']", name: "Stock Area Input Field" }
     }
 
     /**
@@ -104,7 +113,7 @@ class RequisitionRecordsPage {
      * Updates the Quantity Received for a Purchase Order Requisition.
      * @param quantity The new quantity received.
      */
-    public async updateRecivedQuantity(quantity: string): Promise<void> {
+    public async updateReceivedQuantity(quantity: string): Promise<void> {
         const moreButton = this.actions.getLocator(this.elements.backorderMoreButton.selector);
         await this.actions.waitForElementToBeVisible(moreButton, this.elements.backorderMoreButton.name);
         await this.actions.click(moreButton, this.elements.backorderMoreButton.name);
@@ -139,7 +148,7 @@ class RequisitionRecordsPage {
      */
     public async validateReceivedQuantity(tabName: string, quantity: string): Promise<void> {
         await commonActionPage.clickTabByText(tabName);
-        const quantityLocator = this.actions.getLocator(this.elements.recivedQuantityText(quantity));
+        const quantityLocator = this.actions.getLocator(this.elements.receivedQuantityText(quantity));
         await this.actions.waitForElementToBeVisible(quantityLocator, `Quantity: ${quantity}`);
         const actualQuantity = await this.actions.getText(quantityLocator, `Quantity: ${quantity}`);
         await this.actions.assertEqual(actualQuantity, quantity, `Quantity Received: ${quantity}`);
@@ -185,6 +194,89 @@ class RequisitionRecordsPage {
         await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
         await this.fillSupplierDetails();
         await commonActionPage.clickSaveButton();
+    }
+
+    /**
+     * Gets the inventory stock quantity for a specific tab.
+     * @param tabText The text of the tab to retrieve the stock quantity from.
+     * @returns The stock quantity as a string.
+     */
+    public async getInventoryStockQty(tabText: string): Promise<string> {
+        const inventoryListItem = this.actions.getLocator(this.elements.dxLink.selector);
+        await this.actions.waitForElementToBeVisible(inventoryListItem, this.elements.dxLink.name);
+        await this.actions.click(inventoryListItem, this.elements.dxLink.name);
+        await commonActionPage.clickTabByText(tabText);
+        // const checkbox = this.actions.getLocator(this.elements.stockedItemCheckbox.selector).first();
+        // const isChecked = await this.actions.isCheckboxChecked(checkbox, this.elements.stockedItemCheckbox.name);
+        // if (isChecked) {
+        //     console.log('✅ Checkbox is already checked and visible');
+        // } else {
+        //     await commonActionPage.clickBySpanText('Stocked Item?');
+        //     const editFieldIcon = this.actions.getLocator(this.elements.editField.selector);
+        //     await this.actions.waitForElementToBeVisible(editFieldIcon, this.elements.editField.name);
+        //     await this.actions.click(editFieldIcon, this.elements.editField.name);
+        //     const stockAreaInputField = this.actions.getLocator(this.elements.stockAreaInputField.selector).first();
+        //     await this.actions.waitForElementToBeVisible(stockAreaInputField, this.elements.stockAreaInputField.name);
+        //     await this.actions.click(stockAreaInputField, this.elements.stockAreaInputField.name);
+        // }
+        const quantityLocator = this.actions.getLocator(this.elements.stockAreaListRows.selector).nth(2);
+        await this.actions.waitForElementToBeVisible(quantityLocator, this.elements.stockAreaListRows.name);
+        const beforeClosingQuantity = await this.actions.getText(quantityLocator, this.elements.stockAreaListRows.name);
+        console.log(`Before Closing Quantity: ${beforeClosingQuantity}`);
+        return beforeClosingQuantity;
+    }
+
+    /**
+     * Validates the linked inventory quantity after closing a record.
+     * @param tabText The text of the tab to validate.
+     * @param beforeCloseStockQty The stock quantity before closing the record.
+     */
+    public async validateLinkedInventoryQuantity(
+        tabText: string,
+        beforeCloseStockQty: string,
+        newQuantity: string
+    ): Promise<void> {
+        const inventoryListItem = this.actions.getLocator(this.elements.dxLink.selector);
+        await this.actions.waitForElementToBeVisible(inventoryListItem, this.elements.dxLink.name);
+        await this.actions.click(inventoryListItem, this.elements.dxLink.name);
+        await commonActionPage.clickTabByText(tabText);
+        const quantityLocator = this.actions.getLocator(this.elements.stockAreaListRows.selector).nth(2);
+        await this.actions.waitForElementToBeVisible(quantityLocator, this.elements.stockAreaListRows.name);
+        const afterCloseStockQtyText = await this.actions.getText(quantityLocator, this.elements.stockAreaListRows.name);
+        const afterCloseStockQty = Number(afterCloseStockQtyText);
+        const beforeQty = Number(beforeCloseStockQty);
+        const addedQty = Number(newQuantity);
+        const expectedQty = beforeQty + addedQty;
+        await this.actions.assertEqual(
+            afterCloseStockQty.toString(),
+            expectedQty.toString(),
+            `Linked Inventory Quantity after closing is incorrect. Expected: ${expectedQty}, Actual: ${afterCloseStockQty}`
+        );
+    }
+
+    /**
+     * Updates the order quantity for a specific tab.
+     * @param tabText The text of the tab to update.
+     * @param newQuantity The new quantity to set.
+     */
+    public async updateOrderQuantity(tabText: string, newQuantity: string): Promise<void> {
+        await commonActionPage.clickByLinkText('Requisition Records');
+        await commonActionPage.clickTabByText(tabText);
+        const inventoryMoreBtnEl = this.actions.getLocator(this.elements.moreButton.selector);
+        await this.actions.waitForElementToBeVisible(inventoryMoreBtnEl, this.elements.moreButton.name);
+        await this.actions.click(inventoryMoreBtnEl, this.elements.moreButton.name);
+        const editBtnEl = this.actions.getLocator(this.elements.editRecordButton.selector);
+        await this.actions.waitForElementToBeVisible(editBtnEl, this.elements.editRecordButton.name);
+        await this.actions.click(editBtnEl, this.elements.editRecordButton.name);
+        const quantityLocatorEl = this.actions.getLocator(this.elements.receivedOneQuantityText.selector);
+        await this.actions.waitForElementToBeVisible(quantityLocatorEl, this.elements.receivedOneQuantityText.name);
+        await this.actions.click(quantityLocatorEl, this.elements.receivedOneQuantityText.name);
+        const inputField = this.actions.getLocator(this.elements.financialInputField.selector).first();
+        await this.actions.waitForElementToBeVisible(inputField, this.elements.financialInputField.name);
+        await this.actions.typeText(inputField, newQuantity, this.elements.financialInputField.name);
+        const saveButton = this.actions.getLocator(this.elements.financialSaveButton.selector);
+        await this.actions.waitForElementToBeVisible(saveButton, this.elements.financialSaveButton.name);
+        await this.actions.click(saveButton, this.elements.financialSaveButton.name);
     }
 }
 

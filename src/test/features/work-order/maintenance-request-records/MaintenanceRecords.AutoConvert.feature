@@ -1,6 +1,6 @@
 Feature: Maintenance Request - Auto Convert to Work Order
 
-  @maintenanceRequest @mrAutoConvert @sanityMR
+  @maintenanceRequest @mrAutoConvert @sanityMR @e2e
   Scenario: Automatically Convert Maintenance Request to Work Order Upon Creation
     Given the user logs into the application
     And the user selects a specific database
