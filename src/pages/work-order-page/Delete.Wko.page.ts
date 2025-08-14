@@ -13,10 +13,10 @@ class DeleteWOPage {
     }
 
     private Elements = {
-        deleteWOPage: { selector: "//i[@class='far fa-times-circle']", name: 'Delete work order page cross button' },
+        deleteWOPage: { selector: "//div[@class='action-menu-items']/descendant::i[@class='far fa-times-circle']", name: 'Delete work order page cross button' },
         continueButton: { selector: "//span[normalize-space()='Continue']", name: 'Continue button on Alert window' },
         getWorkOrderId: { selector: "//div[contains(@class,'textTruncate')]//span[@id='ID']", name: 'Work Order ID' },
-        noMatchesFound: { selector: "//div[contains(text(),'No matches found.')]", name: 'No matches found message' },
+        noMatchesFound: { selector: "//div[@class='dx-scrollview-content']", name: 'No matches found message' },
     };
 
     /**
@@ -79,6 +79,12 @@ class DeleteWOPage {
         await this.actions.waitForCustomDelay(timeouts.medium);
         const noMatchesFoundLocator = this.actions.getLocator(this.Elements.noMatchesFound.selector);
         await this.actions.waitForElementToBeVisible(noMatchesFoundLocator, this.Elements.noMatchesFound.name);
+        const noMatchesFoundText = await this.actions.getText(noMatchesFoundLocator, this.Elements.noMatchesFound.name);
+        await this.actions.assertEqual(
+            noMatchesFoundText.trim(),
+            "No matches found.",
+            `Expected "No matches found." but got "${noMatchesFoundText}"`
+        );
     }
 }
 

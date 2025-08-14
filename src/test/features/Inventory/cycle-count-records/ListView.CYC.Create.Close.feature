@@ -1,11 +1,12 @@
-Feature: CYC - Create a CYC record with Filtered population -Covert to WKO-Close
+Feature: CYC - Create a CYC record and Close it from List View
 
-  @CYC @cycFilteredPopulation @sanityCYC
-  Scenario: Create a CYC record with Filtered population and Convert to WKO and Close
+  @CYC @cycListView @sanityCYC @e2e
+  Scenario: Create a CYC record and Close it from List View
     Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Cycle Count Records page
-    And the user creates a new Cycle Count Record with unique description and mandatory fields
+    And the user creates a new Cycle Count Record with unique description in list view
+    And the user fills in the mandatory fields
     And the user proceeds to the filter step by choosing a filter with Field, Operator, and Value
     Then the user should see the filtered population of items
     And the user should be able to create a new Cycle Count Record with filtered population successfully

@@ -66,6 +66,7 @@
     "filtered_set_count_type_text": "Filtered Set",
     "random_sample_count_type_text": "Random Sample",
     "constant_population_count_type_text": "Constant Population",
+    "diminished_population_count_type_text": "Diminished Population",
     "random_sample_options": "Random Sample Options",
     "how_many_items_to_count": "How many items to count?",
     "filtered_population_label": "No Of Items",
@@ -93,6 +94,7 @@
     "hoursField_text": "0.00",
     "quantity_ordered_text": "10.00",
     "quantity_received_text": "5.00",
+    "updated_stock_quantity": "4.00",
     "hours": "2"
   },
   "CheckListFields_data": {
@@ -168,5 +170,5 @@
     "fresdb959_inappdev": "FRESHDB959_INAPPDEV",
     "automation_freshdb": "AutomationFreshDB"
   },
-  "db_name": "INAPP_PNS"
+  "db_name": "FreshDBSep"
 }

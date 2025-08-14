@@ -4,6 +4,7 @@ import { WebActions } from "../../../base/web.action.util";
 import { workOrderPage } from "../WorkOrderPage.page";
 import { homePage } from "../../home-page/Home.page";
 import { commonActionPage } from "../../common.action.page";
+import { timeouts } from "../../../helper/timeouts-config";
 
 class MrAutoConvertPage {
 
@@ -95,6 +96,7 @@ class MrAutoConvertPage {
     await this.actions.click(linkInventory, title);
     await workOrderPage.selectRowInLinkAssetPopupIfVisible();
     await workOrderPage.clickInputButton(buttonText);
+    await this.actions.waitForCustomDelay(timeouts.medium);
   }
 
   /**

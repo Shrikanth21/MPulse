@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { Page, selectors } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
 import { homePage } from "../../home-page/Home.page";
@@ -6,7 +6,6 @@ import { commonActionPage } from "../../common.action.page";
 import { generateSupplierFormData } from "../../../helper/requisition.supplier.details";
 import { timeouts } from "../../../helper/timeouts-config";
 import { workOrderPage } from "../../work-order-page/WorkOrderPage.page";
-import { th } from "@faker-js/faker/.";
 
 class RequisitionRecordsPage {
     private get currentPage(): Page {
@@ -38,7 +37,7 @@ class RequisitionRecordsPage {
         editField: { selector: "//div[@id='StockAreaTab']/descendant::span[@title='Edit Field']", name: "Edit Field Icon" },
         financialInputField: { selector: "//div[@id='FinancialTab']/descendant::input[@class='dx-texteditor-input']", name: "Financial Input Field" },
         financialSaveButton: { selector: "//div[@id='FinancialTab']/descendant::a[@title='Save']", name: "Financial Save Button" },
-        stockAreaInputField: { selector: "//div[@id='StockedItem']", name: "Stock Area Input Field" }
+        stockAreaInputField: { selector: "//div[@id='StockedItem']", name: "Stock Area Input Field" },
     }
 
     /**

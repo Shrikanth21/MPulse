@@ -109,3 +109,12 @@ Then(/^the user should verify the updated quantity in stock after closing the re
 		testData.element_text.quantity_ordered_text
 	);
 });
+
+Then(/^the user should verify the updated quantity in stock after back ordering the record$/, async () => {
+	await requisitionRecordsPage.validateLinkedInventoryQuantity(
+		testData.element_text.stock_area_tab_text,
+		beforeCloseStockQty,
+		testData.element_text.quantity_received_text
+	);
+	await commonActionPage.clickByLinkText(testData.requisitionMenuTitle);
+});

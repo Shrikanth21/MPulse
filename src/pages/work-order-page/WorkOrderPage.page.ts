@@ -1,8 +1,7 @@
-import { Page, expect } from '@playwright/test';
+import { Page, expect, selectors } from '@playwright/test';
 import { getPage } from '../../base/base';
 import { WebActions } from '../../base/web.action.util';
 import { timeouts } from '../../helper/timeouts-config';
-import { getCurrentMonthName } from '../../helper/date/get-current-month';
 import { commonActionPage } from '../common.action.page';
 
 class WorkOrderPage {
@@ -46,7 +45,7 @@ class WorkOrderPage {
         popupTextInput: { selector: "//div[@class='modal-content popup-no-resize ui-resizable']/descendant::input[@class='dx-texteditor-input']", name: "Popup Text Input" },
         modalTitle: { selector: "//div[@class='modal-body']/descendant::div[contains(text(),'The date selected is in the future, please confirm.')]", name: "Modal Title" },
         closeRequestButton: { selector: "//div[@class='modal-header ui-draggable-handle']//button[@title='Click here to close']", name: "Click here to close" },
-        cancelPopupTextInputModal: { selector: "//div[@class='modal-content ui-resizable']/descendant::input[@class='dx-texteditor-input']", name: "Cancel Popup Text Input Modal" },
+        cancelPopupTextInputModal: { selector: "//div[@class='modal-content ui-resizable']/descendant::input[@class='dx-texteditor-input']", name: "Cancel Popup Text Input Modal" }
     };
 
     private getInputButton = (text: string): string => `//input[@value='${text}']`;
@@ -494,6 +493,7 @@ class WorkOrderPage {
         await commonActionPage.clickSaveButton();
         await this.clickElementByText(closeText);
         await this.clickElementByText(yesButtonText);
+        await this.actions.performKeyboardAction('Enter');
         await this.selectCloseDate(day);
         await this.clickOnSecondClosePopup(inputOkButtonText);
     }

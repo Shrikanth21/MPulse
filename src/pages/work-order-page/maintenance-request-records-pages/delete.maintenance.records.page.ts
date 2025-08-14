@@ -31,6 +31,7 @@ class DeleteMaintenanceRecordsPage {
      * @returns The text of the Maintenance Request record ID.
      */
     public async getCurrentMRRecordIdText(): Promise<string> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
         const beforeSortedWoID = this.actions.getLocator(this.Elements.getMRId.selector);
         await this.actions.waitForElementToBeVisible(beforeSortedWoID, this.Elements.getMRId.name);
         return await this.actions.getText(beforeSortedWoID, this.Elements.getMRId.name);
@@ -92,21 +93,11 @@ class DeleteMaintenanceRecordsPage {
         const MRIdLocator = this.actions.getLocator(this.Elements.getMRId.selector);
         await this.actions.waitForElementToBeVisible(MRIdLocator, this.Elements.getMRId.name);
         const MRIdText = await this.actions.getText(MRIdLocator, this.Elements.getMRId.name);
-        await this.actions.waitForCustomDelay(timeouts.medium);
         await this.actions.assertNotEqual(
             MRIdText,
             beforeDeleteMRId,
             `Maintenance Request ID "${beforeDeleteMRId}" should not be present after deletion, but found "${MRIdText}".`
         );
-    }
-
-    /**
-     * Verifies that the "No matches found" message is displayed.
-     */
-    public async verifyNoMatchesFoundMessage(): Promise<void> {
-        await this.actions.waitForCustomDelay(timeouts.medium);
-        const noMatchesFoundLocator = this.actions.getLocator(this.Elements.noMatchesFound.selector);
-        await this.actions.waitForElementToBeVisible(noMatchesFoundLocator, this.Elements.noMatchesFound.name);
     }
 }
 

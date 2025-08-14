@@ -15,6 +15,7 @@ Feature: POR - Create POR with Quantity Received update - Close
     And the user sets the Requisition Status to Back Order and updates the Quantity Received
     Then the Purchase Order Requisition status should be Back Order
     And the user goes to the grid and verifies the Quantity Received is updated successfully
+    And the user should verify the updated quantity in stock after back ordering the record
     When the user closes the created Purchase Order Requisition record
     Then the Purchase Order Requisition record should be closed successfully
     And the user should verify the updated quantity in stock after closing the record

@@ -1,9 +1,8 @@
-import { Page } from "@playwright/test";
+import { Page, selectors } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
 import { commonActionPage } from "../../common.action.page";
 import { workOrderPage } from "../../work-order-page/WorkOrderPage.page";
-import { fi } from "@faker-js/faker/.";
 import { homePage } from "../../home-page/Home.page";
 import { timeouts } from "../../../helper/timeouts-config";
 
@@ -26,8 +25,23 @@ class CycleCountRecordsPage {
         searchedId: { selector: "//a[@class='dx-link ng-scope']", name: "Searched ID" },
         inventorySelectedForCounting: { selector: "//span[@title='Inventory selected for counting']", name: "Inventory Selected For Counting Span" },
         numberOfItem: { selector: "//div[@class='form-group-control-wrap-inner']/child::span[@class='form-editor ng-binding']", name: "Number Of Item" },
+        itemsToCount: { selector: "//span[@id='CCOUNTITEMSTOCOUNT']", name: "Items To Count Span" },
         cycleCountLinks: { selector: "//datagrid[@id='CycleCount']/descendant::tr/descendant::a", name: "Cycle Count Links" },
         itemsToCountInput: { selector: "//div[@id='CCOUNTITEMSTOCOUNT']/descendant::input", name: "Items To Count Input" },
+        moreButton: { selector: "//datagrid[@id='CycleCount']//descendant::div[@class='moreBtn']", name: "More Button" },
+        editLink: { selector: "//datagrid[@id='CycleCount']/descendant::a[@title='Edit']", name: "Edit Link" },
+        cycleCountTab: { selector: "//div[@id='CycleCountTab']//table[contains(@class,'dx-datagrid-table dx-datagrid-table-fixed dx-select')]//tr[1]//td[last()]", name: "Cycle Count Tab" },
+        cycleCountLink: { selector: '(//a[@class="dx-link ng-scope"])[2]', name: 'Cycle Count Tab' },
+        dxLink: { selector: "//a[@class='dx-link ng-scope']", name: "DX Link" },
+        stockAreaListRows: { selector: "//gridcontrol[@id='StockAreaList']/descendant::tr[contains(@class,'dx-row dx-data')]/descendant::td", name: "Stock Area List Rows" },
+        stockInput: { selector: "//div[@id='CycleCountTab']//table[contains(@class,'dx-datagrid-table dx-datagrid-table-fixed dx-select')]//tr[1]//td[last()]//input", name: "Stock Input" },
+        saveButton: { selector: "//div[@id='CycleCountTab']/descendant::a[@title='Save']", name: "Save Button" },
+        maximizeButton: { selector: '[title="Maximize"]', name: "Maximize Button" },
+        plusIcon: { selector: "(//i[@class='fa fa-plus'])[1]", name: "Plus Icon" },
+        checkIcon: { selector: '(//i[@class="fas fa-check"])[1]', name: "Check Icon" },
+        wkoInput: { selector: "//div[contains(@class,'modal-content popup-no')]//input", name: "WKO Input" },
+        okInput: { selector: "[value='Ok']", name: "Ok Input" },
+        hideButton: { selector: '[title="Hide"]', name: "Hide Button" },
     }
 
     /**
@@ -39,13 +53,33 @@ class CycleCountRecordsPage {
     }
 
     /**
+     * Clicks on an option by its title.
+     * @param title The title of the option to click.
+     */
+    public async clickOptionByTitle(title: string): Promise<void> {
+        const optionLocator = this.actions.getLocator(commonActionPage.getCustomDivByTitle(title));
+        await this.actions.waitForElementToBeVisible(optionLocator, title);
+        await this.actions.click(optionLocator, title);
+    }
+
+    /**
      * Gets the count of items.
      * @returns The count of items.
      */
-    public async getCount(): Promise<string> {
-        const countLocator = this.actions.getLocator(this.elements.numberOfItem.selector);
-        await this.actions.waitForElementToBeVisible(countLocator, this.elements.numberOfItem.name);
-        const countText = await this.actions.getText(countLocator, this.elements.numberOfItem.name);
+    public async getCount(countType: string): Promise<string> {
+        let countLocator;
+        switch (countType) {
+            case "Filtered Set":
+                countLocator = this.actions.getLocator(this.elements.numberOfItem.selector);
+                break;
+            case "Random Sample":
+                countLocator = this.actions.getLocator(this.elements.itemsToCount.selector);
+                break;
+            default:
+                throw new Error("Unsupported count type for getting count.");
+        }
+        await this.actions.waitForElementToBeVisible(countLocator, "Count Element");
+        const countText = await this.actions.getText(countLocator, "Count Element");
         return countText;
     }
 
@@ -55,12 +89,15 @@ class CycleCountRecordsPage {
      */
     public async selectCountType(countType: string): Promise<void> {
         const countTypeEl = await this.actions.getLocator(this.elements.countTypeDropdown.selector);
-        await this.actions.waitForElementToBeVisible(countTypeEl, this.elements.countTypeDropdown.name);
+        await this.actions.waitForClickable(countTypeEl, this.elements.countTypeDropdown.name);
         await this.actions.click(countTypeEl, this.elements.countTypeDropdown.name);
-        if (countType === "Filtered Set") {
-            await commonActionPage.clickByDivTitle(countType);
-        } else if (countType === "Random Sample") {
-            await commonActionPage.clickByDivTitle(countType);
+        switch (countType) {
+            case "Filtered Set":
+            case "Random Sample":
+                await this.clickOptionByTitle(countType);
+                break;
+            default:
+                throw new Error(`Unsupported count type: ${countType}`);
         }
     }
 
@@ -72,13 +109,20 @@ class CycleCountRecordsPage {
      */
     public async createCycleCountRecord(
         description: string,
-        countType: string,
         dropdownSelections: { ddType: string[] },
         divTitle: string
     ): Promise<void> {
         commonActionPage.clickAddNewRecordButton();
         await commonActionPage.enterDescription(description);
-        await this.selectCountType(countType);
+        await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
+    }
+
+    /**
+     * Fills in the mandatory fields for creating a cycle count record.
+     * @param dropdownSelections The dropdown selections to make.
+     * @param divTitle The title of the div containing the fields.
+     */
+    public async fillInMandatoryFields(dropdownSelections: { ddType: string[] }, divTitle: string): Promise<void> {
         await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
     }
 
@@ -221,6 +265,7 @@ class CycleCountRecordsPage {
         await this.currentPage.waitForSelector(selector, { state: 'visible' });
         const countLocator = this.currentPage.locator(selector);
         const actualCount = await countLocator.count();
+        await this.actions.waitForCustomDelay(timeouts.medium);
         await this.actions.assertEqual(
             actualCount.toString().trim(),
             expectedCount.trim(),
@@ -235,13 +280,22 @@ class CycleCountRecordsPage {
      * @param ccountItemsToCount 
      * @param counts
      */
-    public async selectConstantPopulation(countType: string, randomSampleOption: string, counts: string): Promise<void> {
+    public async selectPopulation(countType: string, randomSampleOption: string, counts: string): Promise<void> {
         await this.selectCountType(countType);
-        await commonActionPage.clickByDivId("CCOUNTRANDOMTYPE");
-        await commonActionPage.clickByDivTitle(randomSampleOption);
+        switch (randomSampleOption) {
+            case "Constant Population":
+            case "Diminished Population":
+                await commonActionPage.clickByDivId("CCOUNTRANDOMTYPE");
+                await commonActionPage.clickByDivTitle(randomSampleOption);
+                break;
+            default:
+                throw new Error(`Unsupported count type: ${randomSampleOption}`);
+        }
         const textEl = await this.actions.getLocator(this.elements.itemsToCountInput.selector);
         await this.actions.waitForElementToBeVisible(textEl, this.elements.itemsToCountInput.name);
         await this.actions.typeText(textEl, counts, this.elements.itemsToCountInput.name);
+
+        await commonActionPage.clickSaveButton();
     }
 
     /**
@@ -249,13 +303,134 @@ class CycleCountRecordsPage {
      * @param randomSampleOptions The random sample options to verify.
      * @param howManyItemsToCount The number of items to count to verify.
      */
-    public async verifyConstantPopulation(randomSampleOptions: string, howManyItemsToCount: string): Promise<void> {
+    public async verifyPopulation(randomSampleOptions: string, howManyItemsToCount: string): Promise<void> {
         await this.actions.waitForElementToBeVisible(
             this.actions.getLocator(commonActionPage.getElementByText(randomSampleOptions)),
             `Random Sample Options: ${randomSampleOptions}`);
         await this.actions.waitForElementToBeVisible(
             this.actions.getLocator(commonActionPage.getElementByText(howManyItemsToCount)),
             `Cycle Count Items To Count: ${howManyItemsToCount}`);
+    }
+
+    /**
+     * Updates the stock quantity of the linked inventory item.
+     * @param populationType The type of population to update.
+     * @param cycleCountTabText The text of the cycle count tab.
+     * @param newQuantity The new stock quantity to set.
+     */
+    public async updateInventoryStockQty(populationType: string, cycleCountTabText: string, newQuantity: string): Promise<void> {
+        await commonActionPage.clickTabByText(cycleCountTabText);
+        const moreBtn = this.actions.getLocator(this.elements.moreButton.selector);
+        await this.actions.waitForElementToBeVisible(moreBtn, this.elements.moreButton.name);
+        await this.actions.click(moreBtn, this.elements.moreButton.name);
+        const editRecordButton = this.actions.getLocator(this.elements.editLink.selector);
+        await this.actions.waitForElementToBeVisible(editRecordButton, this.elements.editLink.name);
+        await this.actions.click(editRecordButton, this.elements.editLink.name);
+        const stockInputEl = this.actions.getLocator(this.elements.cycleCountTab.selector);
+        await this.actions.waitForElementToBeVisible(stockInputEl, this.elements.cycleCountTab.name);
+        await this.actions.click(stockInputEl, this.elements.cycleCountTab.name);
+        const stockInput = this.actions.getLocator(this.elements.stockInput.selector).nth(1);
+        await this.actions.waitForElementToBeVisible(stockInput, this.elements.stockInput.name);
+        const input = Number(newQuantity);
+        switch (populationType) {
+            case "Constant":
+                await this.actions.typeText(stockInput, (input + 1).toString(), this.elements.stockInput.name);
+                break;
+            case "Diminished":
+                await this.actions.typeText(stockInput, (input + 1).toString(), this.elements.stockInput.name);
+                break;
+            case "Filtered":
+                await this.actions.typeText(stockInput, (input + 2).toString(), this.elements.stockInput.name);
+                break;
+            default:
+                throw new Error(`Unsupported population type: ${populationType}`);
+        }
+        const saveButton = this.actions.getLocator(this.elements.saveButton.selector);
+        await this.actions.waitForElementToBeVisible(saveButton, this.elements.saveButton.name);
+        await this.actions.click(saveButton, this.elements.saveButton.name);
+    }
+
+    /**
+     * Gets the inventory stock quantity for a specific tab.
+     * @param tabText The text of the tab to get the stock quantity from.
+     * @returns The stock quantity as a string.
+     */
+    public async getInventoryStockQty(tabText: string): Promise<string> {
+        const inventoryListItem = this.actions.getLocator(this.elements.dxLink.selector).nth(1);
+        await this.actions.waitForElementToBeVisible(inventoryListItem, this.elements.dxLink.name);
+        await this.actions.click(inventoryListItem, this.elements.dxLink.name);
+        await commonActionPage.clickTabByText(tabText);
+        const quantityLocator = this.actions.getLocator(this.elements.stockAreaListRows.selector).nth(2);
+        await this.actions.waitForElementToBeVisible(quantityLocator, this.elements.stockAreaListRows.name);
+        const beforeClosingQuantity = await this.actions.getText(quantityLocator, this.elements.stockAreaListRows.name);
+        console.log(`Before Closing Quantity: ${beforeClosingQuantity}`);
+        return beforeClosingQuantity;
+    }
+
+    /**
+     * Validates the linked inventory quantity after closing a record.
+     * @param tabText The text of the tab to validate.
+     * @param beforeCloseStockQty The stock quantity before closing the record.
+     */
+    public async validateLinkedInventoryQty(
+        populationType: string,
+        tabText1: string,
+        tabText2: string,
+        beforeCloseStockQty: string,
+    ): Promise<void> {
+        await commonActionPage.clickTabByText(tabText1);
+        const inventoryListItem = this.actions.getLocator(this.elements.dxLink.selector).nth(1);
+        await this.actions.waitForElementToBeVisible(inventoryListItem, this.elements.dxLink.name);
+        await this.actions.click(inventoryListItem, this.elements.dxLink.name);
+        await this.actions.waitForCustomDelay(timeouts.medium);
+        await commonActionPage.clickTabByText(tabText2);
+        const quantityLocator = this.actions.getLocator(this.elements.stockAreaListRows.selector).nth(2);
+        await this.actions.waitForElementToBeVisible(quantityLocator, this.elements.stockAreaListRows.name);
+        const afterCloseStockQtyText = await this.actions.getText(quantityLocator, this.elements.stockAreaListRows.name);
+        const afterCloseStockQty = Number(afterCloseStockQtyText);
+        const expectedCount = Number(beforeCloseStockQty);
+        let expectedAfterClose: number;
+        switch (populationType) {
+            case "Constant":
+                expectedAfterClose = expectedCount + 1;
+                break;
+            case "Diminished":
+                expectedAfterClose = expectedCount + 1;
+                break;
+            case "Filtered":
+                expectedAfterClose = expectedCount + 2;
+                break;
+            default:
+                throw new Error(`Unsupported population type: ${populationType}`);
+        }
+        await this.actions.assertEqual(
+            afterCloseStockQty.toString(),
+            expectedAfterClose.toString(),
+            `Linked Inventory Quantity after closing is incorrect. Expected: ${expectedAfterClose}, Actual: ${afterCloseStockQty}`
+        );
+    }
+
+
+    /**
+     * Lists the cycle count details in a view.
+     * @param description The description of the cycle count.
+     */
+    public async listViewCycleCount(description: string): Promise<void> {
+        const sideBarExpanderLocator = this.actions.getLocator(commonActionPage.elements.sideBarExpander.selector);
+        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        const maximizeButton = this.actions.getLocator(this.elements.maximizeButton.selector);
+        await this.actions.click(maximizeButton, this.elements.maximizeButton.name);
+        await this.actions.click(this.actions.getLocator(this.elements.plusIcon.selector), this.elements.plusIcon.name);
+        const saveBtn = this.actions.getLocator(this.elements.checkIcon.selector);
+        await this.actions.waitForElementToBeVisible(saveBtn, this.elements.checkIcon.name);
+        await this.actions.click(saveBtn, this.elements.checkIcon.name);
+        await this.actions.waitForCustomDelay(timeouts.medium);
+        await this.actions.typeText(this.actions.getLocator(this.elements.wkoInput.selector).nth(0), description, `WKO Description: ${description}`);
+        await this.actions.click(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
+        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);
+        await this.actions.click(minimizeButton, this.elements.hideButton.name);
+        await commonActionPage.clickEditButton();
     }
 }
 

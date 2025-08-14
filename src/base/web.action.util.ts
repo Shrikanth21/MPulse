@@ -342,17 +342,16 @@ export class WebActions {
   }
 
   /**
-   * Performs a keyboard action on the specified element.
-   * @param key The key to press.
-   * @param elementDescription Optional description of the element for logging.
-   */
-  public async performKeyboardAction(key: string, elementDescription?: string): Promise<void> {
+ * Performs a keyboard action.
+ * @param key The key to press.
+ */
+  public async performKeyboardAction(key: string): Promise<void> {
     try {
       await this.waitForDelay();
       await this.page.keyboard.press(key);
-      logger.info(`Successfully performed keyboard action: ${key}${elementDescription ? ` on ${elementDescription}` : ''}`);
+      logger.info(`Successfully performed keyboard action: ${key}`);
     } catch (error) {
-      logger.error(`Failed to perform keyboard action: ${key}${elementDescription ? ` on ${elementDescription}` : ''} | Error: ${error}`);
+      logger.error(`Failed to perform keyboard action: ${key} | Error: ${error}`);
       throw error;
     }
   }
@@ -470,19 +469,19 @@ export class WebActions {
  * @param locator The Playwright Locator for the element to wait for.
  * @param elementDescription Description of the element for logging.
  */
-public async waitForClickable(locator: Locator, elementDescription: string): Promise<void> {
-  try {
-    await locator.waitFor({ state: 'visible', timeout: timeouts.large });
-    await this.page.waitForFunction(
-      (el) => el && !el.hasAttribute('disabled'),
-      await locator.elementHandle()
-    );
-    logger.info(`Element is clickable: ${elementDescription}`);
-  } catch (error) {
-    logger.error(`Element not clickable: ${elementDescription} | Error: ${error}`);
-    throw error;
+  public async waitForClickable(locator: Locator, elementDescription: string): Promise<void> {
+    try {
+      await locator.waitFor({ state: 'visible', timeout: timeouts.large });
+      await this.page.waitForFunction(
+        (el) => el && !el.hasAttribute('disabled'),
+        await locator.elementHandle()
+      );
+      logger.info(`Element is clickable: ${elementDescription}`);
+    } catch (error) {
+      logger.error(`Element not clickable: ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
   }
-}
 
 
   /**
