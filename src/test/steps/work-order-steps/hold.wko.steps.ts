@@ -56,7 +56,7 @@ When("the user assign due date to the Work Order", async function () {
 });
 
 When("the user link asset, personnel, and inventory to the Work Order", async function () {
-  await workOrderPage.linkAssetToTask(generatedDescription,
+  await workOrderPage.linkAssetToTask(
     testData.wo_info.assetAssignedToTask,
     testData.icons.asset_link_icon,
     testData.element_text.replace_button

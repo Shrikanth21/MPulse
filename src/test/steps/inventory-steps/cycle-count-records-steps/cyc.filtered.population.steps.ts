@@ -171,7 +171,7 @@ Then(/^the user should verify the "([^"]+)" updated quantity in stock after Clos
 
 When(/^the user clicks on delete current Cycle Count Records$/, async () => {
     currentRecord = await deleteCycleCountRecordPage.getCurrentCycleCountIdText();
-    await deleteCycleCountRecordPage.clickOnDeleteCurrentRecordButton();
+    await deleteCycleCountRecordPage.clickOnDeleteCurrentRecordButton(testData.cycle_count_records_title);
 });
 
 Then(/^the Cycle Count Record should be deleted successfully$/, async () => {

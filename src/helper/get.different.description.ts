@@ -14,3 +14,4 @@ export const generatedLayoutName = generateDescription('Layout', '_Automation');
 export const generatedMaintenanceRecordDescription = generateDescription('Maintenance Record', '_Automation');
 export const updatedDescription = generateDescription('Updated Description', '_Automation');
 export const generatedCycleCountRecordDescription = generateDescription('Cycle Count Record', '_Automation');
+export const generatedScheduledMaintenanceRecordDescription = generateDescription('Scheduled Maintenance Record', '_Automation');

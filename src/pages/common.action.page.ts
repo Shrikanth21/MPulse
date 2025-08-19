@@ -179,6 +179,16 @@ class CommonActionPage {
         await this.actions.waitForElementToBeVisible(linkLocator, `Link: ${text}`);
         await this.actions.click(linkLocator, `Link: ${text}`);
     }
+
+    /**
+     * Clicks on a div element by its text content.
+     * @param text The text content of the div to click on.
+     */
+    public async clickByDivText(text: string): Promise<void> {
+        const divLocator = this.actions.getLocator(this.getColumnCellByTitle(text));
+        await this.actions.waitForElementToBeVisible(divLocator, `Div: ${text}`);
+        await this.actions.click(divLocator, `Div: ${text}`);
+    }
 }
 
 export const commonActionPage = new CommonActionPage();

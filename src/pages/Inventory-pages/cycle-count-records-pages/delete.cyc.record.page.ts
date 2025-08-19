@@ -38,12 +38,12 @@ class DeleteCycleCountRecordPage {
     /**
      * Clicks on the delete button for the current Cycle Count Record.
      */
-    public async clickOnDeleteCurrentRecordButton(): Promise<void> {
+    public async clickOnDeleteCurrentRecordButton(linkedText: string): Promise<void> {
         await deleteWOPage.deleteCurrentWO();
         const modalTitle = await this.actions.getLocator(this.elementSelectors.modalTitle.selector);
         await this.actions.waitForElementToBeVisible(modalTitle, this.elementSelectors.modalTitle.name);
         if (await this.actions.isVisible(modalTitle, this.elementSelectors.modalTitle.name)) {
-            await this.deleteLinkedWorkOrder();
+            await this.deleteLinkedWorkOrder(linkedText);
         }
     }
 
@@ -87,7 +87,7 @@ class DeleteCycleCountRecordPage {
     /**
      * Deletes the linked Work Order.
      */
-    public async deleteLinkedWorkOrder(): Promise<void> {
+    public async deleteLinkedWorkOrder(linkedText: string): Promise<void> {
         const linkedWorkOrder = await this.getLinkedWorkOrderText();
         const closeModalButton = this.actions.getLocator(this.elementSelectors.closeModalButton.selector);
         await this.actions.waitForElementToBeVisible(closeModalButton, this.elementSelectors.closeModalButton.name);
@@ -95,7 +95,7 @@ class DeleteCycleCountRecordPage {
         await searchUpdateWorkOrderPage.searchWorkOrder(linkedWorkOrder);
         await searchUpdateWorkOrderPage.clickOnSearchResult();
         await deleteWOPage.deleteCurrentWO();
-        await commonActionPage.clickByLinkText("Cycle Count Records");
+        await commonActionPage.clickByLinkText(linkedText);
         await deleteWOPage.deleteCurrentWO();
     }
 }

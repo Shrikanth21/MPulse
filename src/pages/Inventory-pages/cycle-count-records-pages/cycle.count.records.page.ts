@@ -186,7 +186,7 @@ class CycleCountRecordsPage {
     /**
      * Verifies that a Cycle Count Record has been created.
      * @param description The description of the Cycle Count Record.
-     * @returns 
+     * @returns
      */
     public async verifyCycleCountRecordCreated(description: string): Promise<void> {
         const descriptionLocator = this.actions.getLocator(this.elements.cycDesc.selector);
@@ -274,11 +274,10 @@ class CycleCountRecordsPage {
     }
 
     /**
-     * Selects the constant population for cycle count.
-     * @param countType 
-     * @param randomSampleOption 
-     * @param ccountItemsToCount 
-     * @param counts
+     * Selects the population for cycle count.
+     * @param countType The type of count to select (e.g., "Constant", "Diminished", "Filtered").
+     * @param randomSampleOption The random sample option to select.
+     * @param counts The number of items to count.
      */
     public async selectPopulation(countType: string, randomSampleOption: string, counts: string): Promise<void> {
         await this.selectCountType(countType);

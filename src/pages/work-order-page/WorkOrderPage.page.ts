@@ -260,7 +260,7 @@ class WorkOrderPage {
      * @param linkTitle The title of the link to click.
      * @param buttonText The text of the button to click.
      */
-    public async linkAssetToTask(recordText: string, assetText: string, linkTitle: string, buttonText: string): Promise<void> {
+    public async linkAssetToTask(assetText: string, linkTitle: string, buttonText: string): Promise<void> {
         await this.clickMoreButton(assetText);
         await commonActionPage.clickLinkByTitle(linkTitle);
         await this.selectRowInLinkAssetPopupIfVisible();

@@ -60,7 +60,7 @@ When('the user links task, asset, personnel, and inventory to the Work Order', a
     testData.element_text.link_button
   );
 
-  await workOrderPage.linkAssetToTask(generatedDescription,
+  await workOrderPage.linkAssetToTask(
     testData.wo_info.assetAssignedToTask,
     testData.icons.asset_link_icon,
     testData.element_text.replace_button

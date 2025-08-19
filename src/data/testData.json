@@ -9,6 +9,7 @@
   "requisitionRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/RequisitionRecords/",
   "cycleCountRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/CycleCount/",
   "openScheduledMaintenancePageURL": "https://dev.mpulse9.com/#/main/openScheduledMaintenance/",
+  "scheduledMaintenanceRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/ScheduledMaintenanceRecords/",
   "menuItemWorkTitle": "Work Orders",
   "subMenuItemWorkTitle": "Work Order Records",
   "managementToolButton": "Management Tools",
@@ -23,6 +24,8 @@
   "inventoryMenuTitle": "Inventory",
   "requisitionMenuTitle": "Requisition Records",
   "cycle_count_records_title": "Cycle Count Records",
+  "scheduled_maintenance_title": "Scheduled Maintenance",
+  "scheduled_maintenance_records_title": "Scheduled Maintenance Records",
   "create_wko": "Create Work Order",
   "general_field": "Date Opened",
   "languageMenuItem": "Language",
@@ -73,6 +76,7 @@
     "scheduledMaintenanceTitle": "Scheduled Maintenance",
     "openScheduledMaintenanceTitle": "Open Scheduled Maintenance",
     "today_date": "This Week",
+    "this_month": "This Month",
     "ok_button_text": "OK",
     "replace_button": "Replace",
     "input_ok_button": "Ok",
@@ -91,6 +95,7 @@
     "financial_tab_text": "Financial",
     "stock_area_tab_text": "Stock Area",
     "cycle_count_tab_text": "Cycle Count",
+    "scheduled_tab_text": "Schedule",
     "hoursField_text": "0.00",
     "quantity_ordered_text": "10.00",
     "quantity_received_text": "5.00",
@@ -163,6 +168,30 @@
     "state_label_change": "Work Order State",
     "start_date_label_change": "Work Order Start Date"
   },
+  "scheduled_maintenance_record_id_prefix": "SMR",
+  "floating_type_id": {
+    "floatOnly": "floatOnly",
+    "floatMeter": "floatMeter"
+  },
+  "floating_type": {
+    "floating_schedule": "Floating schedule",
+    "meter_based": "Meter Based",
+    "fixed_schedule": "Fixed scheduled"
+  },
+  "recurrence_pattern": {
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "yearly": "Yearly"
+  },
+  "meter_based_dropdown_id": [
+    {
+      "ddType": "configAssetToUse"
+    },
+    {
+      "ddType": "configAssetMeter"
+    }
+  ],
   "dataBase": {
     "freshDBSep": "FreshDBSep",
     "anchorglass_inapapptest": "ANCHORGLASS_INAPPTEST",

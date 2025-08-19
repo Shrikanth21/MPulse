@@ -726,6 +726,26 @@ export class WebActions {
   }
 
   /**
+ * Asserts that the given text starts with the expected text.
+ * @param actualText The actual text string.
+ * @param expectedText The text that the actual text should start with.
+ * @param elementDescription A description of the element for logging purposes.
+ */
+  public async assertStartsWith(actualText: string, expectedText: string, elementDescription: string): Promise<void> {
+    try {
+      await this.waitForDelay();
+      await expect(
+        actualText.startsWith(expectedText),
+        `❌ Expected ${elementDescription} text to start with "${expectedText}", but got "${actualText}"`
+      ).toBeTruthy();
+      logger.info(`Assertion passed: ${elementDescription} text starts with "${expectedText}".`);
+    } catch (error) {
+      logger.error(`Failed to assert startsWith for ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  /**
    * Asserts that the actual value does not contain the unexpected substring.
    * @param actualValue The actual value to check.
    * @param unexpectedSubstring The unexpected substring to check for.
@@ -758,16 +778,18 @@ export class WebActions {
   }
 
   /**
-   * Checks if a checkbox is checked.
-   * @param locator The locator for the checkbox element.
-   * @param elementDescription Description of the checkbox for logging.
-   * @returns A boolean indicating whether the checkbox is checked.
-   */
+ * Checks if a checkbox is checked based on the 'aria-checked' attribute.
+ * @param locator The Playwright locator for the checkbox element.
+ * @param elementDescription A description of the checkbox for logging.
+ * @returns true if the checkbox is checked, false otherwise.
+ */
   public async isCheckboxChecked(locator: Locator, elementDescription: string): Promise<boolean> {
     try {
       await this.waitForElement(locator, elementDescription);
+
       const ariaChecked = await locator.getAttribute('aria-checked');
       const isChecked = ariaChecked === 'true';
+
       logger.info(`Checkbox checked state for ${elementDescription}: ${isChecked}`);
       return isChecked;
     } catch (error) {
