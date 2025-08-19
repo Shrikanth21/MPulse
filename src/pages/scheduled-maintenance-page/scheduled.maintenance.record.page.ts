@@ -213,32 +213,22 @@ class ScheduledMaintenanceRecordsPage {
         await this.actions.validateCurrentUrl(expectedUrl);
     }
 
-    /**
-     * Selects a value from the asset dropdown.
-     * @param dropdown The dropdown information.
-     * @param title The title of the asset to select.
+    /*
+     * Selects values from multiple dropdowns.
+     * Ignores duplicate values across dropdowns.
+     * Skips empty option if present as the first value.
+     * @param ddTypes Array of dropdown IDs
+     * @param fallbackTitle Title to click if no valid options are found
      */
-    /**
- * Selects values from multiple dropdowns.
- * - Ignores duplicate values across dropdowns.
- * - Skips empty option if present as the first value.
- *
- * @param ddTypes Array of dropdown IDs
- * @param fallbackTitle Title to click if no valid options are found
- */
     public async selectAssetDropdownValues(ddTypes: string[]): Promise<void> {
         const seenTitles: Set<string> = new Set();
-
         for (const ddType of ddTypes) {
             const dropdownLocator = this.actions.getLocator(this.elementSelectors.meterBasedinput(ddType));
             await this.actions.click(dropdownLocator, `Dropdown: ${ddType}`);
-
             const optionsLocator = this.actions.getLocator('//div[contains(@class, "dx-item-content") and @title]');
             await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
-
             const newTitles: string[] = [];
             const count = await optionsLocator.count();
-
             for (let i = 0; i < count; i++) {
                 const el = optionsLocator.nth(i);
                 const title = (await el.getAttribute('title'))?.trim();

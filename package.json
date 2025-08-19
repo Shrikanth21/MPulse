@@ -48,6 +48,7 @@
     "smr-floating-schedule-test": "cucumber-js features/scheduled-maintenance-records/SMR-Floating.Schedule.feature --tags @smrFloatingSchedule & npx ts-node src/helper/index.ts",
     "smr-fixed-schedule-test": "cucumber-js features/scheduled-maintenance-records/SMR-Fixed.Schedule.feature --tags @smrFixedSchedule & npx ts-node src/helper/index.ts",
     "smr-meter-based-schedule-test": "cucumber-js features/scheduled-maintenance-records/SMR-Meter.Based.Schedule.feature --tags @smrMeterBased & npx ts-node src/helper/index.ts",
+    "smr-auto-convert-test": "cucumber-js features/scheduled-maintenance-records/SMR-Auto.Convert.feature --tags @smrAutoConvert & npx ts-node src/helper/index.ts",
     "smr-existing-record-test": "cucumber-js features/scheduled-maintenance-records/SMR-Existing.Record.feature --tags @smrExistingRecord & npx ts-node src/helper/index.ts",
     "smr-delete-record-test": "cucumber-js features/scheduled-maintenance-records/SMR-Delete.Record.feature --tags @smrDelete & npx ts-node src/helper/index.ts"
   },

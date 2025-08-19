@@ -10,11 +10,13 @@
   "cycleCountRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/CycleCount/",
   "openScheduledMaintenancePageURL": "https://dev.mpulse9.com/#/main/openScheduledMaintenance/",
   "scheduledMaintenanceRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/ScheduledMaintenanceRecords/",
+  "scheduledMaintenancePageURL": "https://dev.mpulse9.com/#/main/scheduledMaintenance/ScheduledMaintenance",
   "menuItemWorkTitle": "Work Orders",
   "subMenuItemWorkTitle": "Work Order Records",
   "managementToolButton": "Management Tools",
   "workFLow": "WorkFlow",
   "workOrderTitle": "Work Orders",
+  "scheduledMaintenanceOptions": "Scheduled Maintenance Options",
   "menuItemTitle": "Capital Assets",
   "managementToolsMenu": "Management Tools",
   "subMenuItemTitle": "Equipment Records",
@@ -197,7 +199,8 @@
     "anchorglass_inapapptest": "ANCHORGLASS_INAPPTEST",
     "inapp_pns": "INAPP_PNS",
     "fresdb959_inappdev": "FRESHDB959_INAPPDEV",
-    "automation_freshdb": "AutomationFreshDB"
+    "automation_freshdb": "AutomationFreshDB",
+    "fresdb96101": "FRESHDB96101"
   },
   "db_name": "FreshDBSep"
 }

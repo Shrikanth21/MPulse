@@ -2,7 +2,7 @@ import { When, Then } from '@cucumber/cucumber';
 import { homePage } from '../../../../pages/home-page/Home.page';
 import mrtestData from '../../../../data/maintenance.records.json';
 import testData from "../../../../data/testData.json";
-import { generatedDescription, generatedMaintenanceRecordDescription } from '../../../../helper/get.different.description';
+import { generatedMaintenanceRecordDescription } from '../../../../helper/get.different.description';
 import { maintenanceRequestRecordsPage } from '../../../../pages/work-order-page/maintenance-request-records-pages/maintenanceRequestRecords.page';
 import { getRandomString } from '../../../../helper/get-random-string';
 import { labelChangePage } from '../../../../pages/work-order-page/label.change.page';

@@ -151,6 +151,7 @@ When(/^the user sets a Meter Based Schedule and selects a valid asset$/, async f
         testData.floating_type.meter_based,
         { ddType: testData.meter_based_dropdown_id.map((item: any) => item.ddType) }
     );
+    await commonActionPage.clickSaveButton();
 });
 
 Then(/^the Meter Based Schedule should be successfully applied to the Scheduled Maintenance Record$/, async function () {
