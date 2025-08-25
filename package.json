@@ -13,6 +13,7 @@
     "por-e2e-test": "cucumber-js features/PorRequisition.feature --tags @sanityPOR & npx ts-node src/helper/index.ts",
     "cyc-e2e-test": "cucumber-js features/cycle-count-records/CYC-List.View.feature --tags @sanityCYC & npx ts-node src/helper/index.ts",
     "smr-e2e-test": "cucumber-js features/scheduled-maintenance-records/SMR-List.View.feature --tags @sanitySMR & npx ts-node src/helper/index.ts",
+    "global-search-e2e-test": "cucumber-js features/global-search/Search.Record.Global.feature --tags @sanityGlobalSearch & npx ts-node src/helper/index.ts",
     "div1": "-------------------------Work Order Records-------------------------------------------------",
     "wko-test": "cucumber-js features/wko.feature --tags @wko & npx ts-node src/helper/index.ts",
     "wko-close-test": "cucumber-js features/close.wko.feature --tags @closeWko & npx ts-node src/helper/index.ts",
@@ -50,7 +51,16 @@
     "smr-meter-based-schedule-test": "cucumber-js features/scheduled-maintenance-records/SMR-Meter.Based.Schedule.feature --tags @smrMeterBased & npx ts-node src/helper/index.ts",
     "smr-auto-convert-test": "cucumber-js features/scheduled-maintenance-records/SMR-Auto.Convert.feature --tags @smrAutoConvert & npx ts-node src/helper/index.ts",
     "smr-existing-record-test": "cucumber-js features/scheduled-maintenance-records/SMR-Existing.Record.feature --tags @smrExistingRecord & npx ts-node src/helper/index.ts",
-    "smr-delete-record-test": "cucumber-js features/scheduled-maintenance-records/SMR-Delete.Record.feature --tags @smrDelete & npx ts-node src/helper/index.ts"
+    "smr-delete-record-test": "cucumber-js features/scheduled-maintenance-records/SMR-Delete.Record.feature --tags @smrDelete & npx ts-node src/helper/index.ts",
+    "div7": "-------------------------Global Search Records-------------------------------------------------",
+    "search-record-any-modules-test": "cucumber-js features/global-search/Search.Record.Any.Modules.feature --tags @searchEquipmentRecord & npx ts-node src/helper/index.ts",
+    "search-record-converted-mr-wko-test": "cucumber-js features/global-search/Search.Record.Converted.MR.WKO.feature --tags @searchConvertedRecord & npx ts-node src/helper/index.ts",
+    "search-record-por-requisition-test": "cucumber-js features/global-search/Search.Record.POR.Requisition.feature --tags @searchPorRecord & npx ts-node src/helper/index.ts",
+    "search-record-closed-work-order-test": "cucumber-js features/global-search/Search.Record.Closed.Work.Order.feature --tags @closeRecord & npx ts-node src/helper/index.ts",
+    "search-record-mr-quit-waiting-test": "cucumber-js features/global-search/Search.Record.Quit.Waiting.feature --tags @searchQuitWaitingRecord & npx ts-node src/helper/index.ts",
+    "search-record-mr-cancelled-test": "cucumber-js features/global-search/Search.Record.Cancelled.feature --tags @searchCanceledRecord & npx ts-node src/helper/index.ts",
+    "search-record-smr-converted-test": "cucumber-js features/global-search/Search.Record.SMR.Converted.feature --tags @searchSmrConverted & npx ts-node src/helper/index.ts",
+    "search-record-cyc-converted-test": "cucumber-js features/global-search/Search.Record.CYC.Converted.feature --tags @searchCycConverted & npx ts-node src/helper/index.ts"
   },
   "keywords": [
     "pw",

@@ -38,6 +38,8 @@ class RequisitionRecordsPage {
         financialInputField: { selector: "//div[@id='FinancialTab']/descendant::input[@class='dx-texteditor-input']", name: "Financial Input Field" },
         financialSaveButton: { selector: "//div[@id='FinancialTab']/descendant::a[@title='Save']", name: "Financial Save Button" },
         stockAreaInputField: { selector: "//div[@id='StockedItem']", name: "Stock Area Input Field" },
+        popupTextInput: { selector: "//div[@class='modal-content popup-no-resize ui-resizable']/descendant::input[@class='dx-texteditor-input']", name: "Popup Text Input" },
+        okInput: { selector: "[value='Ok']", name: "Ok Input" },
     }
 
     /**
@@ -276,6 +278,31 @@ class RequisitionRecordsPage {
         const saveButton = this.actions.getLocator(this.elements.financialSaveButton.selector);
         await this.actions.waitForElementToBeVisible(saveButton, this.elements.financialSaveButton.name);
         await this.actions.click(saveButton, this.elements.financialSaveButton.name);
+    }
+
+    /**
+     * Closes a requisition record with a specific date.
+     * @param tabText The text of the tab to close.
+     * @param closeButtonText The text of the close button.
+     * @param yesButtonText The text of the yes button.
+     * @param date The date to set in the popup.
+     */
+    public async closeRequisitionRecordWithDate(
+        tabText: string,
+        closeButtonText: string,
+        yesButtonText: string,
+        date: string,
+        inputOkButtonText: string
+    ): Promise<void> {
+        await commonActionPage.clickTabByText(tabText);
+        await commonActionPage.clickElementByText(closeButtonText);
+        await commonActionPage.clickElementByText(yesButtonText);
+        const locator = await this.actions.getLocator(this.elements.popupTextInput.selector);
+        await this.actions.waitForElementToBeVisible(locator, this.elements.popupTextInput.name);
+        await this.actions.typeText(locator, date, this.elements.popupTextInput.name);
+        await this.actions.waitForClickable(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
+        await this.actions.click(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
+        await workOrderPage.clickOnSecondClosePopup(inputOkButtonText);
     }
 }
 

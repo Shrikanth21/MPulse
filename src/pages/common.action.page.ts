@@ -20,6 +20,7 @@ class CommonActionPage {
         maximizeButton: { selector: '[title="Maximize"]', name: "Maximize Button" },
         descriptionInput: { selector: "//div[@fieldname='RecordDescription']//input", name: "Description Input" },
         addNewRecordButton: { selector: "//div[@class='action-menu-items']/descendant::a[@title='Add new record']", name: "Add New Record Button" },
+        closeButton: { selector: "//button[@title='Click here to close']", name: "Close Button" },
     }
     getElementByText = (text: string): string => `//span[text()='${text}']`;
     getTabByText = (text: string): string => `//span[@class='dFlex']//span[text()='${text}']`;
@@ -188,6 +189,15 @@ class CommonActionPage {
         const divLocator = this.actions.getLocator(this.getColumnCellByTitle(text));
         await this.actions.waitForElementToBeVisible(divLocator, `Div: ${text}`);
         await this.actions.click(divLocator, `Div: ${text}`);
+    }
+
+    /**
+     * Clicks on the close button.
+     */
+    public async clickCloseButton(): Promise<void> {
+        const closeButtonLocator = this.actions.getLocator(this.elements.closeButton.selector);
+        await this.actions.waitForElementToBeVisible(closeButtonLocator, this.elements.closeButton.name);
+        await this.actions.click(closeButtonLocator, this.elements.closeButton.name);
     }
 }
 

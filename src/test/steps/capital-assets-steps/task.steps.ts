@@ -1,7 +1,6 @@
-import { Given, Then, When } from '@cucumber/cucumber';
+import { Then, When } from '@cucumber/cucumber';
 import testData from '../../../data/testData.json';
 import * as path from 'path';
-import { loginPage } from '../../../pages/login-page/Login.page';
 import { buildingRecordsPage } from '../../../pages/capital-assets-page/Building.records.page';
 import { generatedBuildingTaskDescription } from '../../../helper/get.different.description';
 import { homePage } from '../../../pages/home-page/Home.page';
@@ -33,5 +32,5 @@ Then('the user deletes the created building record', async function () {
     await buildingRecordsPage.deleteBuildingRecord(
         testData.icons.crossIcon,
         testData.element_text.continue_button_text
-      );
+    );
 });
