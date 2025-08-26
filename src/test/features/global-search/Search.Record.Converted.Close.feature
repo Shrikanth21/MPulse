@@ -1,6 +1,6 @@
 Feature: Global Search - Search for record Converted from MR and POR to WKO
 
-  @globalSearch @searchConvertedRecord @sanityGlobalSearch @e2e
+  @searchMrConvertedRecord @sanityGlobalSearch @e2e
   Scenario: Verify search results for a specific record converted from MR to WKO
     Given the user logs into the application
     And the user selects a specific database
@@ -12,7 +12,7 @@ Feature: Global Search - Search for record Converted from MR and POR to WKO
     And the user searches the Maintenance Request Records by request id description and status
     Then the user should see the Maintenance Request in the search results
 
-  @searchPorRecord @searchConvertedRecord @sanityGlobalSearch @e2e
+  @searchClosePorRecord @sanityGlobalSearch @e2e
   Scenario: Verify search results for a specific record converted from POR to WKO
     Given the user logs into the application
     And the user selects a specific database
@@ -25,7 +25,7 @@ Feature: Global Search - Search for record Converted from MR and POR to WKO
     And the user searches the Purchase Order Records by order id and status
     Then the user should see the Purchase Order in the search results
 
-  @closeRecord @sanityGlobalSearch @e2e
+  @searchClosedWkoRecord @sanityGlobalSearch @e2e
   Scenario: Verify search results for a specific record closed work order
     Given the user logs into the application
     And the user selects a specific database

@@ -66,7 +66,8 @@ Then(/^the user should see the Maintenance Request in the search results$/, asyn
         mrtestData.maintenanceRequestSubMenuItemTitle,
         recordId,
         generatedMaintenanceRecordDescription,
-        testData.element_text.convert_status
+        testData.element_text.convert_status,
+        recordId
     );
 });
 
@@ -97,7 +98,7 @@ When(/^the user creates a new Work Order with a unique description$/, async () =
 });
 
 When(/^the user searches the closed Work Order Records by order id and status$/, async () => {
-    await globalSearchPage.searchRecord(recordId + " " + generatedDescription + " " + testData.element_text.closed_status_text);
+    await globalSearchPage.searchRecord(recordId + " " + testData.element_text.closed_status_text);
 });
 
 Then(/^the user should see the closed Work Order in the search results$/, async () => {
@@ -105,7 +106,8 @@ Then(/^the user should see the closed Work Order in the search results$/, async 
         testData.subMenuItemWorkTitle,
         recordId,
         generatedDescription,
-        testData.element_text.closed_status_text
+        testData.element_text.closed_status_text,
+        recordId
     );
 });
 
@@ -118,7 +120,8 @@ Then(/^the user should see the Maintenance Request in the search Cancel results$
         testData.subMenuItemWorkTitle,
         recordId,
         generatedDescription,
-        testData.element_text.cancel_status
+        testData.element_text.cancel_status,
+        recordId
     );
 });
 
@@ -131,7 +134,8 @@ Then(/^the user should see the Maintenance Request in the search Waiting for Rep
         testData.subMenuItemWorkTitle,
         recordId,
         generatedMaintenanceRecordDescription,
-        testData.element_text.waiting_for_reply_status
+        testData.element_text.waiting_for_reply_status,
+        recordId
     );
 });
 

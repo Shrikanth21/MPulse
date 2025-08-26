@@ -30,6 +30,7 @@ class ApprovalFlowPage {
      * @param sendButton The text of the send button to click.
      */
     public async sendEmailToRequester(replyToRequesterMail: string, ccReplyToRequesterMail: string, sendButton: string): Promise<void> {
+        await this.actions.performKeyboardAction('Enter')
         const toMail = this.actions.getLocator(this.elements.toRequesterEmail.selector);
         await this.actions.waitForElementToBeVisible(toMail, this.elements.toRequesterEmail.name);
         await this.actions.click(toMail, this.elements.toRequesterEmail.name);

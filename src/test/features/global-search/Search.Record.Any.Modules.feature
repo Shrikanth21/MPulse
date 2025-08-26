@@ -1,6 +1,6 @@
 Feature: Global Search - Searching a record in any of the modules
 
-  @globalSearch @searchEquipmentRecord @sanityGlobalSearch @e2e
+  @searchEquipmentRecord @sanityGlobalSearch @e2e
   Scenario: Verify search results for a specific record
     Given the user logs into the application
     And the user selects a specific database

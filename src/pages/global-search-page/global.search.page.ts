@@ -2,6 +2,7 @@ import { Page } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
 import { commonActionPage } from "../common.action.page";
+import { maintenanceRequestRecordsPage } from "../work-order-page/maintenance-request-records-pages/maintenanceRequestRecords.page";
 
 class GlobalSearchPage {
     private get currentPage(): Page {
@@ -53,8 +54,9 @@ class GlobalSearchPage {
      * @param recordId The ID of the maintenance request record.
      * @param description The description of the maintenance request record.
      * @param status The status of the maintenance request record.
+     * @param title The title of the maintenance request record.
      */
-    public async verifySearchResultWithStatus(searchGroup: string, recordId: string, description: string, status: string): Promise<void> {
+    public async verifySearchResultWithStatus(searchGroup: string, recordId: string, description: string, status: string, title: string): Promise<void> {
         const headerLocator = this.actions.getLocator(this.elements.searchRecordsHeader(searchGroup));
         await this.actions.waitForElementToBeVisible(headerLocator, this.elements.searchRecordsHeader(searchGroup));
         const idText = await commonActionPage.getElementByLinkText(recordId);
@@ -62,8 +64,14 @@ class GlobalSearchPage {
         await this.actions.assertContains(idText, recordId);
         await this.actions.assertContains(descriptionText, description);
         const statusText = await this.actions.getLocator(this.elements.searchedRequestStatusRows(searchGroup));
-        const actualStatusText = await statusText.innerText();
-        await this.actions.assertEqual(actualStatusText, status, `The actual status text ${actualStatusText}`);
+        const isVisible = await statusText.isVisible();
+        if (!isVisible) {
+            await commonActionPage.clickLinkByTitle(title);
+            await maintenanceRequestRecordsPage.validateElementText(status);
+        } else {
+            const actualStatusText = await statusText.innerText();
+            await this.actions.assertEqual(actualStatusText, status, `The actual status text ${actualStatusText}`);
+        }
     }
 
     /**
