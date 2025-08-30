@@ -1,9 +1,11 @@
 Feature: Global Search - Search for record Converted from MR and POR to WKO
 
-  @searchMrConvertedRecord @sanityGlobalSearch @e2e
-  Scenario: Verify search results for a specific record converted from MR to WKO
+  Background:
     Given the user logs into the application
     And the user selects a specific database
+
+  @searchMrConvertedRecord @sanityGlobalSearch @e2e
+  Scenario: Verify search results for a specific record converted from MR to WKO
     When the user navigates to the Maintenance Request Records page
     And the user creates a new Maintenance Request with a only description
     Then the Maintenance Order status should be Pending
@@ -14,8 +16,6 @@ Feature: Global Search - Search for record Converted from MR and POR to WKO
 
   @searchClosePorRecord @sanityGlobalSearch @e2e
   Scenario: Verify search results for a specific record converted from POR to WKO
-    Given the user logs into the application
-    And the user selects a specific database
     When the user navigates to the Requisition Records page
     And the user creates a new Purchase Order Requisition with a mandatory fields
     Then the Purchase Order Requisition status should be Open
@@ -27,8 +27,6 @@ Feature: Global Search - Search for record Converted from MR and POR to WKO
 
   @searchClosedWkoRecord @sanityGlobalSearch @e2e
   Scenario: Verify search results for a specific record closed work order
-    Given the user logs into the application
-    And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user creates a new Work Order with a unique description
     And the Work Order status should be Open

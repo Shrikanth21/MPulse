@@ -11,6 +11,7 @@
   "openScheduledMaintenancePageURL": "https://dev.mpulse9.com/#/main/openScheduledMaintenance/",
   "scheduledMaintenanceRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/ScheduledMaintenanceRecords/",
   "scheduledMaintenancePageURL": "https://dev.mpulse9.com/#/main/scheduledMaintenance/ScheduledMaintenance",
+  "informationMenuItemsPageURL": "https://dev.mpulse9.com/#/main/informationMenu/InformationMenuItems/",
   "menuItemWorkTitle": "Work Orders",
   "subMenuItemWorkTitle": "Work Order Records",
   "managementToolButton": "Management Tools",
@@ -24,6 +25,8 @@
   "workflowSubMenuItemTitle": "WorkFlow",
   "buildingMenuText": "Building Records",
   "inventoryMenuTitle": "Inventory",
+  "reportsMenuTitle": "Reports",
+  "reportWidgetsTitle": "Report Widgets",
   "requisitionMenuTitle": "Requisition Records",
   "cycle_count_records_title": "Cycle Count Records",
   "scheduled_maintenance_title": "Scheduled Maintenance",
@@ -198,6 +201,13 @@
       "ddType": "configAssetMeter"
     }
   ],
+  "displayRecord": {
+    "x": "Work Order Records",
+    "y": "Work Order Records",
+    "fieldX": "ID#",
+    "fieldY": "Date Opened",
+    "summary": "Count"
+  },
   "dataBase": {
     "freshDBSep": "FreshDBSep",
     "anchorglass_inapapptest": "ANCHORGLASS_INAPPTEST",

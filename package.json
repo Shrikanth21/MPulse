@@ -14,6 +14,7 @@
     "cyc-e2e-test": "cucumber-js features/cycle-count-records/CYC-List.View.feature --tags @sanityCYC & npx ts-node src/helper/index.ts",
     "smr-e2e-test": "cucumber-js features/scheduled-maintenance-records/SMR-List.View.feature --tags @sanitySMR & npx ts-node src/helper/index.ts",
     "global-search-e2e-test": "cucumber-js features/global-search/Search.Record.Global.feature --tags @sanityGlobalSearch & npx ts-node src/helper/index.ts",
+    "report-widget-e2e-test": "cucumber-js features/report-widget/Report.Widget.feature --tags @sanityIm & npx ts-node src/helper/index.ts",
     "div1": "-------------------------Work Order Records-------------------------------------------------",
     "wko-test": "cucumber-js features/wko.feature --tags @wko & npx ts-node src/helper/index.ts",
     "wko-close-test": "cucumber-js features/close.wko.feature --tags @closeWko & npx ts-node src/helper/index.ts",
@@ -60,7 +61,11 @@
     "search-record-mr-quit-waiting-test": "cucumber-js features/global-search/Search.Record.Quit.Waiting.feature --tags @searchQuitWaitingRecord & npx ts-node src/helper/index.ts",
     "search-record-mr-cancelled-test": "cucumber-js features/global-search/Search.Record.Cancelled.feature --tags @searchCanceledRecord & npx ts-node src/helper/index.ts",
     "search-record-smr-converted-test": "cucumber-js features/global-search/Search.Record.SMR.Converted.feature --tags @searchSmrConverted & npx ts-node src/helper/index.ts",
-    "search-record-cyc-converted-test": "cucumber-js features/global-search/Search.Record.CYC.Converted.feature --tags @searchCycConverted & npx ts-node src/helper/index.ts"
+    "search-record-cyc-converted-test": "cucumber-js features/global-search/Search.Record.CYC.Converted.feature --tags @searchCycConverted & npx ts-node src/helper/index.ts",
+    "div8": "-------------------------Report Widget-------------------------------------------------",
+    "report-widget-create-test": "cucumber-js features/report-widget/Report.Widget.feature --tags @createIm & npx ts-node src/helper/index.ts",
+    "report-widget-default-test": "cucumber-js features/report-widget/Report.Widget.feature --tags @defaultWidget & npx ts-node src/helper/index.ts",
+    "report-widget-preview-test": "cucumber-js features/report-widget/Report.Widget.feature --tags @imPreviewWidget & npx ts-node src/helper/index.ts"
   },
   "keywords": [
     "pw",

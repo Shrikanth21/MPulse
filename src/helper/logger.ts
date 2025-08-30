@@ -14,7 +14,7 @@ let logger: Logger = createLogger({
 });
 
 export function setLoggerForScenario(scenarioName: string): void {
-  const logsDir = path.resolve(__dirname, '../../../logs');
+  const logsDir = path.resolve(process.cwd(), 'logs');
   if (!fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir, { recursive: true });
   }

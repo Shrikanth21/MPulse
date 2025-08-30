@@ -8,8 +8,9 @@
     "assetType": "Asset Type",
     "dateDue": "Date Due",
     "workOrderPriority": "Work Order Priority",
-    "woValidation": "WO Validation"
-
+    "workOrderRecords": "Work Order Records",
+    "woValidation": "WO Validation",
+    "dateOpened": "Date Opened"
   },
   "filterTabOptions": {
     "addColumnTab": "Add Columns to Layout",
@@ -31,7 +32,8 @@
       "hold": "Hold",
       "open": "Open",
       "incomplete": "INCOMPLETE",
-      "pass": "PASS"
+      "pass": "PASS",
+      "today": "Today"
     },
     "createdByValue": {
       "created_by": "Shrikant@inapp.com"

@@ -130,6 +130,7 @@ class CreateFilterPage {
      */
     public async clickOnApplyButton(): Promise<void> {
         const applyButtonLocator = this.actions.getLocator(this.elements.applyButton.selector);
+        await this.actions.waitForElementToBeVisible(applyButtonLocator, this.elements.applyButton.name);
         await this.actions.click(applyButtonLocator, this.elements.applyButton.name);
     }
 
@@ -241,7 +242,7 @@ class CreateFilterPage {
         await this.actions.waitForElementToBeVisible(customFilterValueInput, `Custom filter value input with title ${value} is present`);
         await this.actions.click(customFilterValueInput, `Clicked on custom filter value: ${value}`);
 
-        const customFilterConditionInputLocator = this.actions.getLocator(this.elements.customFilterDropdown.selector).nth(3);
+        const customFilterConditionInputLocator = this.actions.getLocator(this.elements.customFilterDropdown.selector).nth(4);
         await this.actions.waitForElementToBeVisible(customFilterConditionInputLocator, this.elements.customFilterDropdown.name);
         await this.actions.click(customFilterConditionInputLocator, this.elements.customFilterDropdown.name);
 

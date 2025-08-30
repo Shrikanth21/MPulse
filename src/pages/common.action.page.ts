@@ -27,7 +27,8 @@ class CommonActionPage {
     getElementByTitle = (title: string): string => `//a[@title='${title}']`;
     getTitleBySpan = (title: string): string => `//span[@title='${title}']`;
     getSpanByTitle = (title: string): string => `//span[@title='${title}']`;
-    getDivByTitle = (title: string): string => `//div[contains(@title,'${title}')]`;;
+    getDivByTitle = (title: string): string => `//div[contains(@title,'${title}')]`;
+    getDivByText = (text: string): string => `//div[text()='${text}']`;
     getCustomDivByTitle = (title: string): string => `//div[@title='${title}']`;
     getColumnCellByTitle = (title: string): string => `//div[text()='${title}']`;
     getTabByTitle = (tabTeading: string): string => `//li[@title='${tabTeading}']`;
