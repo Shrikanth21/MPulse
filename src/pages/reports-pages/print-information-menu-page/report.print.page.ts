@@ -172,8 +172,12 @@ class ReportPrintPage {
      * Verifies all record information on the new page.
      * @param expectedValues The expected record values to verify.
      */
-    public async verifyAllRecordInformation(expectedValues: number): Promise<void> {
+    public async verifyAllRecordInformation(expectedValues: string): Promise<void> {
         try {
+            if (typeof expectedValues !== "string" || expectedValues.trim() === "") {
+                logger.error(`Invalid expectedValues argument: ${expectedValues}`);
+                throw new Error(`Expected value is undefined, null, or empty. Received: ${expectedValues}`);
+            }
             const pages = this.currentPage.context().pages();
             const newPage = pages[pages.length - 1];
             logger.info("Switched to new page for verification.");
@@ -186,15 +190,21 @@ class ReportPrintPage {
                     actualValues.push(text.trim());
                 }
             }
-            if (expectedValues < 1501) {
-                expect(actualValues.length).toEqual(expectedValues.toString());
-                logger.info(`Verified record count: ${expectedValues} and ${actualValues.length}`);
-            } else if (expectedValues > 1501) {
+            const expectedValueNum = Number(expectedValues) + 1; //Added one because element for title is included
+            logger.info("expected value number: " + expectedValueNum);
+            if (isNaN(expectedValueNum)) {
+                logger.error(`Expected value is not a valid number: ${expectedValues}`);
+                throw new Error(`Expected value is not a valid number: ${expectedValues}`);
+            }
+            if (expectedValueNum <= 1500) {
+                expect(actualValues.length).toEqual(expectedValueNum);
+                logger.info(`Verified record count: ${expectedValueNum} and ${actualValues.length}`);
+            } else if (expectedValueNum >= 1501) {
                 const expectedValue = 1501;
                 expect(actualValues.length).toEqual(expectedValue);
                 logger.info(`Verified record count: ${expectedValue} and ${actualValues.length}`);
             }
-            logger.info(`Verified all record texts: ${JSON.stringify(actualValues)} ,${actualValues.length}, ${expectedValues}`);
+            logger.info(`Verified all record texts: ${JSON.stringify(actualValues)} and ${actualValues.length}`);
         } catch (error) {
             logger.error("Error in verifyAllRecordInformation:", error);
             throw error;

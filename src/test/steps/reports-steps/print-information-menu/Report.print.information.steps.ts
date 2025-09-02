@@ -4,7 +4,7 @@ import testData from "../../../../data/testData.json";
 import { reportInformationMenuPage } from "../../../../pages/reports-pages/information-menu-page/report.information.menu.page";
 
 let currentRecordInfo: string;
-let allRecords: number;
+let allRecords: string;
 
 When("the user clicks the print button", async () => {
     await reportPrintPage.clickPrintButton();
@@ -35,7 +35,7 @@ Then("the user should see the correct current record information displayed", asy
 });
 
 Then("the user gets the all record information displayed", async function () {
-    allRecords = await reportInformationMenuPage.getWorkOrderRecordCount();
+    allRecords = (await (reportInformationMenuPage.getWorkOrderRecordCount())).toString();
 });
 
 When(/^the user sets the filter to all records$/, async function () {
@@ -64,4 +64,8 @@ Then(/^the user should see the correct current lookup information displayed$/, a
 
 Then("the user verifies the download report functionality", async function () {
     await reportPrintPage.verifyDownloadReport();
+});
+
+When("the user gets the records count from the custom filter layout", async function () {
+    allRecords = (await (reportInformationMenuPage.getWorkOrderRecordCount())).toString();
 });

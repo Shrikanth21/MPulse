@@ -14,7 +14,7 @@ Feature: Report - Form View - Current Layout
     When the user clicks on the Settings icon again
     And the user navigate to the custom filter Layouts tab
     And the user creates a filter using provided criteria with conditions
-    And the user gets the records count from the list view
+    And the user gets the records count from the custom filter layout
     And the user minimizes the list view display
     And the user clicks the print button
     And the user sets the filter to current lookup
