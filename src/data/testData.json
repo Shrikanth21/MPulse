@@ -208,6 +208,17 @@
     "fieldY": "Date Opened",
     "summary": "Count"
   },
+  "run_report": {
+    "work_order_form": "Work Order Form",
+    "days_between_failure_by_asset": "Days Between Failure By Asset Report",
+    "labor_hours_by_personnel": "Labor Hours By Personnel",
+    "work_order_comprehensive": "Work Order Comprehensive Report"
+  },
+  "include_data_from": {
+    "current_record": "Current Record",
+    "current_lookup": "Current lookup",
+    "all_records": "All records"
+  },
   "dataBase": {
     "freshDBSep": "FreshDBSep",
     "anchorglass_inapapptest": "ANCHORGLASS_INAPPTEST",

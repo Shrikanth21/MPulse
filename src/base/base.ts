@@ -20,7 +20,7 @@ BeforeAll(async () => {
   switch (browserType.toLowerCase()) {
     case 'chrome':
     case 'gc':
-      browser = await chromium.launch({ headless: false, channel: 'chrome', args: ['--start-maximized'] });
+      browser = await chromium.launch({ headless: false, channel: 'chrome', args: ['--start-maximized', '--kiosk-printing'] });
       break;
     case 'firefox':
     case 'ff':

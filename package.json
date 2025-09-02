@@ -15,6 +15,7 @@
     "smr-e2e-test": "cucumber-js features/scheduled-maintenance-records/SMR-List.View.feature --tags @sanitySMR & npx ts-node src/helper/index.ts",
     "global-search-e2e-test": "cucumber-js features/global-search/Search.Record.Global.feature --tags @sanityGlobalSearch & npx ts-node src/helper/index.ts",
     "report-widget-e2e-test": "cucumber-js features/report-widget/Report.Widget.feature --tags @sanityIm & npx ts-node src/helper/index.ts",
+    "report-print-information-e2e-test": "cucumber-js features/reports-widget/print-information-menu/Report.Print.Information.Menu.feature --tags @sanityReport & npx ts-node src/helper/index.ts",
     "div1": "-------------------------Work Order Records-------------------------------------------------",
     "wko-test": "cucumber-js features/wko.feature --tags @wko & npx ts-node src/helper/index.ts",
     "wko-close-test": "cucumber-js features/close.wko.feature --tags @closeWko & npx ts-node src/helper/index.ts",
@@ -65,7 +66,12 @@
     "div8": "-------------------------Report Widget-------------------------------------------------",
     "report-widget-create-test": "cucumber-js features/report-widget/Report.Widget.feature --tags @createIm & npx ts-node src/helper/index.ts",
     "report-widget-default-test": "cucumber-js features/report-widget/Report.Widget.feature --tags @defaultWidget & npx ts-node src/helper/index.ts",
-    "report-widget-preview-test": "cucumber-js features/report-widget/Report.Widget.feature --tags @imPreviewWidget & npx ts-node src/helper/index.ts"
+    "report-widget-preview-test": "cucumber-js features/report-widget/Report.Widget.feature --tags @imPreviewWidget & npx ts-node src/helper/index.ts",
+    "div9": "-------------------------Print Information Menu-------------------------------------------------",
+    "report-print-information-menu-test": "cucumber-js features/reports-widget/print-information-menu/Report.List.View.feature --tags @reportListView & npx ts-node src/helper/index.ts",
+    "report-print-information-current-record-test": "cucumber-js features/reports-widget/print-information-menu/Report.Print.Information.Menu.feature --tags @reportCurrentRecord & npx ts-node src/helper/index.ts",
+    "report-print-information-all-records-test": "cucumber-js features/reports-widget/print-information-menu/Report.Print.Information.Menu.feature --tags @reportAllRecords & npx ts-node src/helper/index.ts",
+    "report-print-information-custom-layout-test": "cucumber-js features/reports-widget/print-information-menu/Report.Print.Information.Menu.feature --tags @reportCustomLayout & npx ts-node src/helper/index.ts"
   },
   "keywords": [
     "pw",

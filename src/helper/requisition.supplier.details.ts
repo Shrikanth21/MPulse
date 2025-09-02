@@ -1,5 +1,9 @@
 import { faker } from '@faker-js/faker';
 
+/**
+ * Generates a set of fake supplier form data.
+ * @returns An object containing fake supplier form data.
+ */
 export function generateSupplierFormData() {
   return {
     SupplierContact: faker.person.fullName(),
