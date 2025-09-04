@@ -17,3 +17,4 @@ export const generatedCycleCountRecordDescription = generateDescription('Cycle C
 export const generatedScheduledMaintenanceRecordDescription = generateDescription('Scheduled Maintenance Record', '_Automation');
 export const generatedIMDescription = generateDescription('Information Menu', '_Automation');
 export const generatedReportTitle = generateDescription('Report Title', '_Automation');
+export const generatedWorkOrderCalendarTitle = generateDescription('Work Order Calendar', '_Automation');

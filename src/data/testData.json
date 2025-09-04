@@ -12,6 +12,7 @@
   "scheduledMaintenanceRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/ScheduledMaintenanceRecords/",
   "scheduledMaintenancePageURL": "https://dev.mpulse9.com/#/main/scheduledMaintenance/ScheduledMaintenance",
   "informationMenuItemsPageURL": "https://dev.mpulse9.com/#/main/informationMenu/InformationMenuItems/",
+  "calendarPageURL": "https://dev.mpulse9.com/#/main/maintenanceAdvisor/calendar/",
   "menuItemWorkTitle": "Work Orders",
   "subMenuItemWorkTitle": "Work Order Records",
   "managementToolButton": "Management Tools",
@@ -218,6 +219,9 @@
     "current_record": "Current Record",
     "current_lookup": "Current lookup",
     "all_records": "All records"
+  },
+  "calendar": {
+    "calendar_tab_name": "Calendars"
   },
   "dataBase": {
     "freshDBSep": "FreshDBSep",

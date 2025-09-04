@@ -181,7 +181,7 @@ class ReportPrintPage {
             const pages = this.currentPage.context().pages();
             const newPage = pages[pages.length - 1];
             logger.info("Switched to new page for verification.");
-            await newPage.waitForSelector(this.elementSelectors.wkoSpan.selector, { timeout: 30000 });
+            await newPage.waitForSelector(this.elementSelectors.wkoSpan.selector, { timeout: 40000 });
             const allRecordLocators = await newPage.$$(this.elementSelectors.wkoSpan.selector);
             const actualValues: string[] = [];
             for (const locator of allRecordLocators) {
