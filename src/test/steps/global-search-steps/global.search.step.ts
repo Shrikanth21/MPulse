@@ -139,7 +139,7 @@ Then(/^the user should see the Maintenance Request in the search Waiting for Rep
     );
 });
 
-When(/^the user creates a new Scheduled Maintenance with a only description$/, async () => {
+When(/^the user creates a new Scheduled Maintenance Record with a only description$/, async () => {
     await maintenanceRequestRecordsPage.createMaintenanceRecord(generatedScheduledMaintenanceRecordDescription);
     await commonActionPage.clickSaveButton();
 });
@@ -154,7 +154,7 @@ When(/^the user converts the Scheduled Maintenance into a Work Order$/, async ()
         testData.openScheduledMaintenancePageURL
     );
     await cycleCountRecordsPage.selectDateRange(testData.element_text.this_month, testData.element_text.openScheduledMaintenanceTitle);
-    await cycleCountRecordsPage.searchCycleCountRecord(recordId);
+    await cycleCountRecordsPage.searchCycleCountRecord(recordId, testData.element_text.next_week, testData.element_text.openScheduledMaintenanceTitle);
     await cycleCountRecordsPage.clickOnConvertWorkOrderButton(
         mrtestData.element_text.convert_wko_order,
         mrtestData.element_text.yes_convert,
@@ -203,7 +203,7 @@ When(/^the user converts the Cycle Count into a Work Order$/, async () => {
         testData.openScheduledMaintenancePageURL
     );
     await cycleCountRecordsPage.selectDateRange(testData.element_text.this_month, testData.element_text.openScheduledMaintenanceTitle);
-    await cycleCountRecordsPage.searchCycleCountRecord(recordId);
+    await cycleCountRecordsPage.searchCycleCountRecord(recordId, testData.element_text.next_week, testData.element_text.openScheduledMaintenanceTitle);
     await cycleCountRecordsPage.clickOnConvertWorkOrderButton(
         mrtestData.element_text.convert_wko_order,
         mrtestData.element_text.yes_convert,

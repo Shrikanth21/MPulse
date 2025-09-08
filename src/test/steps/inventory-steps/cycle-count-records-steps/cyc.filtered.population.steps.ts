@@ -9,6 +9,7 @@ import { getFutureDateFormatted } from "../../../../helper/date/get.future.date"
 import { commonActionPage } from "../../../../pages/common.action.page";
 import { deleteCycleCountRecordPage } from "../../../../pages/Inventory-pages/cycle-count-records-pages/delete.cyc.record.page";
 import { deleteWOPage } from "../../../../pages/work-order-page/delete.wko.page";
+import { mrAutoConvertPage } from "../../../../pages/work-order-page/maintenance-request-records-pages/mr.auto.convert.page";
 
 let createdCycId: string;
 let createdCycCount: string;
@@ -16,9 +17,7 @@ let beforeCloseStockQty: string;
 let currentRecord: string;
 
 When(/^the user navigates to the Cycle Count Records page$/, async () => {
-    await requisitionRecordsPage.navigateToRequisitionRecordsPage(
-        testData.homePageURL,
-        testData.element_text.got_it_btn,
+    await cycleCountRecordsPage.navigateToOpenScheduledMaintenancePage(
         testData.inventoryMenuTitle,
         testData.cycle_count_records_title,
         testData.cycleCountRecordsPageURL
@@ -80,11 +79,11 @@ When(/^the user navigate to the Open Scheduled Maintenance page$/, async () => {
 });
 
 When(/^the user set the today date in date range$/, async () => {
-    await cycleCountRecordsPage.selectDateRange(testData.element_text.today_date, testData.element_text.openScheduledMaintenanceTitle);
+    await cycleCountRecordsPage.selectDateRange(testData.element_text.this_week, testData.element_text.openScheduledMaintenanceTitle);
 });
 
 When(/^the user search the created cycle count record$/, async () => {
-    await cycleCountRecordsPage.searchCycleCountRecord(createdCycId);
+    await cycleCountRecordsPage.searchCycleCountRecord(createdCycId, testData.element_text.next_week, testData.element_text.openScheduledMaintenanceTitle);
 });
 
 Then(/^the user should see the created Cycle Count Record in the search results$/, async () => {
@@ -181,4 +180,22 @@ Then(/^the Cycle Count Record should be deleted successfully$/, async () => {
 Then(/^the user should not see the deleted Cycle Count Record in the search results$/, async () => {
     await deleteCycleCountRecordPage.searchDeleTedCyc(currentRecord);
     await deleteWOPage.verifyNoMatchesFoundMessage();
+});
+
+Then(/^the user waits for the cyc auto conversion to occur$/, async () => {
+    await cycleCountRecordsPage.waitForCycAutoConversion();
+});
+
+When(/^the user enables the cyc automatic request conversion with on due date$/, async () => {
+    await cycleCountRecordsPage.enableCycAutoRequestConversion();
+});
+
+Then(/^the user changes the automatic cyc request conversion flag$/, async () => {
+    await mrAutoConvertPage.navigateToManagementWorkFlowPageFromOtherMenu(
+        testData.managementToolsMenu,
+        testData.workflowSubMenuItemTitle,
+        testData.scheduledMaintenanceOptions,
+        testData.scheduledMaintenancePageURL
+    );
+    await cycleCountRecordsPage.changeCycAutoRequestConversion();
 });

@@ -18,6 +18,6 @@ Feature: CYC - Create a CYC record with Constant population -Covert to WKO-Close
     And the Work Order status should be Open status
     When the user check the stock quantity of the linked inventory item
     And the user updates the "Constant" stock quantity of the linked inventory item
-    When the user closes the converted Work Order record
+    And the user closes the converted Work Order record
     Then the Work Order record should be closed successfully
     And the user should verify the "Constant" updated quantity in stock after Closing the record

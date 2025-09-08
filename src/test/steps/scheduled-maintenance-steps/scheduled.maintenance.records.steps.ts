@@ -3,16 +3,17 @@ import testData from '../../../data/testData.json';
 import mrtestData from '../../../data/maintenance.records.json';
 import { requisitionRecordsPage } from "../../../pages/Inventory-pages/por-requisition-page/requisition.records.page";
 import { scheduledMaintenanceRecordsPage } from "../../../pages/scheduled-maintenance-page/scheduled.maintenance.record.page";
-import { generatedScheduledMaintenanceRecordDescription } from "../../../helper/get.different.description";
 import { workOrderPage } from "../../../pages/work-order-page/WorkOrderPage.page";
 import { commonActionPage } from "../../../pages/common.action.page";
 import { getFutureDateFormatted } from "../../../helper/date/get.future.date";
 import { cycleCountRecordsPage } from "../../../pages/Inventory-pages/cycle-count-records-pages/cycle.count.records.page";
 import { deleteSMRPage } from "../../../pages/scheduled-maintenance-page/delete.smr.page";
 import { deleteWOPage } from "../../../pages/work-order-page/delete.wko.page";
+import { generatedSMRAutoConversionDescription, generatedSMRFixedScheduleDescription, generatedSMRFloatingScheduleDescription, generatedSMRMeterBasedDescription } from "../../../helper/get.different.description";
 
 let createdSmrId: string;
 let currentRecord: string;
+let smrType: string;
 
 When(/^the user navigates to the Scheduled Maintenance Records page$/, async function () {
     await requisitionRecordsPage.navigateToRequisitionRecordsPage(
@@ -24,9 +25,25 @@ When(/^the user navigates to the Scheduled Maintenance Records page$/, async fun
     );
 });
 
-When(/^the user creates a new Scheduled Maintenance Record with a unique description and all mandatory fields$/, async function () {
+When(/^the user creates a new SMR "(.*)" with a unique description and all mandatory fields$/, async function (description: string) {
+    switch (description) {
+        case "Auto Conversion":
+            smrType = generatedSMRAutoConversionDescription;
+            break;
+        case "Fixed Schedule":
+            smrType = generatedSMRFixedScheduleDescription;
+            break;
+        case "Floating Schedule":
+            smrType = generatedSMRFloatingScheduleDescription;
+            break;
+        case "Meter Based":
+            smrType = generatedSMRMeterBasedDescription;
+            break;
+        default:
+            throw new Error(`Unknown description type: ${description}`);
+    }
     await scheduledMaintenanceRecordsPage.createScheduledMaintenanceRecord(
-        generatedScheduledMaintenanceRecordDescription,
+        smrType,
         testData.element_text.scheduled_tab_text,
         { ddType: testData.cycleCountDropdownSelections.map((item: any) => item.ddType) },
         testData.scheduled_maintenance_records_title
@@ -36,7 +53,7 @@ When(/^the user creates a new Scheduled Maintenance Record with a unique descrip
 Then(/^the newly created Scheduled Maintenance Record should be visible in the list$/, async function () {
     await scheduledMaintenanceRecordsPage.verifyScheduledMaintenanceRecordVisible(
         testData.scheduled_maintenance_record_id_prefix,
-        generatedScheduledMaintenanceRecordDescription,
+        smrType,
         testData.scheduled_maintenance_record_id_prefix
     );
     createdSmrId = await cycleCountRecordsPage.getCreatedCycId();
@@ -100,7 +117,9 @@ Then(/^the Floating Schedule should be successfully applied to the Scheduled Mai
 
 Then(/^the user converts the Scheduled Maintenance Record into a Work Order$/, async function () {
     await cycleCountRecordsPage.selectDateRange(testData.element_text.this_month, testData.element_text.openScheduledMaintenanceTitle);
-    await cycleCountRecordsPage.searchCycleCountRecord(createdSmrId);
+    await cycleCountRecordsPage.searchCycleCountRecord(createdSmrId,
+        testData.element_text.next_week,
+        testData.element_text.openScheduledMaintenanceTitle);
     await cycleCountRecordsPage.clickOnConvertWorkOrderButton(
         mrtestData.element_text.convert_wko_order,
         mrtestData.element_text.yes_convert,
@@ -111,7 +130,7 @@ Then(/^the user converts the Scheduled Maintenance Record into a Work Order$/, a
 Then(/^the Work Order should be created from the Scheduled Maintenance Record$/, async function () {
     await scheduledMaintenanceRecordsPage.verifyScheduledMaintenanceRecordVisible(
         testData.wo_info.workOrderId,
-        generatedScheduledMaintenanceRecordDescription,
+        smrType,
         testData.wo_info.workOrderId
     );
 });

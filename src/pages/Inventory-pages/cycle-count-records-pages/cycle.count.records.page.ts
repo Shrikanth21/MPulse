@@ -5,6 +5,8 @@ import { commonActionPage } from "../../common.action.page";
 import { workOrderPage } from "../../work-order-page/WorkOrderPage.page";
 import { homePage } from "../../home-page/Home.page";
 import { timeouts } from "../../../helper/timeouts-config";
+import { formattedYesterday } from "../../../helper/date/get.future.date";
+import { smrAutoConvert } from "../../scheduled-maintenance-page/smr.auto.convert";
 
 class CycleCountRecordsPage {
     private get currentPage(): Page {
@@ -42,6 +44,9 @@ class CycleCountRecordsPage {
         wkoInput: { selector: "//div[contains(@class,'modal-content popup-no')]//input", name: "WKO Input" },
         okInput: { selector: "[value='Ok']", name: "Ok Input" },
         hideButton: { selector: '[title="Hide"]', name: "Hide Button" },
+        floatStartDateInput: { selector: '//div[@dx-date-box="configFloatStartDateBox"]//input[@role="combobox"]', name: "Float Start Date Input" },
+        onDueDateRadioBtn: { selector: "//div[contains(@title,'automatically convert any Cycle Count record to a work order')]//div[text()='on due date']", name: "On Due Date Radio Button" },
+        doNotConvertRadioBtn: { selector: "//div[contains(@title,'automatically convert any Cycle Count record to a work order')]//div[text()='do not convert']", name: "Do Not Convert Radio Button" }
     }
 
     /**
@@ -50,6 +55,16 @@ class CycleCountRecordsPage {
      */
     public async getCreatedCycId(): Promise<string> {
         return await this.actions.getText(this.actions.getLocator(this.elements.cycId.selector), this.elements.cycId.name);
+    }
+
+    /**
+     * Enters the last done date.
+     * @param date The date to enter.
+     */
+    public async enterLastDoneDate(date: string): Promise<void> {
+        const lastDoneDateInput = this.actions.getLocator(this.elements.floatStartDateInput.selector);
+        await this.actions.waitForElementToBeVisible(lastDoneDateInput, this.elements.floatStartDateInput.name);
+        await this.actions.typeText(lastDoneDateInput, date, this.elements.floatStartDateInput.name);
     }
 
     /**
@@ -228,10 +243,14 @@ class CycleCountRecordsPage {
      * Searches for a Cycle Count Record by ID.
      * @param id The ID of the Cycle Count Record to search for.
      */
-    public async searchCycleCountRecord(id: string): Promise<void> {
+    public async searchCycleCountRecord(id: string, dateRange: string, spanText: string): Promise<void> {
         const searchInputLocator = this.actions.getLocator(this.elements.searchTextBox.selector).nth(0);
         await this.actions.waitForElementToBeVisible(searchInputLocator, this.elements.searchTextBox.name);
         await this.actions.typeText(searchInputLocator, id, this.elements.searchTextBox.name);
+        if (!await searchInputLocator.isVisible()) {
+            await this.selectDateRange(dateRange, spanText);
+            await this.actions.typeText(searchInputLocator, id, this.elements.searchTextBox.name);
+        }
         await this.actions.waitForCustomDelay(timeouts.large);
     }
 
@@ -293,7 +312,7 @@ class CycleCountRecordsPage {
         const textEl = await this.actions.getLocator(this.elements.itemsToCountInput.selector);
         await this.actions.waitForElementToBeVisible(textEl, this.elements.itemsToCountInput.name);
         await this.actions.typeText(textEl, counts, this.elements.itemsToCountInput.name);
-
+        await this.enterLastDoneDate(formattedYesterday);
         await commonActionPage.clickSaveButton();
     }
 
@@ -431,6 +450,38 @@ class CycleCountRecordsPage {
         await this.actions.click(minimizeButton, this.elements.hideButton.name);
         await commonActionPage.clickEditButton();
     }
-}
 
+    /**
+     * Waits for the cyc auto conversion to occur.
+     */
+    public async waitForCycAutoConversion(): Promise<void> {
+        await this.currentPage.reload();
+        await this.actions.waitForCustomDelay(timeouts.huge);
+        await this.currentPage.reload();
+        await commonActionPage.clickByLinkText('Scheduled Maintenance Options');
+        await commonActionPage.clickByLinkText('Cycle Count Records');
+    }
+
+    /**
+     * Enables the cyc automatic request conversion with on due date.
+     */
+    public async enableCycAutoRequestConversion(): Promise<void> {
+        await smrAutoConvert.clickEditScheduledMaintenance();
+        const onDueDateRadioBtnEl = await this.actions.getLocator(this.elements.onDueDateRadioBtn.selector);
+        await this.actions.waitForClickable(onDueDateRadioBtnEl, this.elements.onDueDateRadioBtn.name);
+        await this.actions.click(onDueDateRadioBtnEl, this.elements.onDueDateRadioBtn.name);
+        await smrAutoConvert.clickSaveScheduledMaintenance();
+    }
+
+    /**
+     * Disables the cyc automatic request conversion.
+     */
+    public async changeCycAutoRequestConversion(): Promise<void> {
+        await smrAutoConvert.clickEditScheduledMaintenance();
+        const doNotConvertRadioBtnEl = await this.actions.getLocator(this.elements.doNotConvertRadioBtn.selector);
+        await this.actions.waitForClickable(doNotConvertRadioBtnEl, this.elements.doNotConvertRadioBtn.name);
+        await this.actions.click(doNotConvertRadioBtnEl, this.elements.doNotConvertRadioBtn.name);
+        await smrAutoConvert.clickSaveScheduledMaintenance();
+    }
+}
 export const cycleCountRecordsPage = new CycleCountRecordsPage();

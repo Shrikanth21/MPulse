@@ -21,7 +21,8 @@ class SMRAutoConvert {
         openWorkOrdersPopup: { selector: "//a[@popuptype='OpenWorkOrdersPopup']", name: "Open Work Orders Popup" },
         workOrderLink: { selector: "//div[@class='modal-body view-popup-body customize ng-scope']/descendant::a[@class='dx-link ng-scope']", name: "Work Order Link" },
         editScheduledMaintenance: { selector: "//li[@ng-click='editScheduledMaintenance()']", name: "Edit Scheduled Maintenance" },
-        saveScheduledMaintenance: { selector: "//li[@ng-click='saveScheduledMaintenance()']", name: "Save Scheduled Maintenance" }
+        saveScheduledMaintenance: { selector: "//li[@ng-click='saveScheduledMaintenance()']", name: "Save Scheduled Maintenance" },
+        doNotConvertRadioBtn: { selector: "//div[contains(@title,'Scheduled  Maintenance record')]/descendant::div[text()='do not convert']", name: "Do Not Convert radio button" },
     }
 
     /**
@@ -90,6 +91,7 @@ class SMRAutoConvert {
     public async waitForAutoConversion(): Promise<void> {
         await this.currentPage.reload();
         await this.actions.waitForCustomDelay(timeouts.huge);
+        await this.currentPage.reload();
         await commonActionPage.clickByLinkText('Scheduled Maintenance Options');
         await commonActionPage.clickByLinkText('Scheduled Maintenance Records');
     }
@@ -110,6 +112,17 @@ class SMRAutoConvert {
         const workOrderLinkEl = await this.actions.getLocator(this.elementSelector.workOrderLink.selector);
         await this.actions.waitForClickable(workOrderLinkEl, this.elementSelector.workOrderLink.name);
         await this.actions.click(workOrderLinkEl, this.elementSelector.workOrderLink.name);
+    }
+
+    /**
+     * Reverts the auto-convert setting to "Do Not Convert".
+     */
+    public async revertAutoConvertSetting(): Promise<void> {
+        await this.clickEditScheduledMaintenance();
+        const doNotConvertRadioBtnElement = await this.actions.getLocator(this.elementSelector.doNotConvertRadioBtn.selector);
+        await this.actions.waitForElementToBeVisible(doNotConvertRadioBtnElement, this.elementSelector.doNotConvertRadioBtn.name);
+        await this.actions.click(doNotConvertRadioBtnElement, this.elementSelector.doNotConvertRadioBtn.name);
+        await this.clickSaveScheduledMaintenance();
     }
 }
 

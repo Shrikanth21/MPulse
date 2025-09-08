@@ -5,7 +5,7 @@ Feature: SMR - Verify Existing record Next Due date appearing
     Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Scheduled Maintenance Records page
-    And the user creates a new Scheduled Maintenance Record with a unique description and all mandatory fields
+    And the user creates a new SMR "Floating Schedule" with a unique description and all mandatory fields
     And the user links assets, personnel, and inventory to the Scheduled Maintenance Record
     Then the newly created Scheduled Maintenance Record should be visible in the list
     When the user sets a Fixed Schedule and specifies the done date

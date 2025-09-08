@@ -5,7 +5,7 @@ Feature: Global Search - Search for record Converted from SMR to WKO
     Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Scheduled Maintenance Records page
-    And the user creates a new Scheduled Maintenance with a only description
+    And the user creates a new Scheduled Maintenance Record with a only description
     When the user gets the created smr record id
     And the user converts the Scheduled Maintenance into a Work Order
     And User navigates back to the Scheduled Maintenance Records page

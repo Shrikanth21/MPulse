@@ -7,7 +7,7 @@ Feature: SMR - Verify auto convert of Scheduled Maintenance Records
     When the user navigates to the workflow page and selects Scheduled Maintenance options
     And the user enables the checkbox for automatic request conversion with on due date
     And the user navigates to the Scheduled Maintenance Records page from the workflow page
-    And the user creates a new Scheduled Maintenance Record with a unique description and all mandatory fields
+    And the user creates a new SMR "Auto Conversion" with a unique description and all mandatory fields
     And the user links assets, personnel, and inventory to the Scheduled Maintenance Record
     Then the newly created Scheduled Maintenance Record should be visible in the list
     When the user sets a Fixed Schedule and specifies an earlier done date
@@ -21,3 +21,4 @@ Feature: SMR - Verify auto convert of Scheduled Maintenance Records
     Then the user navigates to the Work Order record page
     When the user closes the converted Work Order record
     Then the Work Order record should be closed successfully
+    And the user changes the automatic request conversion flag

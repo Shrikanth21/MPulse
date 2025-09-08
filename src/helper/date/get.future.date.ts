@@ -36,3 +36,10 @@ export function getFormattedDate(): string {
 
   return `${month}/${day}/${year}`;
 }
+
+/**
+ * Gets yesterday's date formatted as a string.
+ */
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+export const formattedYesterday = `${yesterday.getMonth() + 1}/${yesterday.getDate()}/${yesterday.getFullYear()}`;

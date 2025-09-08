@@ -1,7 +1,7 @@
 {
-  "name": "cucumber-bdd",
+  "name": "mpulse-automation",
   "version": "1.0.0",
-  "description": "this is automation of pw with bdd",
+  "description": "MPulse Automation Framework",
   "main": "index.js",
   "scripts": {
     "test": "cucumber-js features/**/*.feature --tags @e2e & npx ts-node index.ts",
@@ -46,6 +46,7 @@
     "cyc-filtered-population-test": "cucumber-js features/cycle-count-records/CYC-Filtered.Population.feature --tags @cycFilteredPopulation & npx ts-node src/helper/index.ts",
     "cyc-constant-population-test": "cucumber-js features/cycle-count-records/CYC-Constant.Population.feature --tags @cycConstantPopulation & npx ts-node src/helper/index.ts",
     "cyc-diminished-population-test": "cucumber-js features/cycle-count-records/CYC-Diminished.Population.feature --tags @cycDiminishedPopulation & npx ts-node src/helper/index.ts",
+    "cyc-auto-convert-test": "cucumber-js features/cycle-count-records/CYC-Auto.Convert.feature --tags @cycAutoConvert & npx ts-node src/helper/index.ts",
     "cyc-list-view-test": "cucumber-js features/cycle-count-records/CYC-List.View.feature --tags @cycListView & npx ts-node src/helper/index.ts",
     "cyc-delete-record-test": "cucumber-js features/cycle-count-records/CYC-Delete.Record.feature --tags @cycDelete & npx ts-node src/helper/index.ts",
     "div6": "-------------------------Scheduled Maintenance Records-------------------------------------------------",

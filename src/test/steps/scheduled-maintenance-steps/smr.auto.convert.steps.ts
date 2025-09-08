@@ -4,7 +4,8 @@ import { labelChangePage } from "../../../pages/work-order-page/label.change.pag
 import testData from "../../../data/testData.json";
 import { scheduledMaintenanceRecordsPage } from "../../../pages/scheduled-maintenance-page/scheduled.maintenance.record.page";
 import { getFutureDateFormatted } from "../../../helper/date/get.future.date";
-import { generatedScheduledMaintenanceRecordDescription } from "../../../helper/get.different.description";
+import { generatedSMRAutoConversionDescription } from "../../../helper/get.different.description";
+import { mrAutoConvertPage } from "../../../pages/work-order-page/maintenance-request-records-pages/mr.auto.convert.page";
 
 When(/^the user navigates to the workflow page and selects Scheduled Maintenance options$/, async function () {
     await labelChangePage.navigateToManagementToolCustomizationPage(
@@ -54,7 +55,17 @@ When(/^the user clicks on the converted work order records$/, async function () 
 Then(/^the user navigates to the Work Order record page$/, async function () {
     await scheduledMaintenanceRecordsPage.verifyScheduledMaintenanceRecordVisible(
         testData.wo_info.workOrderId,
-        generatedScheduledMaintenanceRecordDescription,
+        generatedSMRAutoConversionDescription,
         testData.wo_info.workOrderId
     );
+});
+
+Then(/^the user changes the automatic request conversion flag$/, async function () {
+    await mrAutoConvertPage.navigateToManagementWorkFlowPageFromOtherMenu(
+        testData.managementToolsMenu,
+        testData.workflowSubMenuItemTitle,
+        testData.scheduledMaintenanceOptions,
+        testData.scheduledMaintenancePageURL
+    );
+    await smrAutoConvert.revertAutoConvertSetting();
 });

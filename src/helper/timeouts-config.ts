@@ -9,5 +9,5 @@ export const timeouts = {
     medium: MULTIPLIER * 1.5 * 1000,
     large: MULTIPLIER * 2.5 * 1000,
     largest: MULTIPLIER * 5 * 1000,
-    huge: MULTIPLIER * 10 * 1000,
+    huge: MULTIPLIER * 20 * 1000,
 };
