@@ -8,12 +8,12 @@ When(/^the user maximizes the Work Order Records list view display$/, async () =
     await gridPage.clickOnMaximizeButton();
 });
 
-When('the user click on workorderID', async function () {
+When(/^the user click on workorderID$/, async function () {
     beforeSortedText = await gridPage.getCurrentWorkOrderIdText();
     await gridPage.clickColumnHeader();
 });
 
-Then('the Work Order record should be sorted successfully', async function () {
+Then(/^the Work Order record should be sorted successfully$/, async function () {
     await gridPage.verifySortedWorkOrderId(beforeSortedText);
 });
 

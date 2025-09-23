@@ -1,8 +1,8 @@
 import { Page } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
-import { commonActionPage } from "../common.action.page";
 import { timeouts } from "../../helper/timeouts-config";
+import { CommonPageLocators } from "../locators/common.page.locator";
 
 class SearchUpdateWorkOrderPage {
     private get currentPage(): Page {
@@ -37,6 +37,7 @@ class SearchUpdateWorkOrderPage {
      * @returns The description text as a string.
      */
     public async getDescription(): Promise<string> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
         const descriptionLocator = this.actions.getLocator(this.elements.getDescriptionText.selector);
         await this.actions.waitForElementToBeVisible(descriptionLocator, this.elements.getDescriptionText.name);
         return await this.actions.getText(descriptionLocator, this.elements.getDescriptionText.name);
@@ -78,8 +79,9 @@ class SearchUpdateWorkOrderPage {
      * Clicks on the edit icon to edit the work order.
      */
     public async clickOnEditIcon(): Promise<void> {
-        const editIconLocator = this.actions.getLocator(commonActionPage.elements.editButton.selector);
-        await this.actions.click(editIconLocator, commonActionPage.elements.editButton.name);
+        const editIconLocator = this.actions.getLocator(CommonPageLocators.editButton.selector);
+        await this.actions.waitForElementToBeVisible(editIconLocator, CommonPageLocators.editButton.name);
+        await this.actions.click(editIconLocator, CommonPageLocators.editButton.name);
     }
 
     /**

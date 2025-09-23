@@ -1,12 +1,13 @@
 import { Page, selectors } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
-import { commonActionPage } from "../../common.action.page";
 import { workOrderPage } from "../../work-order-page/WorkOrderPage.page";
-import { homePage } from "../../home-page/Home.page";
 import { timeouts } from "../../../helper/timeouts-config";
 import { formattedYesterday } from "../../../helper/date/get.future.date";
 import { smrAutoConvert } from "../../scheduled-maintenance-page/smr.auto.convert";
+import { homePageActions } from "../../actions/home.page.action/home.page.actions";
+import { commonPageActions } from "../../actions/common.page.actions";
+import { CommonPageLocators } from "../../locators/common.page.locator";
 
 class CycleCountRecordsPage {
     private get currentPage(): Page {
@@ -72,7 +73,7 @@ class CycleCountRecordsPage {
      * @param title The title of the option to click.
      */
     public async clickOptionByTitle(title: string): Promise<void> {
-        const optionLocator = this.actions.getLocator(commonActionPage.getCustomDivByTitle(title));
+        const optionLocator = this.actions.getLocator(CommonPageLocators.getDivByTitle(title));
         await this.actions.waitForElementToBeVisible(optionLocator, title);
         await this.actions.click(optionLocator, title);
     }
@@ -127,8 +128,8 @@ class CycleCountRecordsPage {
         dropdownSelections: { ddType: string[] },
         divTitle: string
     ): Promise<void> {
-        commonActionPage.clickAddNewRecordButton();
-        await commonActionPage.enterDescription(description);
+        commonPageActions.clickAddNewRecordButton();
+        await commonPageActions.enterDescription(description);
         await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
     }
 
@@ -149,11 +150,11 @@ class CycleCountRecordsPage {
     public async clickOnConvertWorkOrderButton(
         convertText: string,
         yesConvert: string,
-        yesButton: string
+        yesButton: string,
     ): Promise<void> {
-        await commonActionPage.clickButtonByTitle(convertText);
-        await commonActionPage.clickElementByText(yesConvert);
-        await commonActionPage.clickElementByText(yesButton);
+        await commonPageActions.clickButtonByTitle(convertText);
+        await commonPageActions.clickSpanByText(yesConvert);
+        await commonPageActions.clickSpanByText(yesButton);
     }
 
     /**
@@ -161,7 +162,7 @@ class CycleCountRecordsPage {
      * @param labelText The text of the label to verify.
      */
     public async verifyFilteredPopulationLabel(labelText: string): Promise<void> {
-        const labelLocator = this.actions.getLocator(commonActionPage.getElementByLabelText(labelText));
+        const labelLocator = this.actions.getLocator(CommonPageLocators.getLabelByText(labelText));
         await this.actions.waitForElementToBeVisible(labelLocator, `Label: ${labelText}`);
         const labelTextContent = await this.actions.getText(labelLocator, `Label: ${labelText}`);
         await this.actions.assertContains(labelTextContent, labelText);
@@ -178,24 +179,24 @@ class CycleCountRecordsPage {
         const fieldFilterInput = this.actions.getLocator(this.elements.filterInput.selector).nth(0);
         await this.actions.waitForElementToBeVisible(fieldFilterInput, this.elements.filterInput.name);
         await this.actions.typeText(fieldFilterInput, field, this.elements.filterInput.name);
-        await commonActionPage.clickByDivTitle(field);
+        await commonPageActions.clickDivByTitle(field);
 
         const operatorFilterInput = this.actions.getLocator(this.elements.filterInput.selector).nth(1);
         await this.actions.waitForElementToBeVisible(operatorFilterInput, this.elements.filterInput.name);
         await this.actions.typeText(operatorFilterInput, operator, this.elements.filterInput.name);
-        await commonActionPage.clickByDivTitle(operator);
+        await commonPageActions.clickDivByTitle(operator);
 
         const valueFilterInput = this.actions.getLocator(this.elements.filterInput.selector).nth(2);
         await this.actions.waitForElementToBeVisible(valueFilterInput, this.elements.filterInput.name);
         await this.actions.typeText(valueFilterInput, value, this.elements.filterInput.name);
-        await commonActionPage.clickByDivTitle(value);
+        await commonPageActions.clickDivByTitle(value);
 
         const conditionFilterInput = this.actions.getLocator(this.elements.filterInput.selector).nth(3);
         await this.actions.waitForElementToBeVisible(conditionFilterInput, this.elements.filterInput.name);
         await this.actions.typeText(conditionFilterInput, condition, this.elements.filterInput.name);
-        await commonActionPage.clickByDivTitle(condition);
+        await commonPageActions.clickDivByTitle(condition);
 
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
     }
 
     /**
@@ -221,9 +222,9 @@ class CycleCountRecordsPage {
         subMenuItemTitle: string,
         expectedUrl: string
     ): Promise<void> {
-        await homePage.clickSideMenuIcon();
-        await commonActionPage.clickBySpanTitle(menuItemTitle);
-        await homePage.clickLinkByTitle(subMenuItemTitle);
+        await homePageActions.clickSideMenuIcon();
+        await commonPageActions.clickSpanByTitle(menuItemTitle);
+        await commonPageActions.clickLinkByTitle(subMenuItemTitle);
         await this.actions.validateCurrentUrl(expectedUrl);
     }
 
@@ -235,8 +236,8 @@ class CycleCountRecordsPage {
         const dateRangeInputLocator = this.actions.getLocator(this.elements.dateRangeInput.selector);
         await this.actions.waitForElementToBeVisible(dateRangeInputLocator, this.elements.dateRangeInput.name);
         await this.actions.click(dateRangeInputLocator, this.elements.dateRangeInput.name);
-        await commonActionPage.clickByDivTitle(date);
-        await commonActionPage.clickBySpanText(spanText);
+        await commonPageActions.clickDivByTitle(date);
+        await commonPageActions.clickSpanByText(spanText);
     }
 
     /**
@@ -270,7 +271,7 @@ class CycleCountRecordsPage {
      * @param tabName The name of the tab to click.
      */
     public async verifyInventorySelectedForCounting(tabName: string): Promise<void> {
-        await commonActionPage.clickTabByText(tabName);
+        await commonPageActions.clickTabByText(tabName);
         const inventoryLocator = this.actions.getLocator(this.elements.inventorySelectedForCounting.selector);
         await this.actions.assertTrue(await inventoryLocator.isVisible(), this.elements.inventorySelectedForCounting.name);
     }
@@ -303,8 +304,8 @@ class CycleCountRecordsPage {
         switch (randomSampleOption) {
             case "Constant Population":
             case "Diminished Population":
-                await commonActionPage.clickByDivId("CCOUNTRANDOMTYPE");
-                await commonActionPage.clickByDivTitle(randomSampleOption);
+                await commonPageActions.clickDivById("CCOUNTRANDOMTYPE");
+                await commonPageActions.clickDivByTitle(randomSampleOption);
                 break;
             default:
                 throw new Error(`Unsupported count type: ${randomSampleOption}`);
@@ -313,7 +314,7 @@ class CycleCountRecordsPage {
         await this.actions.waitForElementToBeVisible(textEl, this.elements.itemsToCountInput.name);
         await this.actions.typeText(textEl, counts, this.elements.itemsToCountInput.name);
         await this.enterLastDoneDate(formattedYesterday);
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
     }
 
     /**
@@ -323,10 +324,10 @@ class CycleCountRecordsPage {
      */
     public async verifyPopulation(randomSampleOptions: string, howManyItemsToCount: string): Promise<void> {
         await this.actions.waitForElementToBeVisible(
-            this.actions.getLocator(commonActionPage.getElementByText(randomSampleOptions)),
+            this.actions.getLocator(CommonPageLocators.getSpanByText(randomSampleOptions)),
             `Random Sample Options: ${randomSampleOptions}`);
         await this.actions.waitForElementToBeVisible(
-            this.actions.getLocator(commonActionPage.getElementByText(howManyItemsToCount)),
+            this.actions.getLocator(CommonPageLocators.getSpanByText(howManyItemsToCount)),
             `Cycle Count Items To Count: ${howManyItemsToCount}`);
     }
 
@@ -337,7 +338,7 @@ class CycleCountRecordsPage {
      * @param newQuantity The new stock quantity to set.
      */
     public async updateInventoryStockQty(populationType: string, cycleCountTabText: string, newQuantity: string): Promise<void> {
-        await commonActionPage.clickTabByText(cycleCountTabText);
+        await commonPageActions.clickTabByText(cycleCountTabText);
         const moreBtn = this.actions.getLocator(this.elements.moreButton.selector);
         await this.actions.waitForElementToBeVisible(moreBtn, this.elements.moreButton.name);
         await this.actions.click(moreBtn, this.elements.moreButton.name);
@@ -377,7 +378,7 @@ class CycleCountRecordsPage {
         const inventoryListItem = this.actions.getLocator(this.elements.dxLink.selector).nth(1);
         await this.actions.waitForElementToBeVisible(inventoryListItem, this.elements.dxLink.name);
         await this.actions.click(inventoryListItem, this.elements.dxLink.name);
-        await commonActionPage.clickTabByText(tabText);
+        await commonPageActions.clickTabByText(tabText);
         const quantityLocator = this.actions.getLocator(this.elements.stockAreaListRows.selector).nth(2);
         await this.actions.waitForElementToBeVisible(quantityLocator, this.elements.stockAreaListRows.name);
         const beforeClosingQuantity = await this.actions.getText(quantityLocator, this.elements.stockAreaListRows.name);
@@ -396,12 +397,12 @@ class CycleCountRecordsPage {
         tabText2: string,
         beforeCloseStockQty: string,
     ): Promise<void> {
-        await commonActionPage.clickTabByText(tabText1);
+        await commonPageActions.clickTabByText(tabText1);
         const inventoryListItem = this.actions.getLocator(this.elements.dxLink.selector).nth(1);
         await this.actions.waitForElementToBeVisible(inventoryListItem, this.elements.dxLink.name);
         await this.actions.click(inventoryListItem, this.elements.dxLink.name);
         await this.actions.waitForCustomDelay(timeouts.medium);
-        await commonActionPage.clickTabByText(tabText2);
+        await commonPageActions.clickTabByText(tabText2);
         const quantityLocator = this.actions.getLocator(this.elements.stockAreaListRows.selector).nth(2);
         await this.actions.waitForElementToBeVisible(quantityLocator, this.elements.stockAreaListRows.name);
         const afterCloseStockQtyText = await this.actions.getText(quantityLocator, this.elements.stockAreaListRows.name);
@@ -434,8 +435,8 @@ class CycleCountRecordsPage {
      * @param description The description of the cycle count.
      */
     public async listViewCycleCount(description: string): Promise<void> {
-        const sideBarExpanderLocator = this.actions.getLocator(commonActionPage.elements.sideBarExpander.selector);
-        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        const sideBarExpanderLocator = this.actions.getLocator(CommonPageLocators.sideBarExpander.selector);
+        await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const maximizeButton = this.actions.getLocator(this.elements.maximizeButton.selector);
         await this.actions.click(maximizeButton, this.elements.maximizeButton.name);
         await this.actions.click(this.actions.getLocator(this.elements.plusIcon.selector), this.elements.plusIcon.name);
@@ -445,10 +446,10 @@ class CycleCountRecordsPage {
         await this.actions.waitForCustomDelay(timeouts.medium);
         await this.actions.typeText(this.actions.getLocator(this.elements.wkoInput.selector).nth(0), description, `WKO Description: ${description}`);
         await this.actions.click(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
-        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);
         await this.actions.click(minimizeButton, this.elements.hideButton.name);
-        await commonActionPage.clickEditButton();
+        await commonPageActions.clickEditButton();
     }
 
     /**
@@ -458,8 +459,8 @@ class CycleCountRecordsPage {
         await this.currentPage.reload();
         await this.actions.waitForCustomDelay(timeouts.huge);
         await this.currentPage.reload();
-        await commonActionPage.clickByLinkText('Scheduled Maintenance Options');
-        await commonActionPage.clickByLinkText('Cycle Count Records');
+        await commonPageActions.clickLinkByText('Scheduled Maintenance Options');
+        await commonPageActions.clickLinkByText('Cycle Count Records');
     }
 
     /**

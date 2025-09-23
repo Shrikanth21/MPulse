@@ -3,7 +3,8 @@ import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
 import { timeouts } from "../../../helper/timeouts-config";
 import { workOrderPage } from "../WorkOrderPage.page";
-import { commonActionPage } from "../../common.action.page";
+import { CommonPageLocators } from "../../locators/common.page.locator";
+import { commonPageActions } from "../../actions/common.page.actions";
 
 class MaintenanceRequestRecordsPage {
     private get currentPage(): Page {
@@ -68,9 +69,9 @@ class MaintenanceRequestRecordsPage {
      * Clicks on the edit button to enable editing of the maintenance request record.
      */
     public async enterDescriptionAfterConvert(description: string): Promise<void> {
-        const editButton = this.actions.getLocator(commonActionPage.elements.editButton.selector);
-        await this.actions.click(editButton, commonActionPage.elements.editButton.name);
-        await commonActionPage.enterDescription(description);
+        const editButton = this.actions.getLocator(CommonPageLocators.editButton.selector);
+        await this.actions.click(editButton, CommonPageLocators.editButton.name);
+        await commonPageActions.enterDescription(description);
     }
     /**
      * creates a new maintenance record with the specified description.
@@ -80,8 +81,8 @@ class MaintenanceRequestRecordsPage {
     public async createMaintenanceRecord(
         description: string,
     ): Promise<void> {
-        commonActionPage.clickAddNewRecordButton();
-        await commonActionPage.enterDescription(description);
+        commonPageActions.clickAddNewRecordButton();
+        await commonPageActions.enterDescription(description);
     }
 
     /**
@@ -96,10 +97,10 @@ class MaintenanceRequestRecordsPage {
         dropdownSelections: { ddType: string[] },
         divTitle: string
     ): Promise<void> {
-        await commonActionPage.clickElementByText(tabName);
+        await commonPageActions.clickSpanByText(tabName);
         await this.enterNumbersInput(value);
         await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
         await this.clickOnConfirmButton();
     }
 
@@ -108,7 +109,7 @@ class MaintenanceRequestRecordsPage {
      * @param elementText The text of the element to validate.
      */
     public async validateElementText(elementText: string): Promise<void> {
-        const elementLocator = this.actions.getLocator(commonActionPage.getElementByText(elementText));
+        const elementLocator = this.actions.getLocator(CommonPageLocators.getSpanByText(elementText));
         await this.actions.waitForElementToBeVisible(elementLocator, `Waiting for Element: ${elementText}`);
         const actualText = await this.actions.getText(elementLocator, `Element: ${elementText}`);
         await this.actions.waitForCustomDelay(timeouts.largest);
@@ -120,8 +121,8 @@ class MaintenanceRequestRecordsPage {
      * @param tabText The text of the tab to click on.
      */
     public async listViewMRO(description: string): Promise<void> {
-        const sideBarExpanderLocator = this.actions.getLocator(commonActionPage.elements.sideBarExpander.selector);
-        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        const sideBarExpanderLocator = this.actions.getLocator(CommonPageLocators.sideBarExpander.selector);
+        await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const maximizeButton = this.actions.getLocator(this.elements.maximizeButton.selector);
         await this.actions.click(maximizeButton, this.elements.maximizeButton.name);
         await this.actions.click(this.actions.getLocator(this.elements.plusIcon.selector), this.elements.plusIcon.name);
@@ -134,7 +135,7 @@ class MaintenanceRequestRecordsPage {
         const OkButton = this.actions.getLocator(this.elements.okButton.selector);
         await this.actions.waitForElementToBeVisible(OkButton, this.elements.okButton.name);
         await this.actions.click(OkButton, this.elements.okButton.name);
-        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);
         await this.actions.click(minimizeButton, this.elements.hideButton.name);
     }
@@ -149,9 +150,9 @@ class MaintenanceRequestRecordsPage {
         yesConvert: string,
         yesButton: string
     ): Promise<void> {
-        await commonActionPage.clickBySpanText(convertText);
-        await commonActionPage.clickElementByText(yesConvert);
-        await commonActionPage.clickElementByText(yesButton);
+        await commonPageActions.clickSpanByText(convertText);
+        await commonPageActions.clickSpanByText(yesConvert);
+        await commonPageActions.clickSpanByText(yesButton);
     }
 
     /**
@@ -159,13 +160,13 @@ class MaintenanceRequestRecordsPage {
      * @param yesConvert The text of the confirmation button to click.
      * @param yesButton The text of the final confirmation button to click.
      */
-     public async clickOnListViewConvertWorkOrderBtn(
+    public async clickOnListViewConvertWorkOrderBtn(
         yesConvert: string,
         yesButton: string
     ): Promise<void> {
         await this.clickOnConvertWKBtnInListView();
-        await commonActionPage.clickElementByText(yesConvert);
-        await commonActionPage.clickElementByText(yesButton);
+        await commonPageActions.clickSpanByText(yesConvert);
+        await commonPageActions.clickSpanByText(yesButton);
     }
 }
 export const maintenanceRequestRecordsPage = new MaintenanceRequestRecordsPage();

@@ -1,11 +1,12 @@
-import { Page, selectors } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
-import { homePage } from "../../home-page/Home.page";
-import { commonActionPage } from "../../common.action.page";
 import { generateSupplierFormData } from "../../../helper/requisition.supplier.details";
 import { timeouts } from "../../../helper/timeouts-config";
 import { workOrderPage } from "../../work-order-page/WorkOrderPage.page";
+import { homePageActions } from "../../actions/home.page.action/home.page.actions";
+import { commonPageActions } from "../../actions/common.page.actions";
+import { CommonPageLocators } from "../../locators/common.page.locator";
 
 class RequisitionRecordsPage {
     private get currentPage(): Page {
@@ -58,10 +59,10 @@ class RequisitionRecordsPage {
         expectedUrl: string
     ): Promise<void> {
         await this.actions.validateCurrentUrl(homePageUrl);
-        await homePage.clickButtonByText(gotItButtonText);
-        await homePage.clickSideMenuIcon();
-        await homePage.clickLinkByTitle(menuItemTitle);
-        await homePage.clickLinkByTitle(subMenuItemTitle);
+        await homePageActions.clickButtonByText(gotItButtonText);
+        await homePageActions.clickSideMenuIcon();
+        await commonPageActions.clickLinkByTitle(menuItemTitle);
+        await commonPageActions.clickLinkByTitle(subMenuItemTitle);
         await this.actions.validateCurrentUrl(expectedUrl);
     }
 
@@ -104,10 +105,10 @@ class RequisitionRecordsPage {
         dropdownSelections: { ddType: string[] },
         divTitle: string
     ): Promise<void> {
-        await commonActionPage.clickAddNewRecordButton();
+        await commonPageActions.clickAddNewRecordButton();
         await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
         await this.fillSupplierDetails();
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
     }
 
     /**
@@ -125,10 +126,10 @@ class RequisitionRecordsPage {
         const inputField = this.actions.getLocator(this.elements.backOrderDetailsInput.selector);
         await this.actions.waitForElementToBeVisible(inputField, this.elements.backOrderDetailsInput.name);
         await this.actions.typeText(inputField, quantity, this.elements.backOrderDetailsInput.name);
-        await commonActionPage.clickByDivId("BackOrderDetails-header");
+        await commonPageActions.clickDivById("BackOrderDetails-header");
         await this.saveBackorderDetails();
         await this.closeBackorderDetails();
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
     }
 
     /**
@@ -137,9 +138,9 @@ class RequisitionRecordsPage {
      * @param yesButton The text of the confirmation button.
      */
     public async closeRequisitionRecord(tabName: string, status: string, yesButton: string): Promise<void> {
-        await commonActionPage.clickTabByText(tabName);
-        await commonActionPage.clickElementByText(status);
-        await commonActionPage.clickElementByText(yesButton);
+        await commonPageActions.clickTabByText(tabName);
+        await commonPageActions.clickSpanByText(status);
+        await commonPageActions.clickSpanByText(yesButton);
     }
 
     /**
@@ -148,7 +149,7 @@ class RequisitionRecordsPage {
      * @param quantity The expected quantity to validate.
      */
     public async validateReceivedQuantity(tabName: string, quantity: string): Promise<void> {
-        await commonActionPage.clickTabByText(tabName);
+        await commonPageActions.clickTabByText(tabName);
         const quantityLocator = this.actions.getLocator(this.elements.receivedQuantityText(quantity));
         await this.actions.waitForElementToBeVisible(quantityLocator, `Quantity: ${quantity}`);
         const actualQuantity = await this.actions.getText(quantityLocator, `Quantity: ${quantity}`);
@@ -160,8 +161,8 @@ class RequisitionRecordsPage {
      * This method clicks the plus icon to create a new record and saves it.
      */
     public async listViewPOR(): Promise<void> {
-        const sideBarExpanderLocator = this.actions.getLocator(commonActionPage.elements.sideBarExpander.selector);
-        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        const sideBarExpanderLocator = this.actions.getLocator(CommonPageLocators.sideBarExpander.selector);
+        await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const maximizeButton = this.actions.getLocator(this.elements.maximizeButton.selector);
         await this.actions.click(maximizeButton, this.elements.maximizeButton.name);
         await this.actions.click(this.actions.getLocator(this.elements.plusIcon.selector), this.elements.plusIcon.name);
@@ -169,7 +170,7 @@ class RequisitionRecordsPage {
         await this.actions.waitForElementToBeVisible(saveBtn, this.elements.saveIcon.name);
         await this.actions.click(saveBtn, this.elements.saveIcon.name);
         await this.actions.waitForCustomDelay(timeouts.medium);
-        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);
         await this.actions.click(minimizeButton, this.elements.hideButton.name);
     }
@@ -180,8 +181,8 @@ class RequisitionRecordsPage {
      * @param yesButton The text of the confirmation button.
      */
     public async closeRequisitionRecordFromListView(closeRequestButton: string, yesButton: string): Promise<void> {
-        await commonActionPage.clickButtonByTitle(closeRequestButton);
-        await commonActionPage.clickElementByText(yesButton);
+        await commonPageActions.clickButtonByTitle(closeRequestButton);
+        await commonPageActions.clickSpanByText(yesButton);
     }
 
     /**
@@ -190,11 +191,11 @@ class RequisitionRecordsPage {
      * @param dropdownSelections The dropdown selections to make.
      */
     public async fillMandatoryFields(tabName: string, dropdownSelections: { ddType: string[] }, divTitle: string): Promise<void> {
-        await commonActionPage.clickTabByText(tabName);
-        await commonActionPage.clickEditButton();
+        await commonPageActions.clickTabByText(tabName);
+        await commonPageActions.clickEditButton();
         await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
         await this.fillSupplierDetails();
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
     }
 
     /**
@@ -206,7 +207,7 @@ class RequisitionRecordsPage {
         const inventoryListItem = this.actions.getLocator(this.elements.dxLink.selector);
         await this.actions.waitForElementToBeVisible(inventoryListItem, this.elements.dxLink.name);
         await this.actions.click(inventoryListItem, this.elements.dxLink.name);
-        await commonActionPage.clickTabByText(tabText);
+        await commonPageActions.clickTabByText(tabText);
         // const checkbox = this.actions.getLocator(this.elements.stockedItemCheckbox.selector).first();
         // const isChecked = await this.actions.isCheckboxChecked(checkbox, this.elements.stockedItemCheckbox.name);
         // if (isChecked) {
@@ -240,7 +241,7 @@ class RequisitionRecordsPage {
         const inventoryListItem = this.actions.getLocator(this.elements.dxLink.selector);
         await this.actions.waitForElementToBeVisible(inventoryListItem, this.elements.dxLink.name);
         await this.actions.click(inventoryListItem, this.elements.dxLink.name);
-        await commonActionPage.clickTabByText(tabText);
+        await commonPageActions.clickTabByText(tabText);
         const quantityLocator = this.actions.getLocator(this.elements.stockAreaListRows.selector).nth(2);
         await this.actions.waitForElementToBeVisible(quantityLocator, this.elements.stockAreaListRows.name);
         const afterCloseStockQtyText = await this.actions.getText(quantityLocator, this.elements.stockAreaListRows.name);
@@ -261,8 +262,8 @@ class RequisitionRecordsPage {
      * @param newQuantity The new quantity to set.
      */
     public async updateOrderQuantity(tabText: string, newQuantity: string): Promise<void> {
-        await commonActionPage.clickByLinkText('Requisition Records');
-        await commonActionPage.clickTabByText(tabText);
+        await commonPageActions.clickLinkByText('Requisition Records');
+        await commonPageActions.clickTabByText(tabText);
         const inventoryMoreBtnEl = this.actions.getLocator(this.elements.moreButton.selector);
         await this.actions.waitForElementToBeVisible(inventoryMoreBtnEl, this.elements.moreButton.name);
         await this.actions.click(inventoryMoreBtnEl, this.elements.moreButton.name);
@@ -294,9 +295,9 @@ class RequisitionRecordsPage {
         date: string,
         inputOkButtonText: string
     ): Promise<void> {
-        await commonActionPage.clickTabByText(tabText);
-        await commonActionPage.clickElementByText(closeButtonText);
-        await commonActionPage.clickElementByText(yesButtonText);
+        await commonPageActions.clickTabByText(tabText);
+        await commonPageActions.clickSpanByText(closeButtonText);
+        await commonPageActions.clickSpanByText(yesButtonText);
         const locator = await this.actions.getLocator(this.elements.popupTextInput.selector);
         await this.actions.waitForElementToBeVisible(locator, this.elements.popupTextInput.name);
         await this.actions.typeText(locator, date, this.elements.popupTextInput.name);

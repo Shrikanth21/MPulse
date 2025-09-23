@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { getPage } from '../../base/base';
 import { WebActions } from '../../base/web.action.util';
-import { commonActionPage } from '../common.action.page';
+import { commonPageActions } from '../actions/common.page.actions';
 
 class BuildingRecordsPage {
     private get currentPage(): Page {
@@ -15,7 +15,7 @@ class BuildingRecordsPage {
     private elements = {
         descriptionInputField: { selector: "//div[@fieldname='RecordDescription']//input", name: "Description Input Field" },
         mediaMoreButton: { selector: "//div[contains(@class,'media')]//div[@class='moreBtn']", name: "Media More Button" },
-        fileInput: { selector: "//input[@title='Choose Files'][1]", name: "File Input" },
+        fileInput: { selector: "//input[@title='Choose Files' and contains(@class,'custom-file-input')]", name: "File Input" },
         uploadButton: { selector: "//button[@title='Upload']", name: "Upload Button" },
     };
 
@@ -96,7 +96,7 @@ class BuildingRecordsPage {
         await this.clickLinkByTitle(addButtonTitle);
         await this.enterDescription(taskDescription);
         await this.uploadMediaFile(mediaButtonText, mediaLinkTitle, mediaFilePath);
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
     }
 
     /**

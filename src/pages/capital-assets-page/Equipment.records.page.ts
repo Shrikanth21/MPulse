@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { getPage } from '../../base/base';
 import { WebActions } from '../../base/web.action.util';
-import { commonActionPage } from '../common.action.page';
+import { commonPageActions } from '../actions/common.page.actions';
 
 class EquipmentRecordsPage {
     private get currentPage(): Page {
@@ -60,10 +60,10 @@ class EquipmentRecordsPage {
      */
     public async uploadMediaFile(mediaButtonText: string, linkIconTitle: string, filePath: string): Promise<void> {
         await this.clickButtonByText(mediaButtonText);
-        await this.actions.click(this.actions.getLocator(this.elements.mediaMoreButton.selector),this.elements.mediaMoreButton.name);
-        await this.actions.click(this.actions.getLocator(this.getLinkByTitleSecondOccurrence(linkIconTitle)),`Second Occurrence of Link: ${linkIconTitle}`);
-        await this.actions.uploadFile(this.actions.getLocator(this.elements.fileInput.selector),filePath,'Media File Upload');
-        await this.actions.click(this.actions.getLocator(this.elements.uploadButton.selector),this.elements.uploadButton.name);
+        await this.actions.click(this.actions.getLocator(this.elements.mediaMoreButton.selector), this.elements.mediaMoreButton.name);
+        await this.actions.click(this.actions.getLocator(this.getLinkByTitleSecondOccurrence(linkIconTitle)), `Second Occurrence of Link: ${linkIconTitle}`);
+        await this.actions.uploadFile(this.actions.getLocator(this.elements.fileInput.selector), filePath, 'Media File Upload');
+        await this.actions.click(this.actions.getLocator(this.elements.uploadButton.selector), this.elements.uploadButton.name);
     }
 
     /**
@@ -78,7 +78,7 @@ class EquipmentRecordsPage {
         await this.clickLinkByTitle(addButtonTitle);
         await this.enterDescription(taskDescription);
         await this.uploadMediaFile(mediaButtonText, mediaLinkTitle, mediaFilePath);
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
     }
 
     /**

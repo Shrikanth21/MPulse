@@ -4,6 +4,11 @@ Feature: SMR - Create SMR - Link Assets - Meter Based - Convert to Work Order
   Scenario: Create Scheduled Maintenance Record with Meter Based
     Given the user logs into the application
     And the user selects a specific database
+    When the user navigates to the Equipment Records page
+    And the user creates a new asset with a unique description and uploads media
+    And the user fills Service Preventive Maintenance and Usage Information
+    And the user links the inventory to the asset
+    Then the newly created asset should be visible in the list
     When the user navigates to the Scheduled Maintenance Records page
     And the user creates a new SMR "Meter Based" with a unique description and all mandatory fields
     And the user links assets, personnel, and inventory to the Scheduled Maintenance Record

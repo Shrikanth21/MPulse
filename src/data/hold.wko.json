@@ -42,8 +42,8 @@
         "hoursField_text": "0.00",
         "hours": "2",
         "upload_text": "Upload",
-        "status_text":"Status",
-        "hold_reason_text":"Waiting for parts"
+        "status_text": "Status",
+        "hold_reason_text": "Waiting for parts"
     },
     "dropdownSelections": [
         {
@@ -59,7 +59,7 @@
             "ddValue": "03-Medium"
         }
     ],
-    "costFields":[
+    "costFields": [
         {
             "id": "OtherCost",
             "fieldName": "Other Cost",

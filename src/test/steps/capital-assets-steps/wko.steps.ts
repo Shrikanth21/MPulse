@@ -1,27 +1,27 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import testData from '../../../data/testData.json';
 import * as path from 'path';
-import { loginPage } from '../../../pages/login-page/Login.page';
-import { homePage } from '../../../pages/home-page/Home.page';
 import { equipmentRecordsPage } from '../../../pages/capital-assets-page/Equipment.records.page';
-import { generatedBuildingTaskDescription, generatedDescription, generatedEqTaskDescription } from '../../../helper/get.different.description';
+import { generatedBuildingTaskDescription, generatedEqTaskDescription } from '../../../helper/get.different.description';
 import { workOrderPage } from '../../../pages/work-order-page/WorkOrderPage.page';
 import { getFutureDay } from '../../../helper/date/get.future.date';
 import { taskChecklistPage } from '../../../pages/capital-assets-page/Task.checkList.page';
+import { loginPageActions } from '../../../pages/actions/login.page.action/login.page.actions';
+import { homePageActions } from '../../../pages/actions/home.page.action/home.page.actions';
 
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
 
 Given('the user logs into the application', async function () {
-  const credentials = await loginPage.loadExcelCredentials();
-  await loginPage.login(credentials.username);
+  const credentials = await loginPageActions.loadExcelCredentials();
+  await loginPageActions.login(credentials.username);
 });
 
 Given(/^the user selects a specific database$/, async () => {
-  await loginPage.selectDatabase(testData.db_name);
+  await loginPageActions.selectDatabase(testData.db_name);
 });
 
 When('the user navigates to the Equipment Records page', async function () {
-  await homePage.navigateToCapitalAssetsRecordsPage(
+  await homePageActions.navigateToCapitalAssetsRecordsPage(
     testData.homePageURL,
     testData.element_text.got_it_btn,
     testData.menuItemTitle,

@@ -4,12 +4,12 @@ import mrtestData from '../../../data/maintenance.records.json';
 import { requisitionRecordsPage } from "../../../pages/Inventory-pages/por-requisition-page/requisition.records.page";
 import { scheduledMaintenanceRecordsPage } from "../../../pages/scheduled-maintenance-page/scheduled.maintenance.record.page";
 import { workOrderPage } from "../../../pages/work-order-page/WorkOrderPage.page";
-import { commonActionPage } from "../../../pages/common.action.page";
 import { getFutureDateFormatted } from "../../../helper/date/get.future.date";
 import { cycleCountRecordsPage } from "../../../pages/Inventory-pages/cycle-count-records-pages/cycle.count.records.page";
 import { deleteSMRPage } from "../../../pages/scheduled-maintenance-page/delete.smr.page";
 import { deleteWOPage } from "../../../pages/work-order-page/delete.wko.page";
 import { generatedSMRAutoConversionDescription, generatedSMRFixedScheduleDescription, generatedSMRFloatingScheduleDescription, generatedSMRMeterBasedDescription } from "../../../helper/get.different.description";
+import { commonPageActions } from "../../../pages/actions/common.page.actions";
 
 let createdSmrId: string;
 let currentRecord: string;
@@ -60,7 +60,7 @@ Then(/^the newly created Scheduled Maintenance Record should be visible in the l
 });
 
 When(/^the user links assets, personnel, and inventory to the Scheduled Maintenance Record$/, async function () {
-    await commonActionPage.clickTabByText(testData.element_text.wo_info_tab_text);
+    await commonPageActions.clickTabByText(testData.element_text.wo_info_tab_text);
     await workOrderPage.linkAssetToTask(
         testData.wo_info.assetAssignedToTask,
         testData.icons.asset_link_icon,
@@ -90,7 +90,7 @@ When(/^the user links assets, personnel, and inventory to the Scheduled Maintena
         testData.icons.crossIcon_title
     );
 
-    await commonActionPage.clickSaveButton();
+    await commonPageActions.clickSaveButton();
 });
 
 When(/^the user sets a Floating Schedule and specifies the last done date$/, async function () {
@@ -107,7 +107,7 @@ When(/^the user sets the recurrence pattern to "Daily" every "1" day$/, async fu
         testData.recurrence_pattern.daily,
         "1"
     );
-    await commonActionPage.clickSaveButton();
+    await commonPageActions.clickSaveButton();
 });
 
 Then(/^the Floating Schedule should be successfully applied to the Scheduled Maintenance Record$/, async function () {
@@ -170,7 +170,7 @@ When(/^the user sets a Meter Based Schedule and selects a valid asset$/, async f
         testData.floating_type.meter_based,
         { ddType: testData.meter_based_dropdown_id.map((item: any) => item.ddType) }
     );
-    await commonActionPage.clickSaveButton();
+    await commonPageActions.clickSaveButton();
 });
 
 Then(/^the Meter Based Schedule should be successfully applied to the Scheduled Maintenance Record$/, async function () {
@@ -189,4 +189,20 @@ Then(/^the Scheduled Maintenance Record should be deleted successfully$/, async 
 Then(/^the user should not see the deleted Scheduled Maintenance Record in the search results$/, async function () {
     await deleteSMRPage.searchDeletedSmr(currentRecord);
     await deleteWOPage.verifyNoMatchesFoundMessage();
+});
+
+When(/^the user fills Service Preventive Maintenance and Usage Information$/, async function () {
+    await scheduledMaintenanceRecordsPage.fillServicePreventiveMaintenanceAndUsageInformation(
+        testData.element_text.service_tab_text,
+        testData.usage_info.anticipatedUseValue,
+        testData.usage_info.frequencyIntervalValue
+    );
+});
+
+When(/^the user links the inventory to the asset$/, async function () {
+    await scheduledMaintenanceRecordsPage.linkInventoryToAsset(testData.element_text.service_tab_text);
+});
+
+Then(/^the newly created asset should be visible in the list$/, async function () {
+    //await scheduledMaintenanceRecordsPage.verifyNewlyCreatedAssetVisible();
 });

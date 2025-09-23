@@ -13,3 +13,5 @@ Feature: Global Search - Search for record Converted from CYC to WKO
     And the user see the converted work order id on the cycle count page
     When the user searches the Cycle Count Records by cycle count id and its description
     Then the user should see the Cycle Count in the search results
+    When the user click on the searched converted work order record
+    Then the Work Order status should be Open

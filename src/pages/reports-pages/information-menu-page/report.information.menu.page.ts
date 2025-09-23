@@ -1,9 +1,9 @@
-import { Page, selectors } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
-import { commonActionPage } from "../../common.action.page";
 import { timeouts } from "../../../helper/timeouts-config";
-import { homePage } from "../../home-page/Home.page";
+import { homePageActions } from "../../actions/home.page.action/home.page.actions";
+import { commonPageActions } from "../../actions/common.page.actions";
 
 class ReportInformationMenuPage {
   private get currentPage(): Page {
@@ -163,7 +163,7 @@ class ReportInformationMenuPage {
    * @param displayRecord The display record data.
    */
   public async createNewInformationMenu(reportTitle: string, reportDes: string, displayRecord: { x: string; y: string; fieldX: string; fieldY: string; summary: string }): Promise<void> {
-    await commonActionPage.clickAddNewRecordButton();
+    await commonPageActions.clickAddNewRecordButton();
     await this.actions.waitForCustomDelay(timeouts.medium);
     await this.enterReportTitle(reportTitle);
     await this.enterReportDescription(reportDes);
@@ -180,7 +180,7 @@ class ReportInformationMenuPage {
    * @returns The report ID.
    */
   public async getReportId(reportTitle: string): Promise<string> {
-    await commonActionPage.clickBySpanText(reportTitle);
+    await commonPageActions.clickSpanByText(reportTitle);
     const reportIdElement = this.actions.getLocator(this.elementSelectors.reportId.selector);
     await this.actions.waitForElementToBeVisible(reportIdElement, this.elementSelectors.reportId.name);
     return await this.actions.getText(reportIdElement, this.elementSelectors.reportId.name);
@@ -236,7 +236,7 @@ class ReportInformationMenuPage {
    * @param displayRecord The display record information.
    */
   public async createNewInformationMenuWithDefaultWidget(reportTitle: string, reportDes: string, displayRecord: { x: string; y: string; fieldX: string; fieldY: string; summary: string }): Promise<void> {
-    await commonActionPage.clickAddNewRecordButton();
+    await commonPageActions.clickAddNewRecordButton();
     await this.actions.waitForCustomDelay(timeouts.medium);
     await this.enterReportTitle(reportTitle);
     await this.enterReportDescription(reportDes);
@@ -253,7 +253,7 @@ class ReportInformationMenuPage {
    * Unchecks the default widget option.
    */
   public async uncheckDefaultWidgetOption(): Promise<void> {
-    commonActionPage.clickEditButton();
+    commonPageActions.clickEditButton();
     await this.checkPlaceOnDashboard();
     await this.clickOnSaveButton();
   }
@@ -313,9 +313,9 @@ class ReportInformationMenuPage {
     subMenuItemTitle: string,
     expectedUrl: string
   ): Promise<void> {
-    await homePage.clickSideMenuIcon();
-    await commonActionPage.clickBySpanTitle(menuItemTitle);
-    await homePage.clickLinkByTitle(subMenuItemTitle);
+    await homePageActions.clickSideMenuIcon();
+    await commonPageActions.clickSpanByTitle(menuItemTitle);
+    await commonPageActions.clickLinkByTitle(subMenuItemTitle);
     await this.actions.validateCurrentUrl(expectedUrl);
   }
 
@@ -337,7 +337,7 @@ class ReportInformationMenuPage {
     operator: string,
     value: string
   ): Promise<void> {
-    await commonActionPage.clickAddNewRecordButton();
+    await commonPageActions.clickAddNewRecordButton();
     await this.actions.waitForCustomDelay(timeouts.medium);
     await this.enterReportTitle(reportTitle);
     await this.enterReportDescription(reportDes);
@@ -401,7 +401,7 @@ class ReportInformationMenuPage {
     await this.actions.waitForElementToBeVisible(customFilterConditionInput, `Custom filter condition input with title ${value} is present`);
     await this.actions.click(customFilterConditionInput, `Clicked on custom filter condition: ${value}`);
 
-    await commonActionPage.clickBySpanText('Apply');
+    await commonPageActions.clickSpanByText('Apply');
   }
 }
 

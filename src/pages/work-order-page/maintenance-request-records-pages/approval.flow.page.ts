@@ -1,8 +1,8 @@
 import { Page, selectors } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
-import { timeouts } from "../../../helper/timeouts-config";
-import { commonActionPage } from "../../common.action.page";
+import { commonPageActions } from "../../actions/common.page.actions";
+import { CommonPageLocators } from "../../locators/common.page.locator";
 
 class ApprovalFlowPage {
     private get currentPage(): Page {
@@ -41,7 +41,7 @@ class ApprovalFlowPage {
         await this.actions.click(ccMail, this.elements.ccRequesterEmail.name);
         await this.actions.typeText(ccMail, ccReplyToRequesterMail, this.elements.ccRequesterEmail.name);
 
-        await commonActionPage.clickElementByText(sendButton);
+        await commonPageActions.clickSpanByText(sendButton);
     }
 
     /**
@@ -70,7 +70,7 @@ class ApprovalFlowPage {
      * @param sentSuccessfullyMsg The message to verify.
      */
     public async verifySentSuccessfullyMsg(sentSuccessfullyMsg: string): Promise<void> {
-        const sentSuccessfullyMsgLocator = this.actions.getLocator(commonActionPage.getElementByText(sentSuccessfullyMsg));
+        const sentSuccessfullyMsgLocator = this.actions.getLocator(CommonPageLocators.getSpanByText(sentSuccessfullyMsg));
         const text = await this.actions.getText(sentSuccessfullyMsgLocator, `Text: ${sentSuccessfullyMsg}`);
         await this.actions.assertEqual(text, sentSuccessfullyMsg, `Text: ${sentSuccessfullyMsg} should be displayed`);
     }

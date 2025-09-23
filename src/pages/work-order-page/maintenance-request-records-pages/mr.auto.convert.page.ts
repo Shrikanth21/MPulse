@@ -2,9 +2,10 @@ import { Page } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
 import { workOrderPage } from "../WorkOrderPage.page";
-import { homePage } from "../../home-page/Home.page";
-import { commonActionPage } from "../../common.action.page";
 import { timeouts } from "../../../helper/timeouts-config";
+import { homePageActions } from "../../actions/home.page.action/home.page.actions";
+import { commonPageActions } from "../../actions/common.page.actions";
+import { CommonPageLocators } from "../../locators/common.page.locator";
 
 class MrAutoConvertPage {
 
@@ -35,9 +36,9 @@ class MrAutoConvertPage {
     subMenuItemTitle: string,
     expectedUrl: string
   ): Promise<void> {
-    await homePage.clickSideMenuIcon();
-    await commonActionPage.clickOnSpanByTitle(menuItemTitle);
-    await homePage.clickLinkByTitle(subMenuItemTitle);
+    await homePageActions.clickSideMenuIcon();
+    await commonPageActions.clickSpanByTitle(menuItemTitle);
+    await commonPageActions.clickLinkByTitle(subMenuItemTitle);
     await this.actions.validateCurrentUrl(expectedUrl);
   }
 
@@ -54,10 +55,10 @@ class MrAutoConvertPage {
     subMenuItemTitles: string,
     expectedUrl: string
   ): Promise<void> {
-    await homePage.clickSideMenuIcon();
-    await commonActionPage.clickOnSpanByTitle(menuItemTitle);
-    await homePage.clickLinkByTitle(subMenuItemTitle);
-    await homePage.clickCustomizationMenuByTitle(subMenuItemTitles);
+    await homePageActions.clickSideMenuIcon();
+    await commonPageActions.clickSpanByTitle(menuItemTitle);
+    await commonPageActions.clickLinkByTitle(subMenuItemTitle);
+    await homePageActions.clickCustomizationMenuByTitle(subMenuItemTitles);
     await this.actions.validateCurrentUrl(expectedUrl);
   }
 
@@ -88,10 +89,10 @@ class MrAutoConvertPage {
    * @param buttonText The text of the button to click.
    */
   public async linkInventoryToMaintenanceRequest(tabText: string, title: string, buttonText: string): Promise<void> {
-    await commonActionPage.clickTabByText(tabText);
+    await commonPageActions.clickTabByText(tabText);
     const moreButton = this.actions.getLocator(this.elements.moreButton.selector);
     await this.actions.click(moreButton, this.elements.moreButton.name);
-    const linkInventory = this.actions.getLocator(commonActionPage.getElementByTitle(title));
+    const linkInventory = this.actions.getLocator(CommonPageLocators.getLinkByTitle(title));
     await this.actions.waitForElementToBeVisible(linkInventory, title);
     await this.actions.click(linkInventory, title);
     await workOrderPage.selectRowInLinkAssetPopupIfVisible();

@@ -13,3 +13,5 @@ Feature: Global Search - Search for record Converted from SMR to WKO
     And the user see the converted work order id on the scheduled maintenance page
     When the user searches the Scheduled Maintenance Records by scheduled maintenance id and its description
     Then the user should see the Scheduled Maintenance in the search results
+    When the user click on the searched converted work order record
+    Then the Work Order status should be Open

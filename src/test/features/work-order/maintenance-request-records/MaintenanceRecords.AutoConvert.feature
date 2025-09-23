@@ -9,8 +9,7 @@ Feature: Maintenance Request - Auto Convert to Work Order
     And the user navigates to the Maintenance Request record page after clicking the checkbox
     And the user creates a new Maintenance Request with a unique description
     Then the user navigate to the work order page automatically
-    And the Work Order status should be Open status
+    And the Work Order status should be Open
     When the user navigates to the Maintenance Request record page after creation
     Then the Maintenance Order status should be Converted
     And uncheck the checkbox for automatic request conversion
-    

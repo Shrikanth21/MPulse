@@ -7,7 +7,7 @@
     "test": "cucumber-js features/**/*.feature --tags @e2e & npx ts-node index.ts",
     "test-parallel": "cucumber-js features/create.wko.feature --parallel 2 & npx ts-node src/helper/index.ts",
     "sanity": "<----------------sanity Suite------------------------------------->",
-    "wko-e2e-test": "cucumber-js features/**/*.feature --tags @sanityWorkOrder & npx ts-node src/helper/index.ts",
+    "wko-e2e-test": "cucumber-js features/WorkOrder.Delete/WorkOrder.Search.Update.feature --tags @sanityWorkOrder & npx ts-node src/helper/index.ts",
     "wkoListView-e2e": "cucumber-js features/ListView.feature --tags @sanityWKListView & npx ts-node src/helper/index.ts",
     "mr-e2e-test": "cucumber-js features/MaintenanceRecords.feature --tags @sanityMR & npx ts-node src/helper/index.ts",
     "por-e2e-test": "cucumber-js features/PorRequisition.feature --tags @sanityPOR & npx ts-node src/helper/index.ts",
@@ -18,7 +18,7 @@
     "report-print-information-e2e-test": "cucumber-js features/reports-widget/print-information-menu/Report.Print.Information.Menu.feature --tags @sanityReport & npx ts-node src/helper/index.ts",
     "calendar-e2e-test": "cucumber-js features/calendar/Calendar.Create.feature --tags @sanityCalendar & npx ts-node src/helper/index.ts",
     "div1": "-------------------------Work Order Records-------------------------------------------------",
-    "wko-test": "cucumber-js features/wko.feature --tags @wko & npx ts-node src/helper/index.ts",
+    "wko-test": "cucumber-js features/wko.feature --tags @poc & npx ts-node src/helper/index.ts",
     "wko-close-test": "cucumber-js features/close.wko.feature --tags @closeWko & npx ts-node src/helper/index.ts",
     "wko-cancel-test": "cucumber-js features/cancel.wko.feature --tags @cancelWko & npx ts-node src/helper/index.ts",
     "wko-hold-test": "cucumber-js features/hold.wko.feature --tags @holdWko & npx ts-node src/helper/index.ts",
@@ -28,7 +28,8 @@
     "wkoListView-update-wko-test": "cucumber-js features/ListView.Search.Update.feature --tags @updateWko & npx ts-node src/helper/index.ts",
     "wkoListView-sort-test": "cucumber-js features/ListView.Sorting.feature --tags @sortWko & npx ts-node src/helper/index.ts",
     "wkoListView-filter-column-row-test": "cucumber-js features/ListView.Filter.feature --tags @filterwko & npx ts-node src/helper/index.ts",
-    "wkoListView-omit-lookup-test": "cucumber-js features/ListView.OmitAndLookup.feature --tags @omitAndLookup & npx ts-node src/helper/index.ts",
+    "wkoListView-omit-test": "cucumber-js features/ListView.OmitAndLookup.feature --tags @omitRecord & npx ts-node src/helper/index.ts",
+    "wkoListView-lookup-test": "cucumber-js features/ListView.OmitAndLookup.feature --tags @lookupRecord & npx ts-node src/helper/index.ts",
     "wkoListView-layout-with-grouping-test": "cucumber-js features/ListView.Layout.WithGroup.feature --tags @withgroup & npx ts-node src/helper/index.ts",
     "wkoListView-layout-without-grouping-test": "cucumber-js features/ListView.Layout.WithoutGroup.feature --tags @withoutgroup & npx ts-node src/helper/index.ts",
     "wkoListView-language-label-change-test": "cucumber-js features/ListView.Label.Change.Language.feature --tags @changeLabel & npx ts-node src/helper/index.ts",
@@ -75,7 +76,9 @@
     "report-print-information-all-records-test": "cucumber-js features/reports-widget/print-information-menu/Report.Print.Information.Menu.feature --tags @reportAllRecords & npx ts-node src/helper/index.ts",
     "report-print-information-custom-layout-test": "cucumber-js features/reports-widget/print-information-menu/Report.Print.Information.Menu.feature --tags @reportCustomLayout & npx ts-node src/helper/index.ts",
     "div10": "-------------------------Calendar-------------------------------------------------",
-    "calendar-create-test": "cucumber-js features/calendar/Calendar.Create.feature --tags @calendarCreate & npx ts-node src/helper/index.ts"
+    "calendar-create-test": "cucumber-js features/calendar/Calendar.Create.feature --tags @calendarCreate & npx ts-node src/helper/index.ts",
+    "div11": "-------------------------API POC-------------------------------------------------",
+    "api-poc-test": "cucumber-js features/API-POC/login-search-data.feature --tags @api & npx ts-node src/helper/index.ts"
   },
   "keywords": [
     "pw",

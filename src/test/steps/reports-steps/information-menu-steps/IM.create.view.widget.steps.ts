@@ -5,8 +5,8 @@ import { requisitionRecordsPage } from "../../../../pages/Inventory-pages/por-re
 import { reportInformationMenuPage } from "../../../../pages/reports-pages/information-menu-page/report.information.menu.page";
 import { searchUpdateWorkOrderPage } from "../../../../pages/work-order-page/search.update.wko.page";
 import { generatedIMDescription, generatedReportTitle } from "../../../../helper/get.different.description";
-import { commonActionPage } from "../../../../pages/common.action.page";
 import { createFilterPage } from "../../../../pages/work-order-page/create.filter.page";
+import { commonPageActions } from "../../../../pages/actions/common.page.actions";
 
 let createdIMId: string;
 let wkoRecordCount: string;
@@ -61,7 +61,7 @@ When(/^the user creates a new Information Menu with default widget for Maintenan
 });
 
 Then(/^the user navigates back to the report widget page$/, async () => {
-    await commonActionPage.clickByLinkText(testData.reportWidgetsTitle);
+    await commonPageActions.clickLinkByText(testData.reportWidgetsTitle);
 });
 
 Then(/^the user should see the default widget displayed in the Maintenance Advisor$/, async () => {
@@ -69,7 +69,7 @@ Then(/^the user should see the default widget displayed in the Maintenance Advis
 });
 
 When(/^the user clicks on the searched Information Menu$/, async () => {
-    await commonActionPage.clickByLinkText(createdIMId);
+    await commonPageActions.clickLinkByText(createdIMId);
 });
 
 Then(/^the user unchecks the default widget option$/, async () => {

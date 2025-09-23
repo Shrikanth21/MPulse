@@ -1,12 +1,12 @@
 import { expect, Page } from "@playwright/test";
+import * as os from "os";
+import * as fs from "fs";
+import * as path from "path";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
 import logger from "../../../helper/logger";
-import * as path from "path";
-import * as os from "os";
-import * as fs from "fs";
-import { commonActionPage } from "../../common.action.page";
 import { getFormattedDate } from "../../../helper/date/get.future.date";
+import { CommonPageLocators } from "../../locators/common.page.locator";
 
 class ReportPrintPage {
     private get currentPage(): Page {
@@ -74,9 +74,6 @@ class ReportPrintPage {
             logger.info("New report page opened.");
             const frame = newPage.frameLocator('iframe');
             logger.info("Locating WKO nobr elements inside iframe...");
-            const wkoNobrLocator = frame.locator(this.elementSelectors.wkoNobr.selector).first();
-            const wkoNobrText = await wkoNobrLocator.textContent();
-            logger.info("First WKO nobr text:", wkoNobrText ?? "<empty>");
             const wkoNobrLocators = await frame.locator(this.elementSelectors.wkoNobr.selector).all();
             const wkoNobrTexts: string[] = [];
             for (const nobrLocator of wkoNobrLocators) {
@@ -96,13 +93,11 @@ class ReportPrintPage {
                 newPage.click(this.elementSelectors.customXlsButton.selector)
             ]);
             logger.info("Custom XLS Button clicked. Waiting for download...");
-            const downloadPath = await download.path();
-            logger.info(`Download path: ${downloadPath ?? "<empty>"}`);
-            expect(downloadPath).not.toBeNull();
             const suggestedFilename = download.suggestedFilename();
             const savePath = path.join(downloadsDir, suggestedFilename);
             await download.saveAs(savePath);
-            logger.info(`Suggested filename: ${suggestedFilename ?? "<empty>"}`);
+            logger.info(`File saved to: ${savePath}`);
+            expect(fs.existsSync(savePath)).toBeTruthy();
             expect(suggestedFilename).toMatch(/\.pdf$/);
         } catch (error) {
             logger.error("Error in openReportAndValidate:", error);
@@ -136,9 +131,9 @@ class ReportPrintPage {
             await newPage.bringToFront();
             await newPage.waitForLoadState('domcontentloaded');
             await newPage.click(this.elementSelectors.printLayoutButtonWrap.selector);
-            await newPage.click(await commonActionPage.getElementByLabelText(rbtlIncludeDataFrom));
-            await newPage.click(await commonActionPage.getElementByLabelText(filterName));
-            await newPage.click(await commonActionPage.getElementByLinkText(okButton));
+            await newPage.click(await CommonPageLocators.getLabelByText(rbtlIncludeDataFrom));
+            await newPage.click(await CommonPageLocators.getLabelByText(filterName));
+            await newPage.click(await CommonPageLocators.getLinkByText(okButton));
         } catch (error) {
             logger.error("Error in switchToWindow:", error);
             throw error;

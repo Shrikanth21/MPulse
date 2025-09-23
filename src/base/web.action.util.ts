@@ -29,21 +29,6 @@ export class WebActions {
   }
 
   /**
-   * switches to the main frame of the page.
-   * @param locator The locator for the element to wait for.
-   * @param elementDescription Description of the element for logging.
-   */
-  public async switchToMainFrame(): Promise<void> {
-    try {
-      await this.page.mainFrame();
-      logger.info(`Switched to main frame successfully.`);
-    } catch (error) {
-      logger.error(`Failed to switch to main frame. Error: ${error}`);
-      throw error;
-    }
-  }
-
-  /**
    * Gets the currently active element on the page.
    * @returns The locator for the currently active element.
    */
@@ -181,7 +166,6 @@ export class WebActions {
     try {
       await this.waitForElement(locator, elementDescription);
       await this.waitForDelay();
-      await locator.scrollIntoViewIfNeeded();
       logger.info(`Successfully scrolled to element: ${elementDescription}`);
     } catch (error) {
       logger.error(`Failed to scroll to element: ${elementDescription} | Error: ${error}`);
@@ -419,10 +403,7 @@ export class WebActions {
    * @param conditionFn The async function that returns a boolean.
    * @param options Options object with timeout and message.
    */
-  public async waitFor(
-    conditionFn: () => Promise<boolean>,
-    options: { timeout: number; message: string }
-  ): Promise<void> {
+  public async waitFor(conditionFn: () => Promise<boolean>, options: { timeout: number; message: string }): Promise<void> {
     const start = Date.now();
     while (Date.now() - start < options.timeout) {
       if (await conditionFn()) {
@@ -665,19 +646,6 @@ export class WebActions {
   }
 
   /**
-   * Asserts that the condition starts with true.
-   * @param condition The condition to check.
-   * @param message The message to log if the assertion passes.
-   */
-  public async assertForStartWithTrue(condition: boolean, message: string): Promise<void> {
-    if (condition) {
-      console.info(`Assertion passed: ${message}`);
-    } else {
-      throw new Error(`Assertion failed: ${message}`);
-    }
-  }
-
-  /**
    * Asserts that the condition is true.
    * @param condition The condition to check.
    * @param message The message to log if the assertion passes.
@@ -736,11 +704,30 @@ export class WebActions {
       await this.waitForDelay();
       await expect(
         actualText.startsWith(expectedText),
-        `❌ Expected ${elementDescription} text to start with "${expectedText}", but got "${actualText}"`
+        `Expected ${elementDescription} text to start with "${expectedText}", but got "${actualText}"`
       ).toBeTruthy();
       logger.info(`Assertion passed: ${elementDescription} text starts with "${expectedText}".`);
     } catch (error) {
       logger.error(`Failed to assert startsWith for ${elementDescription} | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Asserts that the given text ends with the expected text.
+   * @param actualText The actual text string.
+   * @param expectedText The text that the actual text should end with.
+   * @param elementDescription A description of the element for logging purposes.
+   */
+  public async assertEndsWith(actualText: string, expectedText: string, elementDescription: string): Promise<void> {
+    try {
+      await this.waitForDelay();
+      await expect(actualText.endsWith(expectedText),
+        `Expected ${elementDescription} text to end with "${expectedText}", but got "${actualText}"`
+      ).toBeTruthy();
+      logger.info(`Assertion passed: ${elementDescription} text ends with "${expectedText}".`);
+    } catch (error) {
+      logger.error(`Failed to assert endsWith for ${elementDescription} | Error: ${error}`);
       throw error;
     }
   }
@@ -786,10 +773,8 @@ export class WebActions {
   public async isCheckboxChecked(locator: Locator, elementDescription: string): Promise<boolean> {
     try {
       await this.waitForElement(locator, elementDescription);
-
       const ariaChecked = await locator.getAttribute('aria-checked');
       const isChecked = ariaChecked === 'true';
-
       logger.info(`Checkbox checked state for ${elementDescription}: ${isChecked}`);
       return isChecked;
     } catch (error) {

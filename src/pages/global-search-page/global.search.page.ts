@@ -1,8 +1,9 @@
 import { Page } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
-import { commonActionPage } from "../common.action.page";
 import { maintenanceRequestRecordsPage } from "../work-order-page/maintenance-request-records-pages/maintenanceRequestRecords.page";
+import { CommonPageLocators } from "../locators/common.page.locator";
+import { commonPageActions } from "../actions/common.page.actions";
 
 class GlobalSearchPage {
     private get currentPage(): Page {
@@ -40,10 +41,10 @@ class GlobalSearchPage {
      * @param description The description of the equipment record.
      */
     public async verifySearchResult(searchGroup: string, recordId: string, description: string): Promise<void> {
-        const headerLocator = this.actions.getLocator(this.elements.searchRecordsHeader(searchGroup));
+        const headerLocator = await this.actions.getLocator(this.elements.searchRecordsHeader(searchGroup));
         await this.actions.waitForElementToBeVisible(headerLocator, this.elements.searchRecordsHeader(searchGroup));
-        const idText = await commonActionPage.getElementByLinkText(recordId);
-        const descriptionText = await commonActionPage.getElementByLinkText(description);
+        const idText = await CommonPageLocators.getLinkByText(recordId);
+        const descriptionText = await CommonPageLocators.getLinkByText(description);
         await this.actions.assertContains(idText, recordId);
         await this.actions.assertContains(descriptionText, description);
     }
@@ -59,14 +60,14 @@ class GlobalSearchPage {
     public async verifySearchResultWithStatus(searchGroup: string, recordId: string, description: string, status: string, title: string): Promise<void> {
         const headerLocator = this.actions.getLocator(this.elements.searchRecordsHeader(searchGroup));
         await this.actions.waitForElementToBeVisible(headerLocator, this.elements.searchRecordsHeader(searchGroup));
-        const idText = await commonActionPage.getElementByLinkText(recordId);
-        const descriptionText = await commonActionPage.getElementByLinkText(description);
+        const idText = await CommonPageLocators.getLinkByText(recordId);
+        const descriptionText = await CommonPageLocators.getLinkByText(description);
         await this.actions.assertContains(idText, recordId);
         await this.actions.assertContains(descriptionText, description);
         const statusText = await this.actions.getLocator(this.elements.searchedRequestStatusRows(searchGroup));
         const isVisible = await statusText.isVisible();
         if (!isVisible) {
-            await commonActionPage.clickLinkByTitle(title);
+            await commonPageActions.clickLinkByTitle(title);
             await maintenanceRequestRecordsPage.validateElementText(status);
         } else {
             const actualStatusText = await statusText.innerText();
@@ -85,9 +86,9 @@ class GlobalSearchPage {
         yesConvert: string,
         noButton: string
     ): Promise<void> {
-        await commonActionPage.clickBySpanText(convertText);
-        await commonActionPage.clickElementByText(yesConvert);
-        await commonActionPage.clickElementByText(noButton);
+        await commonPageActions.clickSpanByText(convertText);
+        await commonPageActions.clickLinkByText(yesConvert);
+        await commonPageActions.clickLinkByText(noButton);
     }
 
     /**
@@ -99,7 +100,7 @@ class GlobalSearchPage {
     public async verifySearchPORResultWithStatus(searchGroup: string, recordId: string): Promise<void> {
         const headerLocator = this.actions.getLocator(this.elements.searchRecordsHeader(searchGroup));
         await this.actions.waitForElementToBeVisible(headerLocator, this.elements.searchRecordsHeader(searchGroup));
-        const idText = await commonActionPage.getElementByLinkText(recordId);
+        const idText = await CommonPageLocators.getLinkByText(recordId);
         await this.actions.assertContains(idText, recordId);
     }
 }

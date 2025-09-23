@@ -2,8 +2,8 @@ import { Page } from "@playwright/test";
 import { getPage } from "../../../base/base";
 import { WebActions } from "../../../base/web.action.util";
 import { timeouts } from "../../../helper/timeouts-config";
-import { commonActionPage } from "../../common.action.page";
 import { deleteWOPage } from "../delete.wko.page";
+import { commonPageActions } from "../../actions/common.page.actions";
 
 class DeleteMaintenanceRecordsPage {
     private get currentPage(): Page {
@@ -76,7 +76,7 @@ class DeleteMaintenanceRecordsPage {
             await this.actions.click(continueButtonEL, this.Elements.continueButton.name);
             await this.actions.waitForCustomDelay(timeouts.medium);
         } else if (requestStatusText === 'Waiting for Reply') {
-            await commonActionPage.clickElementByText(text)
+            await commonPageActions.clickSpanByText(text)
             const deleteMrLocator = this.actions.getLocator(this.Elements.deleteWOPage.selector);
             await this.actions.click(deleteMrLocator, this.Elements.deleteWOPage.name);
             const continueButtonEL = this.actions.getLocator(this.Elements.continueButton.selector);
@@ -90,6 +90,7 @@ class DeleteMaintenanceRecordsPage {
      * @param beforeDeleteMRId The Maintenance Request ID before deletion.
      */
     public async verifyDeletedMRId(beforeDeleteMRId: string): Promise<void> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
         const MRIdLocator = this.actions.getLocator(this.Elements.getMRId.selector);
         await this.actions.waitForElementToBeVisible(MRIdLocator, this.Elements.getMRId.name);
         const MRIdText = await this.actions.getText(MRIdLocator, this.Elements.getMRId.name);

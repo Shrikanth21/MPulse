@@ -1,18 +1,18 @@
 import { When, Then } from '@cucumber/cucumber';
 import testData from '../../../data/close.wko.json';
 import * as path from 'path';
-import { homePage } from '../../../pages/home-page/Home.page';
+import { homePageActions } from '../../../pages/actions/home.page.action/home.page.actions';
 import { workOrderPage } from '../../../pages/work-order-page/WorkOrderPage.page';
 import { generateDescription } from '../../../helper/get.different.description';
 import { getRandomString } from '../../../helper/get-random-string';
 import { getFutureDateFormatted, getFutureDay } from '../../../helper/date/get.future.date';
-import { commonActionPage } from '../../../pages/common.action.page';
+import { commonPageActions } from '../../../pages/actions/common.page.actions';
 
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
 const description = generateDescription('Work Order', '_Automation');
 
 When('the user navigates to the Work Order Records page', async function () {
-    await homePage.navigateToCapitalAssetsRecordsPage(
+    await homePageActions.navigateToCapitalAssetsRecordsPage(
         testData.homePageURL,
         testData.element_text.got_it_btn,
         testData.menuItemTitle,
@@ -81,7 +81,7 @@ When('the user links assets, personnel, and inventory to the Work Order', async 
 });
 
 When('the user closes the created Work Order record', async function () {
-    await commonActionPage.clickTabByText('Financial');
+    await commonPageActions.clickTabByText('Financial');
     await workOrderPage.setFinancialFields(testData.costFields);
     await workOrderPage.closeWorkOrder(
         testData.element_text.close_wko_text,

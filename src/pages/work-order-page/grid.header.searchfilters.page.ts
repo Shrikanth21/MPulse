@@ -1,9 +1,12 @@
-import { Page } from "@playwright/test";
+import { Page, request } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
 import { timeouts } from "../../helper/timeouts-config";
-import { commonActionPage } from "../common.action.page";
+import { APIRequestContext } from "@playwright/test";
+import { ApiHelper } from "../../helper/api-helper/authentication-login";
+import { CommonPageLocators } from "../locators/common.page.locator";
 
+let apiRequestContext: APIRequestContext;
 class GridHeaderSearchFiltersPage {
     private get currentPage(): Page {
         return getPage();
@@ -45,7 +48,7 @@ class GridHeaderSearchFiltersPage {
      * @param title The title of the search option to select.
      */
     public async selectSearchOption(title: string): Promise<void> {
-        const searchOption = this.actions.getLocator(commonActionPage.getElementByText(title)).nth(0);
+        const searchOption = this.actions.getLocator(CommonPageLocators.getSpanByText(title)).nth(0);
         await this.actions.waitForElementToBeVisible(searchOption, `Search option "${title}"`);
         await this.actions.click(searchOption, `Search option "${title}"`);
     }
@@ -103,7 +106,7 @@ class GridHeaderSearchFiltersPage {
             default:
                 throw new Error(`Unknown column name: ${columnName}`);
         }
-        const firstCell = this.actions.getLocator(commonActionPage.getRowCellSelector(columnIndex)).nth(0);
+        const firstCell = this.actions.getLocator(CommonPageLocators.getRowCellByIndex(columnIndex)).nth(0);
         await this.actions.waitForElementToBeVisible(firstCell, `First ${columnName} cell`);
         return await this.actions.getText(firstCell, `First ${columnName} cell`);
     }
@@ -114,7 +117,7 @@ class GridHeaderSearchFiltersPage {
      * @returns The XPath locator for the column header.
      */
     public async getColumnCellTextsByIndex(index: number): Promise<string[]> {
-        const columnCellSelector = commonActionPage.getRowCellSelector(index);
+        const columnCellSelector = CommonPageLocators.getRowCellByIndex(index);
         const columnCells = this.actions.getLocator(columnCellSelector);
         await this.actions.waitForElementToBeVisible(columnCells.first(), `Column cell at index ${index}`);
         return await columnCells.allInnerTexts();
@@ -142,70 +145,60 @@ class GridHeaderSearchFiltersPage {
     }
 
     /**
-     * Verifies that the search input is visible for a specific column.
-     * @param columnName The name of the column to check.
-     * @return A boolean indicating whether the search input is visible.
-     * @returns A boolean indicating whether the search input is visible.
+     * Verifies the filtered results in the grid.
+     * @param expectedText The text expected to be found in the filtered results.
+     * @param option The filter option selected (e.g., "Contains", "Does not contain").
+     * @param columnName The name of the column being filtered.
      */
-    public async verifyFilteredResults(expectedText: string, option: string, columnName: string): Promise<void> {
-        const rowCellTexts: string[] = await this.getAndStoreAllRowCellTextsAfterSearch(columnName);
+    public async verifyFilteredResults(expectedText: string, option: string): Promise<void> {
         switch (option) {
             case "Contains":
-                rowCellTexts.includes(expectedText)
-                    ? await this.actions.assertTrue(
-                        rowCellTexts.some(text => text.includes(expectedText)),
-                        `Expected at least one cell text to contain "${expectedText}"`)
-                    : await this.actions.assertFalse(
-                        rowCellTexts.some(text => text.includes(expectedText)),
-                        `Expected no cell text to contain "${expectedText}"`);
+                apiRequestContext = await request.newContext();
+                const contain = new ApiHelper(apiRequestContext);
+                const containsData = await contain.getRecordDetails("contains", expectedText);
+                containsData.forEach(async element => {
+                    await this.actions.assertContains(element, expectedText);
+                });
                 break;
             case "Does not contain":
-                for (const text of rowCellTexts) {
-                    await this.actions.assertNotContain(text, expectedText);
-                }
+                apiRequestContext = await request.newContext();
+                const doesNotContain = new ApiHelper(apiRequestContext);
+                const alldoesNotContainData = await doesNotContain.getRecordDetails("notcontains", expectedText);
+                alldoesNotContainData.forEach(async element => {
+                    await this.actions.assertNotContain(element, expectedText);
+                });
                 break;
-            case "Starts with": {
-                let found = false;
-                for (let i = 0; i < rowCellTexts.length; i++) {
-                    const text = rowCellTexts[i];
-                    if (!text) continue;
-                    const trimmedText = text.trim();
-                    if (trimmedText.startsWith(expectedText)) {
-                        await this.actions.assertForStartWithTrue(true, `at index ${i}: "${trimmedText}" starts with "${expectedText}"`);
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    await this.actions.assertForStartWithTrue(false, `No cell text starts with "${expectedText}"`);
-                }
-            }
+            case "Starts with":
+                apiRequestContext = await request.newContext();
+                const startsWith = new ApiHelper(apiRequestContext);
+                const allStartsWithData = await startsWith.getRecordDetails("startswith", expectedText);
+                allStartsWithData.forEach(async element => {
+                    await this.actions.assertStartsWith(element, expectedText, `Verifying that "${element}" starts with "${expectedText}"`);
+                });
                 break;
             case "Ends with":
-                let found = false;
-                for (let i = 0; i < rowCellTexts.length; i++) {
-                    const text = rowCellTexts[i];
-                    if (!text) continue;
-                    const trimmedText = text.trim();
-                    const doesEndWith = trimmedText.endsWith(expectedText);
-                    if (doesEndWith) {
-                        await this.actions.assertTrue(true, `at index ${i}: "${trimmedText}" ends with "${expectedText}"`);
-                        found = true;
-                    }
-                }
-                if (!found) {
-                    await this.actions.assertTrue(false, `No cell text ends with "${expectedText}"`);
-                }
+                apiRequestContext = await request.newContext();
+                const endsWith = new ApiHelper(apiRequestContext);
+                const allEndsWithData = await endsWith.getRecordDetails("endswith", expectedText);
+                allEndsWithData.forEach(async element => {
+                    await this.actions.assertEndsWith(element, expectedText, `Verifying that "${element}" ends with "${expectedText}"`);
+                });
                 break;
             case "Equals":
-                const firstCell = await this.actions.getLocator(commonActionPage.getRowCellSelector(2)).nth(0);
-                await this.actions.waitForElementToBeVisible(firstCell, `First cell after search`);
-                const text = await this.actions.getText(firstCell, `First cell text after search`);
-                await this.actions.assertEqual(text, expectedText, `Expected "${text}" to equal "${expectedText}"`);
+                apiRequestContext = await request.newContext();
+                const equal = new ApiHelper(apiRequestContext);
+                const allEqualData = await equal.getRecordDetails("=", expectedText);
+                allEqualData.forEach(async element => {
+                    await this.actions.assertEqual(element, expectedText, `Verifying that "${element}" equals "${expectedText}"`);
+                });
                 break;
             case "Does not equal":
-                for (const text of rowCellTexts) {
-                    await this.actions.assertNotEqual(text, expectedText, `Expected "${text}" to not equal "${expectedText}"`);
-                }
+                apiRequestContext = await request.newContext();
+                const doesNotEqual = new ApiHelper(apiRequestContext);
+                const allDoesNotEqualData = await doesNotEqual.getRecordDetails("<>", expectedText);
+                allDoesNotEqualData.forEach(async element => {
+                    await this.actions.assertNotEqual(element, expectedText, `Verifying that "${element}" does not equal "${expectedText}"`);
+                });
                 break;
             default:
                 throw new Error(`Unknown search option: ${option}`);

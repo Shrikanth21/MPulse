@@ -43,22 +43,22 @@ When(/^the user enters a value in the search field in "([^"]*)" option edit box$
 Then(/^the "([^"]*)" filtered results should be displayed$/, async (option: string) => {
     switch (option) {
         case "Contains":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option, columnName);
+            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option);
             break;
         case "Does not contain":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option, columnName);
+            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option);
             break;
         case "Starts with":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText.slice(0, 3), option, columnName);
+            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText.slice(0, 3), option);
             break;
         case "Ends with":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText.slice(-3), option, columnName);
+            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText.slice(-3), option);
             break;
         case "Equals":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option, columnName);
+            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option);
             break;
         case "Does not equal":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option, columnName);
+            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option);
             break;
         default:
             throw new Error(`Unknown search option: ${option}`);

@@ -1,8 +1,9 @@
 import { Page } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
-import { homePage } from "../home-page/Home.page";
-import { commonActionPage } from "../common.action.page";
+import { homePageActions } from "../actions/home.page.action/home.page.actions";
+import { commonPageActions } from "../actions/common.page.actions";
+import { CommonPageLocators } from "../locators/common.page.locator";
 
 class LabelChangePage {
     private get currentPage(): Page {
@@ -27,22 +28,22 @@ class LabelChangePage {
         customizationMenuItem: string,
         expectedUrl: string
     ): Promise<void> {
-        await homePage.clickButtonByText(gotItButtonText);
-        await homePage.clickSideMenuIcon();
-        await homePage.clickLinkByTitle(menuItemTitle);
-        await homePage.clickLinkByTitle(subMenuItemTitle);
+        await homePageActions.clickButtonByText(gotItButtonText);
+        await homePageActions.clickSideMenuIcon();
+        await commonPageActions.clickLinkByTitle(menuItemTitle);
+        await commonPageActions.clickLinkByTitle(subMenuItemTitle);
         await this.clickOnCustomizationMenuItem(customizationMenuItem);
         await this.actions.validateCurrentUrl(expectedUrl);
     }
 
     public async clickOnCustomizationMenuItem(customizationMenuItem: string): Promise<void> {
-        const customizationButton = this.actions.getLocator(commonActionPage.getElementByTitle(customizationMenuItem)).nth(0);
+        const customizationButton = this.actions.getLocator(CommonPageLocators.getLinkByTitle(customizationMenuItem)).nth(0);
         await this.actions.waitForElementToBeVisible(customizationButton, `Customization Menu Item: ${customizationMenuItem} is visible`);
         await this.actions.click(customizationButton, `Customization Menu Item: ${customizationMenuItem}`);
     }
 
     public async clickOnSpanByText(spanTitle: string): Promise<void> {
-        const spanLocator = this.actions.getLocator(commonActionPage.getSpanByTitle(spanTitle));
+        const spanLocator = this.actions.getLocator(CommonPageLocators.getSpanByTitle(spanTitle));
         await this.actions.click(spanLocator, `Span with text: ${spanTitle}`);
     }
 
@@ -50,7 +51,7 @@ class LabelChangePage {
         const recordAreaDropdown = this.actions.getLocator(this.elements.recordAreaDropdown.selector).nth(0);
         await this.actions.click(recordAreaDropdown, this.elements.recordAreaDropdown.name);
         await this.actions.typeText(recordAreaDropdown, text, this.elements.recordAreaDropdown.name);
-        const recordAreaValue = this.actions.getLocator(commonActionPage.getCustomDivByTitle(text));
+        const recordAreaValue = this.actions.getLocator(CommonPageLocators.getDivByTitle(text));
         await this.actions.waitForElementToBeVisible(recordAreaValue, `Record Area Dropdown value ${text} is visible`);
         await this.actions.click(recordAreaValue, `Record Area Dropdown value ${text} is clickable`);
     }
@@ -59,7 +60,7 @@ class LabelChangePage {
         const recordAreaDropdown = this.actions.getLocator(this.elements.recordAreaDropdown.selector).nth(1);
         await this.actions.click(recordAreaDropdown, this.elements.recordAreaDropdown.name);
         await this.actions.typeText(recordAreaDropdown, text, this.elements.recordAreaDropdown.name);
-        const recordAreaValue = this.actions.getLocator(commonActionPage.getCustomDivByTitle(text));
+        const recordAreaValue = this.actions.getLocator(CommonPageLocators.getDivByTitle(text));
         await this.actions.waitForElementToBeVisible(recordAreaValue, `Label Change Dropdown value ${text} is visible`);
         await this.actions.click(recordAreaValue, `Label Change Dropdown value ${text} is clickable`);
     }
@@ -75,10 +76,10 @@ class LabelChangePage {
         subMenuItemTitle: string,
         expectedUrl: string
     ): Promise<void> {
-        await homePage.clickSideMenuIcon();
+        await homePageActions.clickSideMenuIcon();
         this.clickOnSpanByText(sideMenuIcon);
-        await homePage.clickLinkByTitle(menuItemTitle);
-        await homePage.clickLinkByTitle(subMenuItemTitle);
+        await commonPageActions.clickLinkByTitle(menuItemTitle);
+        await commonPageActions.clickLinkByTitle(subMenuItemTitle);
         await this.actions.validateCurrentUrl(expectedUrl);
     }
 
@@ -89,10 +90,10 @@ class LabelChangePage {
         customizationMenuItem: string,
         expectedUrl: string
     ): Promise<void> {
-        await homePage.clickSideMenuIcon();
+        await homePageActions.clickSideMenuIcon();
         this.clickOnSpanByText(sideMenuIcon);
-        await homePage.clickLinkByTitle(menuItemTitle);
-        await homePage.clickLinkByTitle(subMenuItemTitle);
+        await commonPageActions.clickLinkByTitle(menuItemTitle);
+        await commonPageActions.clickLinkByTitle(subMenuItemTitle);
         await this.clickOnCustomizationMenuItem(customizationMenuItem);
         await this.actions.validateCurrentUrl(expectedUrl);
     }
@@ -108,7 +109,7 @@ class LabelChangePage {
     }
 
     public async validateLabelChange(labelText: string): Promise<void> {
-        const labelLocator = this.actions.getLocator(commonActionPage.getElementByText(labelText));
+        const labelLocator = this.actions.getLocator(CommonPageLocators.getSpanByText(labelText));
         await this.actions.waitForElementToBeVisible(labelLocator, `Label with text ${labelText} is visible`);
         const labelTextContent = await labelLocator.textContent();
         if (labelTextContent !== labelText) {

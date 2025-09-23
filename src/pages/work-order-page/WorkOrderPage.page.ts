@@ -2,7 +2,8 @@ import { Page, expect, selectors } from '@playwright/test';
 import { getPage } from '../../base/base';
 import { WebActions } from '../../base/web.action.util';
 import { timeouts } from '../../helper/timeouts-config';
-import { commonActionPage } from '../common.action.page';
+import { commonPageActions } from '../actions/common.page.actions';
+import { CommonPageLocators } from '../locators/common.page.locator';
 
 class WorkOrderPage {
     private get currentPage(): Page {
@@ -218,11 +219,11 @@ class WorkOrderPage {
      */
     public async createWorkOrderFromMoreDropDown(dropdownOption: string, createOption: string, description: string): Promise<void> {
         await this.currentPage.waitForTimeout(timeouts.medium);
-        await commonActionPage.clickLinkByTitle(dropdownOption);
-        await commonActionPage.clickLinkByTitle(createOption);
+        await commonPageActions.clickLinkByTitle(dropdownOption);
+        await commonPageActions.clickLinkByTitle(createOption);
         await this.currentPage.waitForTimeout(timeouts.medium);
-        await commonActionPage.enterDescription(description);
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.enterDescription(description);
+        await commonPageActions.clickSaveButton();
     }
 
     /**
@@ -247,7 +248,7 @@ class WorkOrderPage {
      */
     public async linkTaskToWorkOrder(taskText: string, linkTitle: string, buttonText: string): Promise<void> {
         await this.clickMoreButton(taskText);
-        await commonActionPage.clickLinkByTitle(linkTitle);
+        await commonPageActions.clickLinkByTitle(linkTitle);
         await this.selectRowInLinkAssetPopupIfVisible();
         await this.clickInputButton(buttonText);
         await this.clickTaskLinkRow();
@@ -262,7 +263,7 @@ class WorkOrderPage {
      */
     public async linkAssetToTask(assetText: string, linkTitle: string, buttonText: string): Promise<void> {
         await this.clickMoreButton(assetText);
-        await commonActionPage.clickLinkByTitle(linkTitle);
+        await commonPageActions.clickLinkByTitle(linkTitle);
         await this.selectRowInLinkAssetPopupIfVisible();
         await this.clickInputButton(buttonText);
     }
@@ -275,7 +276,7 @@ class WorkOrderPage {
      */
     public async linkPersonnelToAsset(personnelText: string, linkTitle: string, buttonText: string): Promise<void> {
         await this.clickMoreButton(personnelText);
-        await commonActionPage.clickLinkByTitle(linkTitle);
+        await commonPageActions.clickLinkByTitle(linkTitle);
         await this.selectRowInLinkAssetPopupIfVisible();
         await this.clickInputButton(buttonText);
     }
@@ -289,7 +290,7 @@ class WorkOrderPage {
      */
     public async linkInventoryToAsset(inventoryText: string, linkTitle: string, buttonText: string, confirmText: string): Promise<void> {
         await this.clickMoreButton(inventoryText);
-        await commonActionPage.clickLinkByTitle(linkTitle);
+        await commonPageActions.clickLinkByTitle(linkTitle);
         await this.selectRowInLinkAssetPopupIfVisible();
         await this.clickInputButton(buttonText);
         await this.actions.waitForCustomDelay(timeouts.medium);
@@ -313,13 +314,13 @@ class WorkOrderPage {
         crossIconTitle: string,
         continueButtonText: string
     ): Promise<void> {
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
         await this.clickElementByText(closeText);
         await this.clickElementByText(yesButtonText);
         await this.clickPopupCalendarIcon();
         await this.selectPopupCalendarDate(day);
         await this.clickInputButton(inputOkButtonText);
-        await commonActionPage.clickLinkByTitle(crossIconTitle);
+        await commonPageActions.clickLinkByTitle(crossIconTitle);
         await this.clickElementByText(continueButtonText);
 
     }
@@ -365,8 +366,8 @@ class WorkOrderPage {
      */
     public async createWorkOrder(addButtonTitle: string, description: string, mediaButtonText: string, mediaLinkTitle: string, mediaFilePath: string, btnTitle: string): Promise<void> {
         await this.currentPage.waitForTimeout(timeouts.large);
-        await commonActionPage.clickLinkByTitle(addButtonTitle);
-        await commonActionPage.enterDescription(description);
+        await commonPageActions.clickLinkByTitle(addButtonTitle);
+        await commonPageActions.enterDescription(description);
         await this.uploadMediaFile(mediaButtonText, mediaLinkTitle, mediaFilePath, btnTitle);
     }
 
@@ -391,7 +392,7 @@ class WorkOrderPage {
         }
         if (validTitles.length === 0) {
             console.warn(`No valid options found in the dropdown: ${ddType}. Leaving it empty.`);
-            await commonActionPage.clickByDivTitle(title);
+            await commonPageActions.clickDivByTitle(title);
             return;
         }
         const selectedTitle = validTitles[0];
@@ -456,7 +457,7 @@ class WorkOrderPage {
                 }
             }
             if (newTitles.length === 0) {
-                await commonActionPage.clickByDivTitle(title);
+                await commonPageActions.clickDivByTitle(title);
                 await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
                 console.warn(`No valid options found in the dropdown: ${ddType}. Leaving it empty.`);
                 continue;
@@ -465,6 +466,7 @@ class WorkOrderPage {
             const selectedLocator = this.actions.getLocator(this.getDDvalueByTitle(selectedTitle));
             await selectedLocator.hover();
             await selectedLocator.waitFor({ state: 'visible', timeout: 2000 });
+            await selectedLocator.scrollIntoViewIfNeeded();
             await this.actions.click(selectedLocator, `Selecting "${selectedTitle}" from ${ddType}`);
         }
     }
@@ -490,7 +492,7 @@ class WorkOrderPage {
         inputOkButtonText: string,
         day: string
     ): Promise<void> {
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
         await this.clickElementByText(closeText);
         await this.clickElementByText(yesButtonText);
         await this.actions.performKeyboardAction('Enter');
@@ -530,7 +532,7 @@ class WorkOrderPage {
         await this.actions.waitForCustomDelay(timeouts.medium);
         await this.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
         await this.setPhoneNumber(phoneNumber);
-        await commonActionPage.clickSaveButton();
+        await commonPageActions.clickSaveButton();
     }
 
     /**
@@ -550,7 +552,7 @@ class WorkOrderPage {
      * @param continueButtonText The text of the continue button.
      */
     public async deleteRecord(crossIconTitle: string, continueButtonText: string): Promise<void> {
-        await commonActionPage.clickLinkByTitle(crossIconTitle);
+        await commonPageActions.clickLinkByTitle(crossIconTitle);
         await this.clickElementByText(continueButtonText);
     }
 
@@ -590,7 +592,6 @@ class WorkOrderPage {
     public async selectByElementText(radioButtonText: string): Promise<void> {
         const radioButtonLocator = this.actions.getLocator(this.getEleByText(radioButtonText));
         await this.actions.waitForElementToBeVisible(radioButtonLocator, `Radio Button: ${radioButtonText}`);
-        await this.actions.waitForCustomDelay(timeouts.large);
         await this.actions.click(radioButtonLocator, `Radio Button: ${radioButtonText}`);
     }
 
@@ -602,7 +603,7 @@ class WorkOrderPage {
      * @param cost The cost value to set.
      */
     public async setCost(id: string, fieldName: string, inputField: string, cost: string): Promise<void> {
-        await commonActionPage.clickTabByText('Financial')
+        await commonPageActions.clickTabByText('Financial')
         const linkLocator = this.actions.getLocator(this.getById(id));
         await this.actions.click(linkLocator, `Link: ${id}`);
 
@@ -644,12 +645,12 @@ class WorkOrderPage {
         crossIconTitle: string
     ): Promise<void> {
         await this.clickMoreButton(personnelText);
-        const linkLocator = this.actions.getLocator(commonActionPage.getElementByTitle(linkTitle));
+        const linkLocator = this.actions.getLocator(CommonPageLocators.getLinkByTitle(linkTitle));
         if (await linkLocator.isVisible()) {
-            await commonActionPage.clickLinkByTitle(linkTitle);
+            await commonPageActions.clickLinkByTitle(linkTitle);
             const moreIconLocator = this.actions.getLocator(this.getTaskMoreIcon(timeSheetDetails));
             await this.actions.click(moreIconLocator, `Task More Icon for: ${timeSheetDetails}`);
-            await commonActionPage.clickLinkByTitle(plusIconTitle);
+            await commonPageActions.clickLinkByTitle(plusIconTitle);
             const timeSheetDetailsLocator = this.actions.getLocator(this.getPopupGridRowByText(eleText));
             await this.actions.doubleClick(timeSheetDetailsLocator, `Double Click on: ${eleText}`);
             const hoursInputLocator = this.actions.getLocator(this.elements.hoursInputField.selector);
@@ -725,9 +726,11 @@ class WorkOrderPage {
      * @param description The description of the work order.
      */
     public async listViewWKO(description: string): Promise<void> {
-        const sideBarExpanderLocator = this.actions.getLocator(commonActionPage.elements.sideBarExpander.selector);
-        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        const sideBarExpanderLocator = this.actions.getLocator(CommonPageLocators.sideBarExpander.selector);
+        await this.actions.waitForElementToBeVisible(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
+        await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const maximizeButton = this.actions.getLocator(this.elements.maximizeButton.selector);
+        await this.actions.waitForElementToBeVisible(maximizeButton, this.elements.maximizeButton.name);
         await this.actions.click(maximizeButton, this.elements.maximizeButton.name);
         await this.actions.click(this.actions.getLocator(this.elements.plusIcon.selector), this.elements.plusIcon.name);
         const saveBtn = this.actions.getLocator(this.elements.checkIcon.selector);
@@ -736,10 +739,10 @@ class WorkOrderPage {
         await this.actions.waitForCustomDelay(timeouts.medium);
         await this.actions.typeText(this.actions.getLocator(this.elements.wkoInput.selector).nth(0), description, `WKO Description: ${description}`);
         await this.actions.click(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
-        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);
         await this.actions.click(minimizeButton, this.elements.hideButton.name);
-        await commonActionPage.clickEditButton();
+        await commonPageActions.clickEditButton();
     }
 
     /**
@@ -796,8 +799,8 @@ class WorkOrderPage {
         day: string,
         inputOkButtonText: string
     ): Promise<void> {
-        const sideBarExpanderLocator = this.actions.getLocator(commonActionPage.elements.sideBarExpander.selector);
-        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        const sideBarExpanderLocator = this.actions.getLocator(CommonPageLocators.sideBarExpander.selector);
+        await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const maximizeButton = this.actions.getLocator(this.elements.maximizeButton.selector);
         await this.actions.click(maximizeButton, this.elements.maximizeButton.name);
         await this.actions.click(this.actions.getLocator(this.elements.closeWorkOrderButton.selector), this.elements.closeWorkOrderButton.name);
@@ -805,7 +808,7 @@ class WorkOrderPage {
         await this.actions.click(yesSpanLocator, this.elements.yesSpan.name);
         await this.selectCloseDate(day);
         await this.clickOnSecondClosePopup(inputOkButtonText);
-        await this.actions.click(sideBarExpanderLocator, commonActionPage.elements.sideBarExpander.name);
+        await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);
         await this.actions.click(minimizeButton, this.elements.hideButton.name);
     }

@@ -4,18 +4,21 @@ import { gridHeaderSearchFiltersPage } from "../../../pages/work-order-page/grid
 
 let beforeFilteredText: string;
 let coulmnName: string = "ID";
+let beforeOmitCount: number;
 
 Then(/^the user get the first record from the Work order records list view$/, async () => {
     beforeFilteredText = await gridHeaderSearchFiltersPage.getFirstIdText(coulmnName);
 });
 
 When(/^the user clicks on the "([^"]*)" button$/, async (button: string) => {
+    beforeOmitCount = await omitAndLookupPage.getTotalRecordCount();
     await omitAndLookupPage.clickFirstWorkOrderRecord();
     await omitAndLookupPage.clickOnButton(button);
 });
 
 Then(/^the omitted Work Order should not appear in the Omitted Records section$/, async () => {
-    await omitAndLookupPage.verifyOmitRecord();
+    await omitAndLookupPage.verifyOmitRecord(beforeFilteredText);
+    await omitAndLookupPage.verifyCountAfterOmitRecord(beforeOmitCount.toString());
 });
 
 Then(/^only the selected Work Order should be visible in the list$/, async () => {

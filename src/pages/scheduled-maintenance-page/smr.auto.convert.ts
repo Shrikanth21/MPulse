@@ -1,9 +1,9 @@
 import { Page } from "@playwright/test";
 import { WebActions } from "../../base/web.action.util";
 import { getPage } from "../../base/base";
-import { commonActionPage } from "../common.action.page";
 import { timeouts } from "../../helper/timeouts-config";
-import { homePage } from "../home-page/Home.page";
+import { homePageActions } from "../actions/home.page.action/home.page.actions";
+import { commonPageActions } from "../actions/common.page.actions";
 
 class SMRAutoConvert {
     private get currentPage(): Page {
@@ -79,9 +79,9 @@ class SMRAutoConvert {
      * @param pageURL The expected URL of the page
      */
     public async navigateToPageFromOtherMenu(menuItemTitle: string, subMenuItemTitle: string, pageURL: string): Promise<void> {
-        await homePage.clickSideMenuIcon();
-        await commonActionPage.clickOnSpanByTitle(menuItemTitle);
-        await homePage.clickLinkByTitle(subMenuItemTitle);
+        await homePageActions.clickSideMenuIcon();
+        await commonPageActions.clickSpanByTitle(menuItemTitle);
+        await commonPageActions.clickLinkByTitle(subMenuItemTitle);
         await this.actions.validateCurrentUrl(pageURL);
     }
 
@@ -92,8 +92,19 @@ class SMRAutoConvert {
         await this.currentPage.reload();
         await this.actions.waitForCustomDelay(timeouts.huge);
         await this.currentPage.reload();
-        await commonActionPage.clickByLinkText('Scheduled Maintenance Options');
-        await commonActionPage.clickByLinkText('Scheduled Maintenance Records');
+        await commonPageActions.clickLinkByText('Scheduled Maintenance Options');
+        await commonPageActions.clickLinkByText('Scheduled Maintenance Records');
+    }
+
+    /**
+     * Get the Work Order ID of the converted Work Order
+     * @returns the Work Order ID of the converted Work Order
+     */
+    public async getConvertedWorkOrderID(): Promise<string> {
+        const workOrderLinkEl = await this.actions.getLocator(this.elementSelector.workOrderLink.selector);
+        await this.actions.waitForElementToBeVisible(workOrderLinkEl, this.elementSelector.workOrderLink.name);
+        const workOrderID = await workOrderLinkEl.innerText();
+        return workOrderID;
     }
 
     /**

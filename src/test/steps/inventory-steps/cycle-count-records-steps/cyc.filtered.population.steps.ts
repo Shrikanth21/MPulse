@@ -6,10 +6,10 @@ import { generatedCycleCountRecordDescription } from "../../../../helper/get.dif
 import { cycleCountRecordsPage } from "../../../../pages/Inventory-pages/cycle-count-records-pages/cycle.count.records.page";
 import { workOrderPage } from "../../../../pages/work-order-page/WorkOrderPage.page";
 import { getFutureDateFormatted } from "../../../../helper/date/get.future.date";
-import { commonActionPage } from "../../../../pages/common.action.page";
 import { deleteCycleCountRecordPage } from "../../../../pages/Inventory-pages/cycle-count-records-pages/delete.cyc.record.page";
 import { deleteWOPage } from "../../../../pages/work-order-page/delete.wko.page";
 import { mrAutoConvertPage } from "../../../../pages/work-order-page/maintenance-request-records-pages/mr.auto.convert.page";
+import { commonPageActions } from "../../../../pages/actions/common.page.actions";
 
 let createdCycId: string;
 let createdCycCount: string;
@@ -104,7 +104,7 @@ Then(/^the user should see the Work Order created from Cycle Count Record$/, asy
 });
 
 When(/^the user closes the converted Work Order record$/, async () => {
-    await commonActionPage.clickTabByText(testData.element_text.financial_tab_text);
+    await commonPageActions.clickTabByText(testData.element_text.financial_tab_text);
     await workOrderPage.setFinancialFields(testData.costFields);
 
     await workOrderPage.closeWorkOrder(
@@ -148,7 +148,7 @@ Then(/^the user should see the diminished population of items$/, async () => {
 When(/^the user check the stock quantity of the linked inventory item$/, async () => {
     beforeCloseStockQty = await cycleCountRecordsPage.getInventoryStockQty(
         testData.element_text.stock_area_tab_text);
-    await commonActionPage.clickByLinkText(testData.subMenuItemWorkTitle);
+    await commonPageActions.clickLinkByText(testData.subMenuItemWorkTitle);
 });
 
 When(/^the user updates the "([^"]+)" stock quantity of the linked inventory item$/, async (populationType: string) => {

@@ -107,6 +107,7 @@
     "stock_area_tab_text": "Stock Area",
     "cycle_count_tab_text": "Cycle Count",
     "scheduled_tab_text": "Schedule",
+    "service_tab_text": "Service",
     "hoursField_text": "0.00",
     "quantity_ordered_text": "10.00",
     "quantity_received_text": "5.00",
@@ -223,6 +224,10 @@
   },
   "calendar": {
     "calendar_tab_name": "Calendars"
+  },
+  "usage_info": {
+    "anticipatedUseValue": "100",
+    "frequencyIntervalValue": "Day"
   },
   "dataBase": {
     "freshDBSep": "FreshDBSep",

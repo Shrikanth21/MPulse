@@ -1,8 +1,9 @@
 import { Page } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
-import { commonActionPage } from "../common.action.page";
 import { timeouts } from "../../helper/timeouts-config";
+import { commonPageActions } from "../actions/common.page.actions";
+import { CommonPageLocators } from "../locators/common.page.locator";
 
 class CalendarPage {
     private get currentPage(): Page {
@@ -36,8 +37,8 @@ class CalendarPage {
      * @param tabName The name of the tab to navigate to.
      */
     public async navigateToCalendarTab(tabName1: string, tabName2: string, currentUrl: string): Promise<void> {
-        await commonActionPage.clickLinkByTitle(tabName1);
-        await commonActionPage.clickLinkByTitle(tabName2);
+        await commonPageActions.clickLinkByTitle(tabName1);
+        await commonPageActions.clickLinkByTitle(tabName2);
         await this.actions.validateCurrentUrl(currentUrl);
     }
 
@@ -46,6 +47,9 @@ class CalendarPage {
      */
     public async verifyCurrentMonthCalendarView(): Promise<void> {
         const currentMonthLabel = await this.actions.getLocator(this.elementSelectors.currentMonthLabel);
+        await this.actions.waitForElementToBeVisible(currentMonthLabel, "Current Month Label");
+        const currentMonthText = await currentMonthLabel.innerText();
+        console.log("Current Month Text:", currentMonthText);
         const isVisible = await currentMonthLabel.isVisible();
         await this.actions.assertTrue(isVisible, "Current Month Label");
     }
@@ -103,7 +107,7 @@ class CalendarPage {
 
             const input = await this.actions.getLocator(inputSelector);
             await this.actions.waitForElementToBeVisible(input, dropdownName + " Input");
-            await this.actions.typeText(input, value, dropdownName + " Input");
+            await this.actions.clearAndTypeText(input, value, dropdownName + " Input");
 
             const valueLocator = await this.actions.getLocator(this.elementSelectors.dropdownValue(value));
             await this.actions.waitForElementToBeVisible(valueLocator, `Dropdown Value: ${value}`);
@@ -131,7 +135,7 @@ class CalendarPage {
 
         const calendarColorInput = await this.actions.getLocator(this.elementSelectors.calendarColorInput.selector);
         await this.actions.waitForElementToBeVisible(calendarColorInput, this.elementSelectors.calendarColorInput.name);
-        await this.actions.typeText(calendarColorInput, calendarColor, this.elementSelectors.calendarColorInput.name);
+        await this.actions.clearAndTypeText(calendarColorInput, calendarColor, this.elementSelectors.calendarColorInput.name);
     }
 
     /**
@@ -176,9 +180,11 @@ class CalendarPage {
      */
     public async verifyCalendarRecordDetails(expectedRecords: string, dashboardTab: string): Promise<void> {
         const eventDateLocator = this.actions.getLocator(this.elementSelectors.eventByDateAndTitle(expectedRecords));
+        await this.actions.waitForElementToBeVisible(await eventDateLocator, `Calendar Event: ${expectedRecords}`);
         const actualRecord = await eventDateLocator.innerText();
+        console.log("Actual Record:", actualRecord);
         await this.actions.assertEqual(actualRecord, expectedRecords, "Calendar Event Title");
-        await commonActionPage.clickLinkByTitle(dashboardTab);
+        await commonPageActions.clickLinkByTitle(dashboardTab);
     }
 
     /**
@@ -188,14 +194,14 @@ class CalendarPage {
      * @param calendarView The title of the calendar view.
      */
     public async navigateToCalendarView(calendarTab: string, calendarView: string): Promise<void> {
-        await commonActionPage.clickLinkByTitle(calendarTab);
+        await commonPageActions.clickLinkByTitle(calendarTab);
         await this.clickOnCalendarSettingsLink();
         await this.actions.waitForCustomDelay(timeouts.medium);
         const calendarViewIcon = await this.actions.getLocator(this.elementSelectors.calendarViewIcon.selector);
         await this.actions.waitForElementToBeVisible(calendarViewIcon, this.elementSelectors.calendarViewIcon.name);
         await this.actions.click(calendarViewIcon, this.elementSelectors.calendarViewIcon.name);
         await this.actions.waitForCustomDelay(timeouts.medium);
-        const calendarViewLocator = await this.actions.getLocator(commonActionPage.getElementByText(calendarView));
+        const calendarViewLocator = await this.actions.getLocator(CommonPageLocators.getSpanByText(calendarView));
         await this.actions.waitForElementToBeVisible(calendarViewLocator, `Calendar View: ${calendarView}`);
         const isVisible = await calendarViewLocator.isVisible();
         await this.actions.assertTrue(isVisible, `Calendar View: ${calendarView}`);

@@ -2,7 +2,7 @@ import { Page } from "@playwright/test";
 import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
 import { timeouts } from "../../helper/timeouts-config";
-import { commonActionPage } from "../common.action.page";
+import { CommonPageLocators } from "../locators/common.page.locator";
 
 class MaintenanceAdvisorPage {
     private get currentPage(): Page {
@@ -27,7 +27,7 @@ class MaintenanceAdvisorPage {
      * @param pages The name of the page to navigate to.
      */
     public async navigateToPages(pages: string): Promise<void> {
-        const pageLink = this.actions.getLocator(commonActionPage.getElementByTitle(pages));
+        const pageLink = this.actions.getLocator(CommonPageLocators.getLinkByTitle(pages));
         await this.actions.waitForElementToBeVisible(pageLink, `${pages} link`);
         await this.actions.click(pageLink, `${pages} link`);
     }
@@ -37,7 +37,7 @@ class MaintenanceAdvisorPage {
      * @param title The expected title of the page.
      */
     public async verifyPageTitle(title: string): Promise<void> {
-        const pageTitle = this.actions.getLocator(commonActionPage.getElementByTitle(title));
+        const pageTitle = this.actions.getLocator(CommonPageLocators.getLinkByTitle(title));
         await this.actions.waitForElementToBeVisible(pageTitle, `Page title: ${title}`);
         const actualTitle = await this.actions.getText(pageTitle, `Page title: ${title}`);
         await this.actions.assertEqual(actualTitle, title, `Page title should be "${title}"`);
@@ -71,11 +71,11 @@ class MaintenanceAdvisorPage {
      */
     public async selectSavedLayout(layoutName: string): Promise<void> {
         await this.selectConfigureDashboard();
-        const savedLayoutLocator = this.actions.getLocator(commonActionPage.getLabelByTitle(layoutName));
+        const savedLayoutLocator = this.actions.getLocator(CommonPageLocators.getLabelByTitle(layoutName));
         await this.actions.waitForElementToBeVisible(savedLayoutLocator, `Saved Layout: ${layoutName}`);
         await this.actions.click(savedLayoutLocator, `Saved Layout: ${layoutName}`);
         await this.actions.waitForElementToBeVisible(
-            this.actions.getLocator(commonActionPage.getLabelByTitle(`Work Order Records-${layoutName}`)),
+            this.actions.getLocator(CommonPageLocators.getLabelByTitle(`Work Order Records-${layoutName}`)),
             `Work Order Records - ${layoutName}`
         );
     }

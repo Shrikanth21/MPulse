@@ -6,7 +6,6 @@ import testData from '../../../data/testData.json';
 import mrtestData from '../../../data/maintenance.records.json';
 import { searchUpdateWorkOrderPage } from "../../../pages/work-order-page/search.update.wko.page";
 import { globalSearchPage } from "../../../pages/global-search-page/global.search.page";
-import { commonActionPage } from "../../../pages/common.action.page";
 import { maintenanceRequestRecordsPage } from "../../../pages/work-order-page/maintenance-request-records-pages/maintenanceRequestRecords.page";
 import { requisitionRecordsPage } from "../../../pages/Inventory-pages/por-requisition-page/requisition.records.page";
 import { getFutureDateFormatted } from "../../../helper/date/get.future.date";
@@ -14,9 +13,11 @@ import { deleteSMRPage } from "../../../pages/scheduled-maintenance-page/delete.
 import { scheduledMaintenanceRecordsPage } from "../../../pages/scheduled-maintenance-page/scheduled.maintenance.record.page";
 import { cycleCountRecordsPage } from "../../../pages/Inventory-pages/cycle-count-records-pages/cycle.count.records.page";
 import { smrAutoConvert } from "../../../pages/scheduled-maintenance-page/smr.auto.convert";
+import { commonPageActions } from "../../../pages/actions/common.page.actions";
 
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
 let recordId: string;
+let convertedWkoId: string;
 
 When(/^the user creates a new Equipment Record with a unique description and uploads media$/, async () => {
     await buildingRecordsPage.createTaskWithMediaUpload(
@@ -45,8 +46,8 @@ Then(/^the user should see the Equipment Record in the search results$/, async (
 
 When(/^the user creates a new Maintenance Request with a only description$/, async () => {
     await maintenanceRequestRecordsPage.createMaintenanceRecord(generatedMaintenanceRecordDescription);
-    await commonActionPage.clickSaveButton();
-    await commonActionPage.clickElementByText(testData.element_text.ok_button_text);
+    await commonPageActions.clickSaveButton();
+    await commonPageActions.clickSpanByText(testData.element_text.ok_button_text);
 });
 
 When(/^the user convert a Maintenance Request into new Work order$/, async () => {
@@ -94,7 +95,7 @@ Then(/^the user should see the Purchase Order in the search results$/, async () 
 
 When(/^the user creates a new Work Order with a unique description$/, async () => {
     await maintenanceRequestRecordsPage.createMaintenanceRecord(generatedDescription);
-    await commonActionPage.clickSaveButton();
+    await commonPageActions.clickSaveButton();
 });
 
 When(/^the user searches the closed Work Order Records by order id and status$/, async () => {
@@ -141,7 +142,7 @@ Then(/^the user should see the Maintenance Request in the search Waiting for Rep
 
 When(/^the user creates a new Scheduled Maintenance Record with a only description$/, async () => {
     await maintenanceRequestRecordsPage.createMaintenanceRecord(generatedScheduledMaintenanceRecordDescription);
-    await commonActionPage.clickSaveButton();
+    await commonPageActions.clickSaveButton();
 });
 
 When(/^the user gets the created smr record id$/, async () => {
@@ -163,7 +164,7 @@ When(/^the user converts the Scheduled Maintenance into a Work Order$/, async ()
 });
 
 When(/^User navigates back to the Scheduled Maintenance Records page$/, async () => {
-    await commonActionPage.clickByLinkText(testData.scheduled_maintenance_records_title);
+    await commonPageActions.clickLinkByText(testData.scheduled_maintenance_records_title);
 });
 
 Then(/^the user navigates to more button on scheduled maintenance page$/, async () => {
@@ -171,12 +172,17 @@ Then(/^the user navigates to more button on scheduled maintenance page$/, async 
 });
 
 Then(/^the user see the converted work order id on the scheduled maintenance page$/, async () => {
+    convertedWkoId = await smrAutoConvert.getConvertedWorkOrderID();
     await smrAutoConvert.verifyConvertedWorkOrder();
-    await commonActionPage.clickCloseButton();
+    await commonPageActions.clickCloseButton();
 });
 
 When(/^the user searches the Scheduled Maintenance Records by scheduled maintenance id and its description$/, async () => {
-    await globalSearchPage.searchRecord(recordId + " " + generatedScheduledMaintenanceRecordDescription);
+    await globalSearchPage.searchRecord(convertedWkoId + " " + generatedScheduledMaintenanceRecordDescription);
+});
+
+When(/^the user click on the searched converted work order record$/, async () => {
+    await commonPageActions.clickLinkByText(convertedWkoId);
 });
 
 Then(/^the user should see the Scheduled Maintenance in the search results$/, async () => {
@@ -189,7 +195,7 @@ Then(/^the user should see the Scheduled Maintenance in the search results$/, as
 
 When(/^the user creates a new Cycle Count with a only description$/, async () => {
     await maintenanceRequestRecordsPage.createMaintenanceRecord(generatedCycleCountRecordDescription);
-    await commonActionPage.clickSaveButton();
+    await commonPageActions.clickSaveButton();
 });
 
 When(/^the user gets the created cyc record id$/, async () => {
@@ -212,7 +218,7 @@ When(/^the user converts the Cycle Count into a Work Order$/, async () => {
 });
 
 When(/^User navigates back to the Cycle Count Records page$/, async () => {
-    await commonActionPage.clickByLinkText(testData.cycle_count_records_title);
+    await commonPageActions.clickLinkByText(testData.cycle_count_records_title);
 });
 
 Then(/^the user navigates to more button on cycle count page$/, async () => {
@@ -220,12 +226,13 @@ Then(/^the user navigates to more button on cycle count page$/, async () => {
 });
 
 Then(/^the user see the converted work order id on the cycle count page$/, async () => {
+    convertedWkoId = await smrAutoConvert.getConvertedWorkOrderID();
     await smrAutoConvert.verifyConvertedWorkOrder();
-    await commonActionPage.clickCloseButton();
+    await commonPageActions.clickCloseButton();
 });
 
 When(/^the user searches the Cycle Count Records by cycle count id and its description$/, async () => {
-    await globalSearchPage.searchRecord(recordId + " " + generatedCycleCountRecordDescription);
+    await globalSearchPage.searchRecord(convertedWkoId + " " + generatedCycleCountRecordDescription);
 });
 
 Then(/^the user should see the Cycle Count in the search results$/, async () => {

@@ -1,5 +1,5 @@
 import { When, Then } from '@cucumber/cucumber';
-import { homePage } from '../../../../pages/home-page/Home.page';
+import * as path from 'path';
 import mrtestData from '../../../../data/maintenance.records.json';
 import testData from "../../../../data/testData.json";
 import { generatedMaintenanceRecordDescription } from '../../../../helper/get.different.description';
@@ -8,13 +8,13 @@ import { getRandomString } from '../../../../helper/get-random-string';
 import { labelChangePage } from '../../../../pages/work-order-page/label.change.page';
 import { mrAutoConvertPage } from '../../../../pages/work-order-page/maintenance-request-records-pages/mr.auto.convert.page';
 import { workOrderPage } from '../../../../pages/work-order-page/WorkOrderPage.page';
-import * as path from 'path';
-import { commonActionPage } from '../../../../pages/common.action.page';
+import { homePageActions } from '../../../../pages/actions/home.page.action/home.page.actions';
+import { commonPageActions } from '../../../../pages/actions/common.page.actions';
 
 const filePath = path.resolve(__dirname, '../../../../data/docs/MPulse.docx');
 
 When('the user navigates to the Maintenance Request Records page', async function () {
-    await homePage.navigateToCapitalAssetsRecordsPage(
+    await homePageActions.navigateToCapitalAssetsRecordsPage(
         mrtestData.homePageURL,
         mrtestData.element_text.got_it_btn,
         mrtestData.wkoMenuItemTitle,
@@ -42,7 +42,7 @@ When('the user convert a Maintenance Request into new work order', async functio
         mrtestData.element_text.yes_convert,
         mrtestData.element_text.yes_button,
     );
-    await commonActionPage.clickEditButton();
+    await commonPageActions.clickEditButton();
 });
 
 
@@ -107,7 +107,7 @@ When(/^the user creates a new Maintenance Request with a unique description in t
 
 When("the user upload media file on Maintenance Request page", async function () {
     await workOrderPage.addMediaAndSelectRecord(testData.element_text.media_text, testData.icons.media_link_icon, filePath, mrtestData.element_text.upload_text);
-    await commonActionPage.clickLinkByTitle(testData.icons.editIcon);
+    await commonPageActions.clickLinkByTitle(testData.icons.editIcon);
     await maintenanceRequestRecordsPage.setMrGeneralFields(
         mrtestData.element_text.general_tab_text,
         getRandomString('digits', 10),

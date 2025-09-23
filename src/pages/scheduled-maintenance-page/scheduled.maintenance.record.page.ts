@@ -1,10 +1,10 @@
 import { expect, Page } from "@playwright/test";
 import { WebActions } from "../../base/web.action.util";
 import { getPage } from "../../base/base";
-import { commonActionPage } from "../common.action.page";
 import { workOrderPage } from "../work-order-page/WorkOrderPage.page";
-import { homePage } from "../home-page/Home.page";
-import dayjs from "dayjs";
+import { homePageActions } from "../actions/home.page.action/home.page.actions";
+import { commonPageActions } from "../actions/common.page.actions";
+import { CommonPageLocators } from "../locators/common.page.locator";
 
 class ScheduledMaintenanceRecordsPage {
     private get currentPage(): Page {
@@ -37,7 +37,14 @@ class ScheduledMaintenanceRecordsPage {
         lastMeterReadingDateLabel: { selector: "//label[text()=' Last Meter Reading Date ']", name: "Last Meter Reading Date label" },
         lastMeterReadingDateValue: { selector: "//span[@class='pull-left']/child::b", name: "Last Meter Reading Date value" },
         scheduledDateValue: { selector: "//div[@class='pull-left margin_L5 ng-binding ng-scope']", name: "Scheduled Date container" },
-        smrNextDueDateValue: { selector: "//span[@id='SMRNextDate']", name: "SMR Next Due Date value" }
+        smrNextDueDateValue: { selector: "//span[@id='SMRNextDate']", name: "SMR Next Due Date value" },
+        anticipatedUseInput: { selector: "//div[@id='AnticipatedUse']/descendant::input[@inputmode='decimal']", name: "Anticipated Use input" },
+        frequencyIntervalInput: { selector: "//div[@id='FrequencyInterval']", name: "Frequency Interval input" },
+        metersListMoreBtn: { selector: "//servicegrid[@id='MetersList']/descendant::div[@class='moreBtn']", name: "Meters List More Button" },
+        addNewRowButton: { selector: "//li[@ng-click='insertNewRow()']", name: "Add New Row button" },
+        serviceGridSelectedRow: { selector: '//div[@id="serviceGridContainer"]/descendant::tr[@class=\'dx-row dx-data-row dx-column-lines dx-selection\']/child::td', name: "Service Grid Selected Row" },
+        saveServiceGridButton: { selector: '//li[@ng-click="saveEdit()"]', name: "Save Edit button" },
+        serviceGridDropdownIcon: { selector: "//div[@class='dx-datagrid-content']//div[@class='dx-dropdowneditor-icon']", name: "Service Grid Dropdown Icon" },
     }
 
     /**
@@ -82,9 +89,9 @@ class ScheduledMaintenanceRecordsPage {
         dropdownSelections: { ddType: string[] },
         divTitle: string
     ): Promise<void> {
-        commonActionPage.clickAddNewRecordButton();
-        await commonActionPage.enterDescription(description);
-        await commonActionPage.clickTabByText(tabName);
+        commonPageActions.clickAddNewRecordButton();
+        await commonPageActions.enterDescription(description);
+        await commonPageActions.clickTabByText(tabName);
         await workOrderPage.selectMultipleDropdownValues(dropdownSelections.ddType, divTitle);
     }
 
@@ -127,8 +134,8 @@ class ScheduledMaintenanceRecordsPage {
      * @param date The date for the floating schedule.
      */
     public async setFloatingSchedule(tabName: string, floatingScheduleType: string, date: string): Promise<void> {
-        await commonActionPage.clickTabByText(tabName);
-        await commonActionPage.clickEditButton();
+        await commonPageActions.clickTabByText(tabName);
+        await commonPageActions.clickEditButton();
         await this.checkConfigTimeBasedCheckbox();
         const floatingScheduleElement = await this.actions.getLocator(this.elementSelectors.floatingTypeRadioBtn(floatingScheduleType));
         await this.actions.waitForElementToBeVisible(floatingScheduleElement, `Floating Schedule Type: ${floatingScheduleType}`);
@@ -144,8 +151,8 @@ class ScheduledMaintenanceRecordsPage {
      * @param doneDate The done date for the fixed schedule.
      */
     public async setFixedSchedule(tabName: string, doneDate: string): Promise<void> {
-        await commonActionPage.clickTabByText(tabName);
-        await commonActionPage.clickEditButton();
+        await commonPageActions.clickTabByText(tabName);
+        await commonPageActions.clickEditButton();
         await this.checkConfigTimeBasedCheckbox();
         const fixedRadioInputEl = await this.actions.getLocator(this.elementSelectors.fixedRadioInput.selector);
         await this.actions.waitForElementToBeVisible(fixedRadioInputEl, this.elementSelectors.fixedRadioInput.name);
@@ -161,8 +168,8 @@ class ScheduledMaintenanceRecordsPage {
      * @param recurrenceDay The day of the recurrence.
      */
     public async setRecurrencePattern(tabName: string, recurrencePattern: string, recurrenceDay: string): Promise<void> {
-        commonActionPage.clickTabByText(tabName);
-        await commonActionPage.clickByDivText(recurrencePattern);
+        await commonPageActions.clickTabByText(tabName);
+        await commonPageActions.clickByDivText(recurrencePattern);
         const recurrencePatternInputEl = await this.actions.getLocator(this.elementSelectors.smrEveryTextInput.selector);
         await this.actions.waitForElementToBeVisible(recurrencePatternInputEl, this.elementSelectors.smrEveryTextInput.name);
         await this.actions.typeText(recurrencePatternInputEl, recurrenceDay, this.elementSelectors.smrEveryTextInput.name);
@@ -208,8 +215,8 @@ class ScheduledMaintenanceRecordsPage {
         subMenuItemTitle: string,
         expectedUrl: string
     ): Promise<void> {
-        await homePage.clickSideMenuIcon();
-        await homePage.clickLinkByTitle(subMenuItemTitle);
+        await homePageActions.clickSideMenuIcon();
+        await commonPageActions.clickLinkByTitle(subMenuItemTitle);
         await this.actions.validateCurrentUrl(expectedUrl);
     }
 
@@ -245,7 +252,7 @@ class ScheduledMaintenanceRecordsPage {
                 selectedTitle = newTitles[1]; // take the next valid option
             }
 
-            const selectedLocator = this.actions.getLocator(commonActionPage.getCustomDivByTitle(selectedTitle));
+            const selectedLocator = this.actions.getLocator(CommonPageLocators.getDivById(selectedTitle));
             await selectedLocator.waitFor({ state: 'visible', timeout: 2000 });
             await this.actions.click(selectedLocator, `Selecting "${selectedTitle}" from ${ddType}`);
         }
@@ -262,9 +269,9 @@ class ScheduledMaintenanceRecordsPage {
         meterBasedDropdownId: string,
         dropdown: { ddType: string[] }
     ): Promise<void> {
-        await commonActionPage.clickTabByText(tabName);
-        await commonActionPage.clickEditButton();
-        await commonActionPage.clickByLinkText(meterBasedDropdownId);
+        await commonPageActions.clickTabByText(tabName);
+        await commonPageActions.clickEditButton();
+        await commonPageActions.clickLinkByText(meterBasedDropdownId);
         await this.checkConfigMeterBasedCheckbox();
         await this.selectAssetDropdownValues(dropdown.ddType);
     }
@@ -289,7 +296,7 @@ class ScheduledMaintenanceRecordsPage {
      * @param tabName the name of the tab containing the scheduled date
      */
     public async verifyScheduledTypeDateApplied(dateLabel: string, tabName: string): Promise<void> {
-        await commonActionPage.clickTabByText(tabName);
+        await commonPageActions.clickTabByText(tabName);
         const scheduledDateLabel = this.actions.getLocator(this.elementSelectors.scheduledDateLabel(dateLabel));
         await this.actions.waitForElementToBeVisible(scheduledDateLabel, `Scheduled Date Label: ${dateLabel}`);
         const scheduledDateText = await this.actions.getText(scheduledDateLabel, `Getting text for Scheduled Date Label: ${dateLabel}`);
@@ -301,7 +308,7 @@ class ScheduledMaintenanceRecordsPage {
      * @param tabName the name of the tab containing the SMR Next Due Date
      */
     public async verifySmrNextDueDate(tabName: string): Promise<void> {
-        await commonActionPage.clickTabByText(tabName);
+        await commonPageActions.clickTabByText(tabName);
         const scheduledDateValueLocator = this.actions.getLocator(this.elementSelectors.scheduledDateValue.selector);
         const smrNextDueDateValueLocator = this.actions.getLocator(this.elementSelectors.smrNextDueDateValue.selector);
         const scheduledDateText = (await scheduledDateValueLocator.textContent())?.trim();
@@ -318,6 +325,107 @@ class ScheduledMaintenanceRecordsPage {
         const formattedExpected = expectedNextDate.toLocaleDateString();
         const formattedActual = smrNextDate.toLocaleDateString();
         expect(formattedActual).toBe(formattedExpected);
+    }
+
+    /**
+     * Selects the first value from each of the three dropdowns in the service grid row and types '10' into the selected row.
+     */
+    /**
+     * Selects the first available value from each dropdown in the service grid row by index.
+     * Skips duplicate values and "Edit list values".
+     * @param indices Array of dropdown indices (1-based)
+     * @param fallbackTitle Title to click if no valid options are found
+     */
+    public async selectMultipleServiceGridDropdownValues(indices: number[]): Promise<void> {
+        const seenTitles: Set<string> = new Set();
+        for (const idx of indices) {
+            const dropdownLocator = this.actions.getLocator(this.elementSelectors.serviceGridSelectedRow.selector).nth(idx);
+            await this.actions.click(dropdownLocator, `Dropdown at index ${idx}`);
+            const clickDropdownLocator = this.actions.getLocator(this.elementSelectors.serviceGridDropdownIcon.selector);
+            await this.actions.waitForElementToBeVisible(clickDropdownLocator, this.elementSelectors.serviceGridDropdownIcon.name);
+            await this.actions.click(clickDropdownLocator, this.elementSelectors.serviceGridDropdownIcon.name);
+            const optionsLocator = this.actions.getLocator('//div[@title]');
+            await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
+            const newTitles: string[] = [];
+            const count = await optionsLocator.count();
+            for (let i = 0; i < count; i++) {
+                const el = optionsLocator.nth(i);
+                const title = await el.getAttribute('title');
+                if (title && title.trim() && title !== 'Edit list values' && !seenTitles.has(title.trim())) {
+                    const isVisible = await el.isVisible();
+                    if (isVisible) {
+                        const cleanTitle = title.trim();
+                        newTitles.push(cleanTitle);
+                        seenTitles.add(cleanTitle);
+                    }
+                }
+            }
+            if (newTitles.length === 0) {
+                await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
+                console.warn(`No valid options found in the dropdown: ${indices}. Leaving it empty.`);
+                continue;
+            }
+            const selectedTitle = newTitles[0];
+            const selectedLocator = await this.actions.getLocator(CommonPageLocators.getDivByTitle(selectedTitle));
+            await selectedLocator.hover();
+            await selectedLocator.waitFor({ state: 'visible', timeout: 2000 });
+            await selectedLocator.scrollIntoViewIfNeeded();
+            await this.actions.click(selectedLocator, `Selecting "${selectedTitle}" from ${indices}`);
+        }
+    }
+
+    public async enterMultipleServiceGridInputsValues(
+        values: { [key: number]: string }
+    ): Promise<void> {
+        for (const [index, value] of Object.entries(values)) {
+            const inputLocator = this.actions.getLocator(this.elementSelectors.serviceGridSelectedRow.selector).nth(Number(index));
+            await this.actions.waitForElementToBeVisible(inputLocator, `Input at index ${index}`);
+            await this.actions.clearAndTypeText(inputLocator, value, `Input at index ${index}`);
+        }
+    }
+
+    /**
+     * Fills in the service preventive maintenance and usage information.
+     * @param tabName The name of the tab to click.
+     * @param anticipatedUseValue The anticipated use value to enter.
+     * @param frequencyIntervalValue The frequency interval value to enter.
+     */
+    public async fillServicePreventiveMaintenanceAndUsageInformation(
+        tabName: string,
+        anticipatedUseValue: string,
+        frequencyIntervalValue: string
+    ): Promise<void> {
+        await commonPageActions.clickTabByText(tabName);
+        await commonPageActions.clickEditButton();
+        const anticipatedUseInputEl = await this.actions.getLocator(this.elementSelectors.anticipatedUseInput.selector);
+        await this.actions.waitForElementToBeVisible(anticipatedUseInputEl, this.elementSelectors.anticipatedUseInput.name);
+        await this.actions.clearAndTypeText(anticipatedUseInputEl, anticipatedUseValue, this.elementSelectors.anticipatedUseInput.name);
+        const frequencyIntervalInputEl = await this.actions.getLocator(this.elementSelectors.frequencyIntervalInput.selector);
+        await this.actions.waitForElementToBeVisible(frequencyIntervalInputEl, this.elementSelectors.frequencyIntervalInput.name);
+        await this.actions.click(frequencyIntervalInputEl, this.elementSelectors.frequencyIntervalInput.name);
+        await commonPageActions.clickDivByTitle(frequencyIntervalValue);
+    }
+
+    /**
+     * 
+     * @param tabName The name of the tab to click.
+     * Links inventory items to the asset by adding meters in the Meters List service grid.
+     */
+    public async linkInventoryToAsset(
+        tabName: string
+    ): Promise<void> {
+        await commonPageActions.clickTabByText(tabName);
+        const metersListMoreBtnEl = await this.actions.getLocator(this.elementSelectors.metersListMoreBtn.selector);
+        await this.actions.waitForElementToBeVisible(metersListMoreBtnEl, this.elementSelectors.metersListMoreBtn.name);
+        await this.actions.mouseHoverAndClick(metersListMoreBtnEl, this.elementSelectors.metersListMoreBtn.name);
+        const addNewRowButtonEl = await this.actions.getLocator(this.elementSelectors.addNewRowButton.selector);
+        await this.actions.waitForElementToBeVisible(addNewRowButtonEl, this.elementSelectors.addNewRowButton.name);
+        await this.actions.click(addNewRowButtonEl, this.elementSelectors.addNewRowButton.name);
+        await this.selectMultipleServiceGridDropdownValues([1, 2, 3]);
+        await this.enterMultipleServiceGridInputsValues({ 4: '5', 5: '10', 6: '1' });
+        const saveServiceGridButtonEl = await this.actions.getLocator(this.elementSelectors.saveServiceGridButton.selector);
+        await this.actions.waitForElementToBeVisible(saveServiceGridButtonEl, this.elementSelectors.saveServiceGridButton.name);
+        await this.actions.click(saveServiceGridButtonEl, this.elementSelectors.saveServiceGridButton.name);
     }
 }
 

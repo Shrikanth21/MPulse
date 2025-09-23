@@ -2,7 +2,7 @@ import test, { Page } from "@playwright/test";
 import { WebActions } from "../../base/web.action.util";
 import { getPage } from "../../base/base";
 import { timeouts } from "../../helper/timeouts-config";
-import { commonActionPage } from "../common.action.page";
+import { CommonPageLocators } from "../locators/common.page.locator";
 
 class GridPage {
 
@@ -45,8 +45,9 @@ class GridPage {
      * Clicks on the sidebar expander to expand the sidebar.
      */
     public async clickOnSideBarExpander(): Promise<void> {
-        const sideBarExpander = this.actions.getLocator(commonActionPage.elements.sideBarExpander.selector);
-        await this.actions.click(sideBarExpander, commonActionPage.elements.sideBarExpander.name);
+        const sideBarExpander = this.actions.getLocator(CommonPageLocators.sideBarExpander.selector);
+        await this.actions.waitForElementToBeVisible(sideBarExpander, CommonPageLocators.sideBarExpander.name);
+        await this.actions.click(sideBarExpander, CommonPageLocators.sideBarExpander.name);
     }
 
     /**
@@ -65,7 +66,10 @@ class GridPage {
         const sortbyid = this.actions.getLocator(this.Elements.sortingWorkOrderByID.selector);
         await this.actions.waitForElementToBeVisible(sortbyid, this.Elements.sortingWorkOrderByID.name);
         await this.actions.click(sortbyid, this.Elements.sortingWorkOrderByID.name);
-        await this.clickOnSortUpIcon();
+        const isVisible = this.actions.getLocator(this.Elements.sortUpIcon.selector);
+        if (await isVisible.isVisible()) {
+            await this.clickOnSortUpIcon();
+        }
         await this.currentPage.waitForTimeout(timeouts.largest);
     }
 

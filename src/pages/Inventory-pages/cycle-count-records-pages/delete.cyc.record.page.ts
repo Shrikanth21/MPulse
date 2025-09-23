@@ -4,7 +4,7 @@ import { WebActions } from "../../../base/web.action.util";
 import { deleteWOPage } from "../../work-order-page/delete.wko.page";
 import { timeouts } from "../../../helper/timeouts-config";
 import { searchUpdateWorkOrderPage } from "../../work-order-page/search.update.wko.page";
-import { commonActionPage } from "../../common.action.page";
+import { commonPageActions } from "../../actions/common.page.actions";
 
 class DeleteCycleCountRecordPage {
     private get currentPage(): Page {
@@ -95,7 +95,7 @@ class DeleteCycleCountRecordPage {
         await searchUpdateWorkOrderPage.searchWorkOrder(linkedWorkOrder);
         await searchUpdateWorkOrderPage.clickOnSearchResult();
         await deleteWOPage.deleteCurrentWO();
-        await commonActionPage.clickByLinkText(linkedText);
+        await commonPageActions.clickLinkByText(linkedText);
         await deleteWOPage.deleteCurrentWO();
     }
 }

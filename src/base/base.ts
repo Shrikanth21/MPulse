@@ -2,17 +2,25 @@ import { setDefaultTimeout, Before, After, BeforeAll, AfterAll, Status, BeforeSt
 import { Browser, BrowserContext, Page, chromium, firefox } from 'playwright';
 import dotenv from 'dotenv';
 import logger, { setLoggerForScenario } from '../helper/logger';
-import { logoutPage } from '../pages/login-page/Logout.page';
+import { request, APIRequestContext } from "@playwright/test";
+import { logoutPageActions } from '../pages/actions/logout.page.action/logout.page.actions';
 
 setDefaultTimeout(1000 * 60 * 2);
 
 let browser: Browser;
 let context: BrowserContext;
 let page: Page;
+let apiRequestContext: APIRequestContext;
 
 BeforeAll(async () => {
   dotenv.config({
     path: `${process.cwd()}/config/.env.${process.env.environment ?? 'qa'}`
+  });
+
+  apiRequestContext = await request.newContext({
+    extraHTTPHeaders: {
+      "Accept-Encoding": "identity"
+    }
   });
 
   const browserType = process.env.browser!;
@@ -61,7 +69,7 @@ Before(async function (scenario) {
 
 After(async function () {
   try {
-    await logoutPage.logout();
+    await logoutPageActions.performLogout();
     logger.info('User logged out successfully');
   } catch (error) {
     logger.error('Error during logout:', error);
@@ -85,6 +93,7 @@ AfterStep(async function (step) {
 });
 
 AfterAll(async () => {
+  await apiRequestContext.dispose();
   await browser?.close();
 });
 

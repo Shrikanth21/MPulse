@@ -3,8 +3,8 @@ import { requisitionRecordsPage } from "../../../../pages/Inventory-pages/por-re
 import testData from '../../../../data/testData.json';
 import { workOrderPage } from "../../../../pages/work-order-page/WorkOrderPage.page";
 import { mrAutoConvertPage } from "../../../../pages/work-order-page/maintenance-request-records-pages/mr.auto.convert.page";
-import { commonActionPage } from "../../../../pages/common.action.page";
 import path from "path";
+import { commonPageActions } from "../../../../pages/actions/common.page.actions";
 
 const filePath = path.resolve(__dirname, '../../../../data/docs/MPulse.docx');
 let beforeCloseStockQty: string;
@@ -52,7 +52,7 @@ When(/^the user closes the created Purchase Order Requisition record$/, async ()
 });
 
 Then(/^the Purchase Order Requisition record should be closed successfully$/, async () => {
-	await commonActionPage.clickTabByText(testData.element_text.supplier_tab_text);
+	await commonPageActions.clickTabByText(testData.element_text.supplier_tab_text);
 	await workOrderPage.validateElementText(testData.element_text.closed_status_text);
 });
 
@@ -61,7 +61,7 @@ Then(/^the Purchase Order Requisition status should be Back Order$/, async () =>
 });
 
 When(/^the user sets the Requisition Status to Back Order and updates the Quantity Received$/, async () => {
-	await commonActionPage.clickTabByText(testData.element_text.supplier_tab_text);
+	await commonPageActions.clickTabByText(testData.element_text.supplier_tab_text);
 	await workOrderPage.changeWkoStatus(
 		testData.element_text.requisition_status_text,
 		testData.element_text.requisition_status_text,
@@ -86,7 +86,9 @@ When(/^the user fill the mandatory fields$/, async () => {
 });
 
 Then(/^the user goes to the grid and verifies the Quantity Received is updated successfully$/, async () => {
-	await requisitionRecordsPage.validateReceivedQuantity(testData.element_text.financial_tab_text, testData.element_text.quantity_received_text);
+	await requisitionRecordsPage.validateReceivedQuantity(
+		testData.element_text.financial_tab_text,
+		testData.element_text.quantity_received_text);
 });
 
 Then(/^the user verifies the quantity in the stock in the linked inventory$/, async () => {
@@ -116,5 +118,5 @@ Then(/^the user should verify the updated quantity in stock after back ordering 
 		beforeCloseStockQty,
 		testData.element_text.quantity_received_text
 	);
-	await commonActionPage.clickByLinkText(testData.requisitionMenuTitle);
+	await commonPageActions.clickLinkByText(testData.requisitionMenuTitle);
 });

@@ -24,7 +24,7 @@ class DeleteWOPage {
      * @returns The text of the Work Order ID.
      */
     public async getCurrentWorkOrderIdText(): Promise<string> {
-        await this.actions.waitForCustomDelay(timeouts.medium);
+        await this.actions.waitForCustomDelay(timeouts.huge);
         const beforeSortedWoID = this.actions.getLocator(this.Elements.getWorkOrderId.selector);
         await this.actions.waitForElementToBeVisible(beforeSortedWoID, this.Elements.getWorkOrderId.name);
         return await this.actions.getText(beforeSortedWoID, this.Elements.getWorkOrderId.name);
@@ -80,6 +80,7 @@ class DeleteWOPage {
         const noMatchesFoundLocator = this.actions.getLocator(this.Elements.noMatchesFound.selector);
         await this.actions.waitForElementToBeVisible(noMatchesFoundLocator, this.Elements.noMatchesFound.name);
         const noMatchesFoundText = await this.actions.getText(noMatchesFoundLocator, this.Elements.noMatchesFound.name);
+        await this.actions.waitForCustomDelay(timeouts.medium);
         await this.actions.assertEqual(
             noMatchesFoundText.trim(),
             "No matches found.",

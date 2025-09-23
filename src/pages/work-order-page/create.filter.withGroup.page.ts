@@ -3,7 +3,7 @@ import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
 import logger from "../../helper/logger";
 import { timeouts } from "../../helper/timeouts-config";
-import { commonActionPage } from "../common.action.page";
+import { CommonPageLocators } from "../locators/common.page.locator";
 
 class WithGroupFilterPage {
 
@@ -55,13 +55,13 @@ class WithGroupFilterPage {
     public async dragColumnToGroupPanel(columnName: string): Promise<void> {
         switch (columnName) {
             case 'Status':
-                const sourceLocator = this.actions.getLocator(commonActionPage.getColumnHeaderLocator(columnName));
+                const sourceLocator = this.actions.getLocator(CommonPageLocators.getColumnHeaderByText(columnName));
                 const targetLocator = this.actions.getLocator(this.elements.groupPanelDefault.selector);
                 await this.actions.dragAndDrop(sourceLocator, targetLocator, `${columnName} header`, 'Group panel');
                 await this.actions.waitForCustomDelay(timeouts.medium);
                 break;
             case 'Created By':
-                const sourceLocatorSecond = this.actions.getLocator(commonActionPage.getColumnHeaderLocator(columnName));
+                const sourceLocatorSecond = this.actions.getLocator(CommonPageLocators.getColumnHeaderByText(columnName));
                 const targetLocatorSecond = this.actions.getLocator(this.elements.groupPanelAfterDrop.selector);
                 await this.actions.dragAndDrop(sourceLocatorSecond, targetLocatorSecond, `${columnName} header`, 'Group panel');
                 break;
@@ -75,7 +75,7 @@ class WithGroupFilterPage {
      * @returns A boolean indicating whether the group checkbox is checked.
      */
     public async verifyGroupedColumnHeaderExists(columnName: string): Promise<void> {
-        const groupHeaderLocator = this.actions.getLocator(commonActionPage.getGroupedHeaderLocator(columnName));
+        const groupHeaderLocator = this.actions.getLocator(CommonPageLocators.getGroupedHeaderByText(columnName));
         await this.actions.waitForElementToBeVisible(groupHeaderLocator, `Grouped column header "${columnName}" should be visible`);
         const actualText = await this.actions.getText(groupHeaderLocator, `Verifying grouped column header text`);
         await this.actions.assertEqual(actualText.trim(), columnName, `Grouped column header "${columnName}" text mismatch`);

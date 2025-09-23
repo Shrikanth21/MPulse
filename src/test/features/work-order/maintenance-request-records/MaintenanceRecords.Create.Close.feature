@@ -10,7 +10,7 @@ Feature: Maintenance Request - Create and Convert to Work Order and Close
     When the user convert a Maintenance Request into new work order
     And the user uploads media file
     Then the uploaded image should be visible
-    And the Work Order status should be Open status
+    And the Work Order status should be Open
     And the user links assets, personnel, and inventory to the Work Order
     And the user closes the created Work Order record
     Then the Work Order record should be closed successfully

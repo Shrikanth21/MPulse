@@ -15,7 +15,7 @@ Feature: CYC - Create a CYC record with Constant population -Covert to WKO-Close
     Then the user should see the created Cycle Count Record in the search results
     When the user select the searched record and convert to Work Order
     Then the user should see the Work Order created from Cycle Count Record
-    And the Work Order status should be Open status
+    And the Work Order status should be Open
     When the user check the stock quantity of the linked inventory item
     And the user updates the "Constant" stock quantity of the linked inventory item
     And the user closes the converted Work Order record
