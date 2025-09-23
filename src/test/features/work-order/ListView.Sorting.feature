@@ -6,6 +6,7 @@ Feature: List View - Sorting Work Order Records
     And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user maximizes the Work Order Records list view display
+    And the user choses the default layout from the dropdown
     When the user click on workorderID
     Then the Work Order record should be sorted successfully
     And the user minimizes the list view display

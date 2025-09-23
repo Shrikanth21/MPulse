@@ -384,8 +384,6 @@ export class ApiHelper {
         if (!response.ok()) {
             throw new Error(`LoadData API failed with status ${response.status()} - ${JSON.stringify(parsed)}`);
         }
-        fs.writeFileSync("LoadDataResponse.json", JSON.stringify(parsed, null, 2));
-        console.log("Response written to LoadDataResponse.json");
         return parsed;
     }
 
@@ -631,8 +629,6 @@ export class ApiHelper {
         const recordIds = loadDataResponse.ListViewData
             .filter((item: any) => item.RecordId)
             .map((item: any) => item.RecordId);
-        fs.writeFileSync("AllRecordIds.json", JSON.stringify(recordIds, null, 2));
-        console.log("All RecordIds written to AllRecordIds.json");
         return recordIds;
     }
 }

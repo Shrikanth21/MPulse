@@ -43,11 +43,7 @@ class LogoutPageActions {
      * Saves the build link text to a JSON file.
      */
     public async saveBuildLinkToFile(): Promise<void> {
-        const filePath = resolve(__dirname, 'src/data/build-link.json');
-        const dirPath = resolve(__dirname, 'src/data');
-        if (!fs.existsSync(dirPath)) {
-            fs.mkdirSync(dirPath, { recursive: true });
-        }
+        const filePath = resolve('src/data/build-link.json');
         const buildLinkText = await this.fetchBuildLinkText();
         fs.writeFileSync(filePath, JSON.stringify({ buildLinkText }, null, 2));
     }

@@ -82,14 +82,21 @@ class CreateFilterPage {
     }
 
     /**
-     * Clicks on the customize button to open the customization modal.
+     * Chooses the default layout from the dropdown.
      */
-    public async clickOnCustomizeButton(): Promise<void> {
+    public async chooseDefaultLayout(): Promise<void> {
         const clearDropdownEditor = this.actions.getLocator(this.elements.expandGridDropdownInput.selector);
         await this.actions.waitForElementToBeVisible(clearDropdownEditor, this.elements.expandGridDropdownInput.name);
         await this.actions.clearAndTypeText(clearDropdownEditor, 'ID and Description Only', this.elements.expandGridDropdownInput.name);
         await this.actions.waitForElementToBeVisible(clearDropdownEditor, this.elements.expandGridDropdownInput.name);
         await this.actions.click(this.actions.getLocator(CommonPageLocators.getDivByText('ID and Description Only')), 'ID and Description Only');
+    }
+
+    /**
+     * Clicks on the customize button to open the customization modal.
+     */
+    public async clickOnCustomizeButton(): Promise<void> {
+        await this.chooseDefaultLayout();
         const customizeButtonLocator = this.actions.getLocator(this.elements.customizeButton.selector);
         await this.actions.waitForElementToBeVisible(customizeButtonLocator, this.elements.customizeButton.name);
         await this.actions.click(customizeButtonLocator, this.elements.customizeButton.name);

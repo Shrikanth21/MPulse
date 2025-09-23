@@ -46,7 +46,7 @@ class OmitAndLookupPage {
     public async verifyOmitRecord(omitRecord: string): Promise<void> {
         apiRequestContext = await request.newContext();
         const apiHelper = new ApiHelper(apiRequestContext);
-        const allData = await apiHelper.loadData('<>', omitRecord);
+        const allData = await apiHelper.getRecordDetails("<>", omitRecord);
         allData.forEach(async (element: string) => {
             await this.actions.assertNotEqual(element, omitRecord, `Verifying that the omitted record ${omitRecord} is not present`);
         });

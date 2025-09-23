@@ -74,7 +74,7 @@ class ReportPrintPage {
             logger.info("New report page opened.");
             const frame = newPage.frameLocator('iframe');
             logger.info("Locating WKO nobr elements inside iframe...");
-            const wkoNobrLocators = await frame.locator(this.elementSelectors.wkoNobr.selector).all();
+            const wkoNobrLocators = await newPage.locator(this.elementSelectors.wkoNobr.selector).all();
             const wkoNobrTexts: string[] = [];
             for (const nobrLocator of wkoNobrLocators) {
                 const text = await nobrLocator.textContent();

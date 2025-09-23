@@ -1,11 +1,12 @@
 Feature: List View - Search and Filter Work Order Records
 
-  @filterwko  @listView @e2e @sanityWKListView
+  @filterwko @listView @e2e @sanityWKListView
   Scenario: Work Order - Filter operations with search conditions in list view
     Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user maximizes the Work Order Records list view display
+    And the user choses the default layout from the dropdown
     Then the user get the first record from the Work Order Records list view
     When the user hovers over the search icon and click on "Contains" option
     And the user enters a value in the search field in "Contains" option edit box

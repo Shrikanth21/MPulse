@@ -4,6 +4,7 @@ Feature: Work Order - Create Work Order Record with Status
     Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Work Order Records page
+    And the user choses the default layout from the dropdown
     And the user creates a new Work Order with a unique description and uploads media
     Then the uploaded image should be visible
     And the Work Order status should be Open

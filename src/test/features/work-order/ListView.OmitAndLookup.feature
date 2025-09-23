@@ -5,6 +5,7 @@ Feature: List View - Omit and Lookup functionality
     And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user maximizes the Work Order Records list view display
+    And the user choses the default layout from the dropdown
 
   @omitRecord @listView @e2e @sanityWKListView
   Scenario: Work Order - Omit and validate exclusion from list

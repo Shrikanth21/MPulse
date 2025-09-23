@@ -7,6 +7,7 @@ import { generateDescription } from '../../../helper/get.different.description';
 import { getRandomString } from '../../../helper/get-random-string';
 import { getFutureDateFormatted, getFutureDay } from '../../../helper/date/get.future.date';
 import { commonPageActions } from '../../../pages/actions/common.page.actions';
+import { createFilterPage } from '../../../pages/work-order-page/create.filter.page';
 
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
 const description = generateDescription('Work Order', '_Automation');
@@ -126,4 +127,8 @@ Then('the Work Order record from List view should be delete successfully', async
     await workOrderPage.clickButtonByText(testData.element_text.general_tab_text);
     await workOrderPage.validateElementText(testData.element_text.closed_status_text);
     await workOrderPage.deleteRecord(testData.icons.crossIcon, testData.element_text.continue_button_text);
+});
+
+When(/^the user choses the default layout from the dropdown$/, async function () {
+    await createFilterPage.chooseDefaultLayout();
 });

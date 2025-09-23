@@ -8,10 +8,10 @@ let beforeOmitCount: number;
 
 Then(/^the user get the first record from the Work order records list view$/, async () => {
     beforeFilteredText = await gridHeaderSearchFiltersPage.getFirstIdText(coulmnName);
+    beforeOmitCount = await omitAndLookupPage.getTotalRecordCount();
 });
 
 When(/^the user clicks on the "([^"]*)" button$/, async (button: string) => {
-    beforeOmitCount = await omitAndLookupPage.getTotalRecordCount();
     await omitAndLookupPage.clickFirstWorkOrderRecord();
     await omitAndLookupPage.clickOnButton(button);
 });
