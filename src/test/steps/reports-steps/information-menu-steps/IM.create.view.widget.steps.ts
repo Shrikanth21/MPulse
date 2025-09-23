@@ -77,7 +77,7 @@ Then(/^the user unchecks the default widget option$/, async () => {
 });
 
 Then(/^the user creates a filter using provided criteria with conditions$/, async () => {
-    await createFilterPage.applyCustomFilter(
+    await reportInformationMenuPage.applyCustomFilterWithDate(
         filterOptinData.layOutFilterOptions.dateOpened,
         filterOptinData.customFilterOperatorItemContent.equal,
         filterOptinData.customFilterValueItem.statusValue.today,

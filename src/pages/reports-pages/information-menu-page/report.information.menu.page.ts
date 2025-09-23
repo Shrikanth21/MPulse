@@ -4,6 +4,7 @@ import { WebActions } from "../../../base/web.action.util";
 import { timeouts } from "../../../helper/timeouts-config";
 import { homePageActions } from "../../actions/home.page.action/home.page.actions";
 import { commonPageActions } from "../../actions/common.page.actions";
+import { CommonPageLocators } from "../../locators/common.page.locator";
 
 class ReportInformationMenuPage {
   private get currentPage(): Page {
@@ -35,6 +36,7 @@ class ReportInformationMenuPage {
     wkoRecordCount: { selector: "//div[contains(@title,'Record: ') and not(@class='left listview-recordcount ng-binding')]", name: "Work Order Record Count" },
     reportSetDataFilter: { selector: '//div[@aria-label="Set Data Filter"]', name: "Set Data Filter" },
     filterModalInput: { selector: "//div[contains(@class,'modal-content popup-no')]/descendant::input[@class='dx-texteditor-input']", name: "Filter Modal Input" },
+    customFilterDropdown: (field: string) => `//filterpopup[@ng-if='selectedLayoutData.CustomFilter']/descendant::div[contains(@dx-select-box,'${field}')]`,
   }
   getDivByTitle = (title: string): string => `//div[@title='${title}']`;
   getCustomDivByTitle = (title: string): string => `//div[@class='dx-item dx-list-item dx-state-focused']/descendant::div[@title='${title}']`;
@@ -357,6 +359,48 @@ class ReportInformationMenuPage {
     const setDataFilterButton = this.actions.getLocator(this.elementSelectors.reportSetDataFilter.selector);
     await this.actions.waitForElementToBeVisible(setDataFilterButton, this.elementSelectors.reportSetDataFilter.name);
     await this.actions.click(setDataFilterButton, this.elementSelectors.reportSetDataFilter.name);
+  }
+
+  /**
+       * Applies a custom filter with the specified parameters.
+       * @param filterName The name of the filter to apply.
+       * @param operator The operator to use for the filter.
+       * @param value The value to filter by.
+       * @param condition The condition to apply to the filter.
+       */
+  public async applyCustomFilterWithDate(filterName: string, operator: string, value: string, condition: string): Promise<void> {
+    await this.actions.waitForCustomDelay(timeouts.medium);
+    const customFilterFieldInput = this.actions.getLocator(this.elementSelectors.customFilterDropdown('fieldDropDown'));
+    await this.actions.waitForElementToBeVisible(customFilterFieldInput, this.elementSelectors.customFilterDropdown.name);
+    await this.actions.click(customFilterFieldInput, this.elementSelectors.customFilterDropdown.name);
+
+    const customFilterFieldInputLocator = this.actions.getLocator(CommonPageLocators.getColumnCellByTitle(filterName));
+    await this.actions.waitForElementToBeVisible(customFilterFieldInputLocator, `Custom filter field with title ${filterName} is present`);
+    await this.actions.click(customFilterFieldInputLocator, `Clicked on custom filter field: ${filterName}`);
+
+    const customFilterOperatorInputLocator = this.actions.getLocator(this.elementSelectors.customFilterDropdown('operatorDropDown'));
+    await this.actions.waitForElementToBeVisible(customFilterOperatorInputLocator, this.elementSelectors.customFilterDropdown.name);
+    await this.actions.click(customFilterOperatorInputLocator, this.elementSelectors.customFilterDropdown.name);
+
+    const customFilterOperatorItemLocator = this.actions.getLocator(CommonPageLocators.getColumnCellByTitle(operator));
+    await this.actions.waitForElementToBeVisible(customFilterOperatorItemLocator, `Custom filter operator item with title ${operator} is present`);
+    await this.actions.click(customFilterOperatorItemLocator, `Clicked on custom filter operator: ${operator}`);
+
+    const customFilterValueInputLocator = this.actions.getLocator(this.elementSelectors.customFilterDropdown('dateDropDown'));
+    await this.actions.waitForElementToBeVisible(customFilterValueInputLocator, this.elementSelectors.customFilterDropdown.name);
+    await this.actions.click(customFilterValueInputLocator, this.elementSelectors.customFilterDropdown.name);
+
+    const customFilterValueInput = this.actions.getLocator(CommonPageLocators.getValueDivByTitle(value));
+    await this.actions.waitForElementToBeVisible(customFilterValueInput, `Custom filter value input with title ${value} is present`);
+    await this.actions.click(customFilterValueInput, `Clicked on custom filter value: ${value}`);
+
+    const customFilterConditionInputLocator = this.actions.getLocator(this.elementSelectors.customFilterDropdown('conditionDropDown'));
+    await this.actions.waitForElementToBeVisible(customFilterConditionInputLocator, this.elementSelectors.customFilterDropdown.name);
+    await this.actions.click(customFilterConditionInputLocator, this.elementSelectors.customFilterDropdown.name);
+
+    const customFilterConditionItemLocator = this.actions.getLocator(CommonPageLocators.getDivByText(condition));
+    await this.actions.waitForElementToBeVisible(customFilterConditionItemLocator, `Custom filter condition item with title ${condition} is present`);
+    await this.actions.click(customFilterConditionItemLocator, `Clicked on custom filter condition: ${condition}`);
   }
 
   /**
