@@ -32,7 +32,7 @@ class WorkOrderPage {
         maximizeButton: { selector: '[title="Maximize"]', name: "Maximize Button" },
         plusIcon: { selector: "(//i[@class='fa fa-plus'])[1]", name: "Plus Icon" },
         checkIcon: { selector: '(//i[@class="fas fa-check"])[1]', name: "Check Icon" },
-        wkoInput: { selector: "//div[contains(@class,'modal-content popup-no')]//input", name: "WKO Input" },
+        wkoInput: { selector: "//div[contains(@class,'modal-content popup')]/descendant::div[contains(@dx-text-box,'getTextBoxConfig')]/descendant::input", name: "WKO Input" },
         okInput: { selector: "[value='Ok']", name: "Ok Input" },
         hideButton: { selector: '[title="Hide"]', name: "Hide Button" },
         closeWorkOrderButton: { selector: "//button[text()='Close Work Order']", name: "Close Work Order Button" },
@@ -732,13 +732,19 @@ class WorkOrderPage {
         const maximizeButton = this.actions.getLocator(this.elements.maximizeButton.selector);
         await this.actions.waitForElementToBeVisible(maximizeButton, this.elements.maximizeButton.name);
         await this.actions.click(maximizeButton, this.elements.maximizeButton.name);
-        await this.actions.click(this.actions.getLocator(this.elements.plusIcon.selector), this.elements.plusIcon.name);
+        const plusIconLocator = this.actions.getLocator(this.elements.plusIcon.selector);
+        await this.actions.waitForElementToBeVisible(plusIconLocator, this.elements.plusIcon.name);
+        await this.actions.click(plusIconLocator, this.elements.plusIcon.name);
         const saveBtn = this.actions.getLocator(this.elements.checkIcon.selector);
         await this.actions.waitForElementToBeVisible(saveBtn, this.elements.checkIcon.name);
         await this.actions.click(saveBtn, this.elements.checkIcon.name);
         await this.actions.waitForCustomDelay(timeouts.medium);
-        await this.actions.typeText(this.actions.getLocator(this.elements.wkoInput.selector).nth(0), description, `WKO Description: ${description}`);
-        await this.actions.click(this.actions.getLocator(this.elements.okInput.selector), this.elements.okInput.name);
+        const wkoInputLocator = this.actions.getLocator(this.elements.wkoInput.selector);
+        await this.actions.waitForElementToBeVisible(wkoInputLocator, this.elements.wkoInput.name);
+        await this.actions.typeText(wkoInputLocator, description, `WKO Description: ${description}`);
+        const wkoOkButtonLocator = this.actions.getLocator(this.elements.okInput.selector);
+        await this.actions.waitForElementToBeVisible(wkoOkButtonLocator, this.elements.okInput.name);
+        await this.actions.click(wkoOkButtonLocator, this.elements.okInput.name);
         await this.actions.click(sideBarExpanderLocator, CommonPageLocators.sideBarExpander.name);
         const minimizeButton = this.actions.getLocator(this.elements.hideButton.selector);
         await this.actions.click(minimizeButton, this.elements.hideButton.name);

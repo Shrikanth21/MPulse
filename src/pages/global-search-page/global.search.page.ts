@@ -18,8 +18,8 @@ class GlobalSearchPage {
         searchBarInput: { selector: "//input[@aria-autocomplete='inline']", name: 'search bar' },
         getEnterSearchBar: { selector: "//i[@class='fa fa-search']", name: 'click on search option' },
         searchRecordsHeader: (searchGroup: string) => `//p[contains(text(),'${searchGroup}')]`,
-        searchedRequestStatusRows: (recordPage: string) => `//div[@id='search-group']//p[contains(text(),'${recordPage}')]/following::tr[@class='dx-row dx-data-row dx-column-lines dx-selection']//div`
-
+        searchedRequestStatusRows: (recordPage: string) => `//div[@id='search-group']//p[contains(text(),'${recordPage}')]/following::tr[@class='dx-row dx-data-row dx-column-lines dx-selection']//div`,
+        showMoreLink: { selector: '//a[@class="show-more"]', name: 'show more link' }
     }
 
     /**
@@ -58,6 +58,17 @@ class GlobalSearchPage {
      * @param title The title of the maintenance request record.
      */
     public async verifySearchResultWithStatus(searchGroup: string, recordId: string, description: string, status: string, title: string): Promise<void> {
+        const showMoreLinkLocator = this.actions.getLocator(this.elements.showMoreLink.selector);
+        await this.actions.waitForElementToBeVisible(showMoreLinkLocator, this.elements.showMoreLink.name);
+        if (await showMoreLinkLocator.isVisible()) {
+            const count = await showMoreLinkLocator.count();
+            for (let i = 0; i < count; i++) {
+                const button = showMoreLinkLocator.nth(i);
+                await button.scrollIntoViewIfNeeded();
+                await button.waitFor({ state: "visible" });
+                await button.click();
+            }
+        }
         const headerLocator = this.actions.getLocator(this.elements.searchRecordsHeader(searchGroup));
         await this.actions.waitForElementToBeVisible(headerLocator, this.elements.searchRecordsHeader(searchGroup));
         const idText = await CommonPageLocators.getLinkByText(recordId);
