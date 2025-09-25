@@ -68,7 +68,6 @@
     "email_sent_successfully": "Your message was sent successfully",
     "cancellation_reason": "The equipment issue was resolved by the on-site team before the request was processed."
   },
-
   "custom_text": {
     "active_user": "Active Users",
     "invetory_Quant": "Adjust Inventory Quantities",
@@ -109,9 +108,6 @@
     },
     {
       "ddType": "Reasoncode"
-    },
-    {
-      "ddType": "WorkOrderType"
     }
   ],
   "customLanguageDropDown": [
@@ -124,7 +120,6 @@
       "ddValue": "Status"
     }
   ],
-
   "costFields": [
     {
       "id": "OtherCost",
