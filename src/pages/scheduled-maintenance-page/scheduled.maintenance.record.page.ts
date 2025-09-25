@@ -5,6 +5,7 @@ import { workOrderPage } from "../work-order-page/WorkOrderPage.page";
 import { homePageActions } from "../actions/home.page.action/home.page.actions";
 import { commonPageActions } from "../actions/common.page.actions";
 import { CommonPageLocators } from "../locators/common.page.locator";
+import { timeouts } from "../../helper/timeouts-config";
 
 class ScheduledMaintenanceRecordsPage {
     private get currentPage(): Page {
@@ -42,9 +43,12 @@ class ScheduledMaintenanceRecordsPage {
         frequencyIntervalInput: { selector: "//div[@id='FrequencyInterval']", name: "Frequency Interval input" },
         metersListMoreBtn: { selector: "//servicegrid[@id='MetersList']/descendant::div[@class='moreBtn']", name: "Meters List More Button" },
         addNewRowButton: { selector: "//li[@ng-click='insertNewRow()']", name: "Add New Row button" },
-        serviceGridSelectedRow: { selector: '//div[@id="serviceGridContainer"]/descendant::tr[@class=\'dx-row dx-data-row dx-column-lines dx-selection\']/child::td', name: "Service Grid Selected Row" },
+        serviceGridSelectedRow: { selector: '//div[@id="serviceGridContainer"]/descendant::tr[contains(@class,"dx-row dx-data-row dx-column-lines")]/child::td', name: "Service Grid Selected Row" },
+        serviceGridInput: { selector: '//div[@id="serviceGridContainer"]/descendant::input[@class="dx-texteditor-input"]', name: "Service Grid Input" },
         saveServiceGridButton: { selector: '//li[@ng-click="saveEdit()"]', name: "Save Edit button" },
         serviceGridDropdownIcon: { selector: "//div[@class='dx-datagrid-content']//div[@class='dx-dropdowneditor-icon']", name: "Service Grid Dropdown Icon" },
+        assetListLink: { selector: '//datagrid[@id="AssetList"]/descendant::a[@class="dx-link ng-scope"]', name: "Asset List Link" },
+        removeRowButton: { selector: '//li[@ng-click="removeRow()"]', name: "Remove Row button" },
     }
 
     /**
@@ -249,10 +253,9 @@ class ScheduledMaintenanceRecordsPage {
             }
             let selectedTitle = newTitles[0];
             if (selectedTitle === '' && newTitles.length > 1) {
-                selectedTitle = newTitles[1]; // take the next valid option
+                selectedTitle = newTitles[1];
             }
-
-            const selectedLocator = this.actions.getLocator(CommonPageLocators.getDivById(selectedTitle));
+            const selectedLocator = this.actions.getLocator(CommonPageLocators.getDivByTitle(selectedTitle));
             await selectedLocator.waitFor({ state: 'visible', timeout: 2000 });
             await this.actions.click(selectedLocator, `Selecting "${selectedTitle}" from ${ddType}`);
         }
@@ -328,8 +331,14 @@ class ScheduledMaintenanceRecordsPage {
     }
 
     /**
-     * Selects the first value from each of the three dropdowns in the service grid row and types '10' into the selected row.
+     * Click on the Asset List link to navigate to the Asset List page.
      */
+    public async clickOnAssetListLink(): Promise<void> {
+        const assetListLinkEl = await this.actions.getLocator(this.elementSelectors.assetListLink.selector);
+        await this.actions.waitForElementToBeVisible(assetListLinkEl, this.elementSelectors.assetListLink.name);
+        await this.actions.click(assetListLinkEl, this.elementSelectors.assetListLink.name);
+    }
+
     /**
      * Selects the first available value from each dropdown in the service grid row by index.
      * Skips duplicate values and "Edit list values".
@@ -344,43 +353,54 @@ class ScheduledMaintenanceRecordsPage {
             const clickDropdownLocator = this.actions.getLocator(this.elementSelectors.serviceGridDropdownIcon.selector);
             await this.actions.waitForElementToBeVisible(clickDropdownLocator, this.elementSelectors.serviceGridDropdownIcon.name);
             await this.actions.click(clickDropdownLocator, this.elementSelectors.serviceGridDropdownIcon.name);
-            const optionsLocator = this.actions.getLocator('//div[@title]');
+            const optionsLocator = this.actions.getLocator('//div[contains(@class, "dx-item-content dx-list-item-content") and text()]');
             await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
             const newTitles: string[] = [];
             const count = await optionsLocator.count();
             for (let i = 0; i < count; i++) {
                 const el = optionsLocator.nth(i);
-                const title = await el.getAttribute('title');
-                if (title && title.trim() && title !== 'Edit list values' && !seenTitles.has(title.trim())) {
+                let title = (await el.getAttribute('title'))?.trim();
+                if (!title || title.length === 0) {
+                    title = (await el.textContent())?.trim() || '';
+                }
+                if (title && title !== 'Edit list values' && !seenTitles.has(title)) {
                     const isVisible = await el.isVisible();
                     if (isVisible) {
-                        const cleanTitle = title.trim();
-                        newTitles.push(cleanTitle);
-                        seenTitles.add(cleanTitle);
+                        newTitles.push(title);
+                        seenTitles.add(title);
                     }
                 }
             }
-            if (newTitles.length === 0) {
-                await this.actions.waitForNewDropdownOptionsToLoad(optionsLocator, 3000);
-                console.warn(`No valid options found in the dropdown: ${indices}. Leaving it empty.`);
+            let selectedTitle: string | undefined;
+            if (newTitles.length > 1 && newTitles[0] === '') {
+                selectedTitle = newTitles[1];
+            } else if (newTitles.length > 0) {
+                selectedTitle = newTitles[0];
+            }
+            if (!selectedTitle) {
+                console.warn(`No valid options found in the dropdown: ${idx}. Leaving it empty.`);
                 continue;
             }
-            const selectedTitle = newTitles[0];
-            const selectedLocator = await this.actions.getLocator(CommonPageLocators.getDivByTitle(selectedTitle));
-            await selectedLocator.hover();
+            const selectedLocator = this.actions.getLocator(CommonPageLocators.getDivByText(selectedTitle));
             await selectedLocator.waitFor({ state: 'visible', timeout: 2000 });
-            await selectedLocator.scrollIntoViewIfNeeded();
-            await this.actions.click(selectedLocator, `Selecting "${selectedTitle}" from ${indices}`);
+            await this.actions.click(selectedLocator, `Selecting "${selectedTitle}" from dropdown at index ${idx}`);
         }
     }
 
+    /**
+     * Enters multiple values into the service grid inputs.
+     * @param values Object mapping input indices to values
+     */
     public async enterMultipleServiceGridInputsValues(
         values: { [key: number]: string }
     ): Promise<void> {
         for (const [index, value] of Object.entries(values)) {
-            const inputLocator = this.actions.getLocator(this.elementSelectors.serviceGridSelectedRow.selector).nth(Number(index));
-            await this.actions.waitForElementToBeVisible(inputLocator, `Input at index ${index}`);
-            await this.actions.clearAndTypeText(inputLocator, value, `Input at index ${index}`);
+            const locator = this.actions.getLocator(this.elementSelectors.serviceGridSelectedRow.selector).nth(Number(index));
+            await this.actions.waitForElementToBeVisible(locator, `Clicking input at index ${index}`);
+            await this.actions.click(locator, `Clicking input at index ${index}`);
+            const inputLocator = this.actions.getLocator(this.elementSelectors.serviceGridInput.selector);
+            await this.actions.waitForElementToBeVisible(inputLocator, this.elementSelectors.serviceGridInput.name);
+            await this.actions.clearAndTypeText(inputLocator, value, `Typing into input at index ${index}`);
         }
     }
 
@@ -407,9 +427,8 @@ class ScheduledMaintenanceRecordsPage {
     }
 
     /**
-     * 
+     * Links inventory items to an asset in the Scheduled Maintenance Record.
      * @param tabName The name of the tab to click.
-     * Links inventory items to the asset by adding meters in the Meters List service grid.
      */
     public async linkInventoryToAsset(
         tabName: string
@@ -417,6 +436,14 @@ class ScheduledMaintenanceRecordsPage {
         await commonPageActions.clickTabByText(tabName);
         const metersListMoreBtnEl = await this.actions.getLocator(this.elementSelectors.metersListMoreBtn.selector);
         await this.actions.waitForElementToBeVisible(metersListMoreBtnEl, this.elementSelectors.metersListMoreBtn.name);
+        await this.actions.mouseHoverAndClick(metersListMoreBtnEl, this.elementSelectors.metersListMoreBtn.name);
+        const isVisible = await this.actions.getLocator(this.elementSelectors.removeRowButton.selector).isVisible();
+        if (isVisible) {
+            const removeRowButtonEl = await this.actions.getLocator(this.elementSelectors.removeRowButton.selector);
+            await this.actions.waitForElementToBeVisible(removeRowButtonEl, this.elementSelectors.removeRowButton.name);
+            await this.actions.click(removeRowButtonEl, this.elementSelectors.removeRowButton.name);
+            await commonPageActions.clickSpanByText('Yes');
+        }
         await this.actions.mouseHoverAndClick(metersListMoreBtnEl, this.elementSelectors.metersListMoreBtn.name);
         const addNewRowButtonEl = await this.actions.getLocator(this.elementSelectors.addNewRowButton.selector);
         await this.actions.waitForElementToBeVisible(addNewRowButtonEl, this.elementSelectors.addNewRowButton.name);
@@ -426,6 +453,9 @@ class ScheduledMaintenanceRecordsPage {
         const saveServiceGridButtonEl = await this.actions.getLocator(this.elementSelectors.saveServiceGridButton.selector);
         await this.actions.waitForElementToBeVisible(saveServiceGridButtonEl, this.elementSelectors.saveServiceGridButton.name);
         await this.actions.click(saveServiceGridButtonEl, this.elementSelectors.saveServiceGridButton.name);
+        await commonPageActions.clickSaveButton();
+        await commonPageActions.clickLinkByTitle('Scheduled Maintenance Records');
+        await this.actions.waitForCustomDelay(timeouts.small);
     }
 }
 

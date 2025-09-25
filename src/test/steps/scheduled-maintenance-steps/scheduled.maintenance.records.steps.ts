@@ -93,6 +93,50 @@ When(/^the user links assets, personnel, and inventory to the Scheduled Maintena
     await commonPageActions.clickSaveButton();
 });
 
+When(/^the user links assets, personnel, and inventory to the meter based Scheduled Maintenance Record$/, async function () {
+    await commonPageActions.clickTabByText(testData.element_text.wo_info_tab_text);
+    await workOrderPage.linkAssetToTask(
+        testData.wo_info.assetAssignedToTask,
+        testData.icons.asset_link_icon,
+        testData.element_text.replace_button
+    );
+
+    await workOrderPage.linkPersonnelToAsset(
+        testData.wo_info.personnelAssignedToAsset,
+        testData.icons.personnel_link_icon,
+        testData.element_text.link_button
+    );
+
+    await workOrderPage.linkInventoryToAsset(
+        testData.wo_info.inventoryAssignedToAsset,
+        testData.icons.inventory_link_icon,
+        testData.element_text.link_button,
+        testData.element_text.input_ok_button
+    );
+
+    await workOrderPage.setEmployeeActualHours(
+        testData.wo_info.personnelAssignedToAsset,
+        testData.icons.personnel_eye_icon,
+        testData.element_text.timeSheetDetails_text,
+        testData.icons.plusIcon_title,
+        testData.element_text.hoursField_text,
+        testData.element_text.hours,
+        testData.icons.crossIcon_title
+    );
+
+    await commonPageActions.clickSaveButton();
+
+    await scheduledMaintenanceRecordsPage.clickOnAssetListLink();
+
+    await scheduledMaintenanceRecordsPage.fillServicePreventiveMaintenanceAndUsageInformation(
+        testData.element_text.service_tab_text,
+        testData.usage_info.anticipatedUseValue,
+        testData.usage_info.frequencyIntervalValue
+    );
+
+    await scheduledMaintenanceRecordsPage.linkInventoryToAsset(testData.element_text.service_tab_text);
+});
+
 When(/^the user sets a Floating Schedule and specifies the last done date$/, async function () {
     await scheduledMaintenanceRecordsPage.setFloatingSchedule(
         testData.element_text.scheduled_tab_text,
@@ -189,20 +233,4 @@ Then(/^the Scheduled Maintenance Record should be deleted successfully$/, async 
 Then(/^the user should not see the deleted Scheduled Maintenance Record in the search results$/, async function () {
     await deleteSMRPage.searchDeletedSmr(currentRecord);
     await deleteWOPage.verifyNoMatchesFoundMessage();
-});
-
-When(/^the user fills Service Preventive Maintenance and Usage Information$/, async function () {
-    await scheduledMaintenanceRecordsPage.fillServicePreventiveMaintenanceAndUsageInformation(
-        testData.element_text.service_tab_text,
-        testData.usage_info.anticipatedUseValue,
-        testData.usage_info.frequencyIntervalValue
-    );
-});
-
-When(/^the user links the inventory to the asset$/, async function () {
-    await scheduledMaintenanceRecordsPage.linkInventoryToAsset(testData.element_text.service_tab_text);
-});
-
-Then(/^the newly created asset should be visible in the list$/, async function () {
-    //await scheduledMaintenanceRecordsPage.verifyNewlyCreatedAssetVisible();
 });

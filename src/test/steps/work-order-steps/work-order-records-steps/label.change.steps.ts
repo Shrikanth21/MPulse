@@ -1,6 +1,6 @@
 import { Then, When } from "@cucumber/cucumber";
-import testData from "../../../data/testData.json";
-import { labelChangePage } from "../../../pages/work-order-page/label.change.page";
+import testData from "../../../../data/testData.json";
+import { labelChangePage } from "../../../../pages/work-order-page/label.change.page";
 
 When(/^the user navigates to the customization page and selects language options$/, async () => {
     await labelChangePage.navigateToManagementToolCustomizationPage(

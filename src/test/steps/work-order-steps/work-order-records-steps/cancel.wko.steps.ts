@@ -1,9 +1,9 @@
 import { When, Then } from '@cucumber/cucumber';
-import testData from '../../../data/cancel.wko.json';
-import { WebActions } from '../../../base/web.action.util';
-import { workOrderPage } from '../../../pages/work-order-page/WorkOrderPage.page';
-import { getFutureDateFormatted, getFutureDay } from '../../../helper/date/get.future.date';
-import { timeouts } from '../../../helper/timeouts-config';
+import testData from '../../../../data/cancel.wko.json';
+import { WebActions } from '../../../../base/web.action.util';
+import { workOrderPage } from '../../../../pages/work-order-page/WorkOrderPage.page';
+import { getFutureDateFormatted, getFutureDay } from '../../../../helper/date/get.future.date';
+import { timeouts } from '../../../../helper/timeouts-config';
 
 let actions: WebActions;
 

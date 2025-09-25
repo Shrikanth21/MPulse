@@ -1,5 +1,5 @@
 import { Then, When } from "@cucumber/cucumber";
-import { gridHeaderSearchFiltersPage } from "../../../pages/work-order-page/grid.header.searchfilters.page";
+import { gridHeaderSearchFiltersPage } from "../../../../pages/work-order-page/grid.header.searchfilters.page";
 
 let beforeFilteredText: string;
 let columnName: string = "ID";

@@ -1,8 +1,8 @@
 import { Then, When } from "@cucumber/cucumber";
-import { searchUpdateWorkOrderPage } from "../../../pages/work-order-page/search.update.wko.page";
-import { updatedDescription } from "../../../helper/get.different.description";
-import { WebActions } from "../../../base/web.action.util";
-import { timeouts } from "../../../helper/timeouts-config";
+import { searchUpdateWorkOrderPage } from "../../../../pages/work-order-page/search.update.wko.page";
+import { updatedDescription } from "../../../../helper/get.different.description";
+import { WebActions } from "../../../../base/web.action.util";
+import { timeouts } from "../../../../helper/timeouts-config";
 
 let workOrderId: string;
 let workOrderDescription: string;

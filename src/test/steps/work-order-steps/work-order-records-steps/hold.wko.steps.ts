@@ -1,7 +1,7 @@
 import { When, Then } from "@cucumber/cucumber";
-import testData from "../../../data/hold.wko.json";
-import { workOrderPage } from "../../../pages/work-order-page/WorkOrderPage.page";
-import { getFutureDateFormatted } from "../../../helper/date/get.future.date";
+import testData from "../../../../data/hold.wko.json";
+import { workOrderPage } from "../../../../pages/work-order-page/WorkOrderPage.page";
+import { getFutureDateFormatted } from "../../../../helper/date/get.future.date";
 
 When("the user hold the created Work Order record", async function () {
   await workOrderPage.clickButtonByText(testData.element_text.general_tab_text);

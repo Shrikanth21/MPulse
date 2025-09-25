@@ -1,6 +1,6 @@
 import { Then, When } from "@cucumber/cucumber";
-import { omitAndLookupPage } from "../../../pages/work-order-page/omit.lookup.page";
-import { gridHeaderSearchFiltersPage } from "../../../pages/work-order-page/grid.header.searchfilters.page";
+import { omitAndLookupPage } from "../../../../pages/work-order-page/omit.lookup.page";
+import { gridHeaderSearchFiltersPage } from "../../../../pages/work-order-page/grid.header.searchfilters.page";
 
 let beforeFilteredText: string;
 let coulmnName: string = "ID";
