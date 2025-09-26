@@ -17,6 +17,7 @@
     "report-widget-e2e-test": "cucumber-js features/report-widget/Report.Widget.feature --tags @sanityIm & npx ts-node src/helper/index.ts",
     "report-print-information-e2e-test": "cucumber-js features/reports-widget/print-information-menu/Report.Print.Information.Menu.feature --tags @sanityReport & npx ts-node src/helper/index.ts",
     "calendar-e2e-test": "cucumber-js features/calendar/Calendar.Create.feature --tags @sanityCalendar & npx ts-node src/helper/index.ts",
+    "task-checklist-e2e-test": "cucumber-js features/work-order/task-checklists/Task.Checklists.With.WKO.feature --tags @sanityTaskChecklists & npx ts-node src/helper/index.ts",
     "div1": "-------------------------Work Order Records-------------------------------------------------",
     "wko-test": "cucumber-js features/wko.feature --tags @poc & npx ts-node src/helper/index.ts",
     "wko-close-test": "cucumber-js features/close.wko.feature --tags @closeWko & npx ts-node src/helper/index.ts",
@@ -77,7 +78,9 @@
     "report-print-information-custom-layout-test": "cucumber-js features/reports-widget/print-information-menu/Report.Print.Information.Menu.feature --tags @reportCustomLayout & npx ts-node src/helper/index.ts",
     "div10": "-------------------------Calendar-------------------------------------------------",
     "calendar-create-test": "cucumber-js features/calendar/Calendar.Create.feature --tags @calendarCreate & npx ts-node src/helper/index.ts",
-    "div11": "-------------------------API POC-------------------------------------------------",
+    "div11": "-------------------------Task Checklists-------------------------------------------------",
+    "task-checklist-with-wko-test": "cucumber-js features/work-order/task-checklists/Task.Checklists.With.WKO.feature --tags @taskChecklistsWKO & npx ts-node src/helper/index.ts",
+    "div12": "-------------------------API POC-------------------------------------------------",
     "api-poc-test": "cucumber-js features/API-POC/login-search-data.feature --tags @api & npx ts-node src/helper/index.ts"
   },
   "keywords": [

@@ -6,6 +6,7 @@ Feature: Report - List View - Print Information Menu
     And the user selects a specific database
     When the user navigates to the Work Order Records page
     And the user maximizes the Work Order Records list view display
+    And the user choses the default layout from the dropdown
     And the user clicks the list view print button
     Then the user should see the print information menu
     And the user minimizes the list view display

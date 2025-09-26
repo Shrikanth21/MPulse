@@ -3,6 +3,7 @@ import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
 import { CommonPageLocators } from "../locators/common.page.locator";
 import { timeouts } from "../../helper/timeouts-config";
+import { HomePageLocators } from "../locators/home.page.locator/home.page.locators";
 
 
 class CommonPageActions {
@@ -159,6 +160,14 @@ class CommonPageActions {
         const closeButtonLocator = this.actions.getLocator(CommonPageLocators.closeButton.selector);
         await this.actions.waitForElementToBeVisible(closeButtonLocator, CommonPageLocators.closeButton.name);
         await this.actions.click(closeButtonLocator, CommonPageLocators.closeButton.name);
+    }
+
+    /**
+         * Clicks the side menu icon to open the side menu.
+         */
+    public async clickSideMenuIcon(): Promise<void> {
+        const locator = this.actions.getLocator(HomePageLocators.sideMenuIcon.selector);
+        await this.actions.click(locator, HomePageLocators.sideMenuIcon.name);
     }
 }
 

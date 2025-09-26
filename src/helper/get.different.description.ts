@@ -22,3 +22,7 @@ export const generatedSMRMeterBasedDescription = generateDescription('SMR Meter 
 export const generatedIMDescription = generateDescription('Information Menu', '_Automation');
 export const generatedReportTitle = generateDescription('Report Title', '_Automation');
 export const generatedWorkOrderCalendarTitle = generateDescription('Work Order Calendar', '_Automation');
+export const generatedTaskChecklistName = generateDescription('Task Checklist', '_Automation');
+export const generatedCheckBoxName = generateDescription('Check Box', '_Automation');
+export const generatedMaintenanceTaskRecordDescription = generateDescription('Maintenance Task Record', '_Automation');
+export const generateWorkOrderWithTaskDescription = generateDescription('WKO Task Checklist', '_Automation');
