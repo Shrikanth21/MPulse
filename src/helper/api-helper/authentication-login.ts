@@ -614,6 +614,41 @@ export class ApiHelper {
     }
 
     /**
+     * Logs out from the API
+     */
+    public async logout(): Promise<void> {
+        const response = await this.request.post(`${process.env.BASEURL}/Authentication/Logout`, {
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "*/*",
+                "Accept-Encoding": "identity",
+                Language: "en-GB",
+                Token: this.token!,
+                "User-Agent": process.env.USERAGENT!,
+                Connection: "keep-alive",
+                Origin: process.env.ORIGIN!,
+                Referer: process.env.REFERER!,
+                Q1NSRlRPS0VO: process.env.Q1NSRlRPS0VO!,
+                SubModuleKey: "4",
+                ClientTimeZoneOffSet: process.env.ClientTimeZoneOffSet!,
+                ModuleHierarchy: JSON.stringify({ "ModuleKey": 2, "SubModuleKey": 4, "SubSectionKey": 0 }),
+                SubModuleName: process.env.SubModuleName!,
+            },
+            data: {
+                "SubModuleName": process.env.SubModuleName!,
+                "SubModuleKey": "4",
+                "Token": this.token!,
+                "Language": "en-GB",
+                "ClientTimeZoneOffSet": process.env.ClientTimeZoneOffSet!,
+                "CurrentClientDateTime": new Date().toISOString()
+            }
+        });
+
+        expect(response.ok(), `Logout API failed with status ${response.status()}`).toBeTruthy();
+        expect(response.status()).toBe(200);
+    }
+
+    /**
      * Get record details based on filter options
      * @param filterOption The filter option to apply
      * @param filterValue The value to filter by
@@ -629,6 +664,7 @@ export class ApiHelper {
         const recordIds = loadDataResponse.ListViewData
             .filter((item: any) => item.RecordId)
             .map((item: any) => item.RecordId);
+        await this.logout();
         return recordIds;
     }
 }

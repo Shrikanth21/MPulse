@@ -14,6 +14,7 @@ import { commonPageActions } from "../../../pages/actions/common.page.actions";
 let createdSmrId: string;
 let currentRecord: string;
 let smrType: string;
+let smrNextDate: string;
 
 When(/^the user navigates to the Scheduled Maintenance Records page$/, async function () {
     await requisitionRecordsPage.navigateToRequisitionRecordsPage(
@@ -214,7 +215,22 @@ When(/^the user sets a Meter Based Schedule and selects a valid asset$/, async f
         testData.floating_type.meter_based,
         { ddType: testData.meter_based_dropdown_id.map((item: any) => item.ddType) }
     );
+});
+
+When(/^the user sets Units between Maintenance and next Schedule date$/, async function () {
+    smrNextDate = await scheduledMaintenanceRecordsPage.getSMRNextDateValue();
+    await scheduledMaintenanceRecordsPage.setUnitsBetweenMaintenance(
+        testData.element_text.units_between_maintenance
+    );
     await commonPageActions.clickSaveButton();
+});
+
+Then(/^the user should see that the Next Date is calculated based on the meter reading and units between maintenance$/, async function () {
+    await scheduledMaintenanceRecordsPage.verifySMRNextDateCalculated(
+        smrNextDate,
+        testData.usage_info.anticipatedUseValue,
+        testData.element_text.units_between_maintenance
+    );
 });
 
 Then(/^the Meter Based Schedule should be successfully applied to the Scheduled Maintenance Record$/, async function () {

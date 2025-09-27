@@ -21,6 +21,7 @@ export const TaskChecklistsPageLocators: Readonly<{
     readonly taskChecklistCheckbox: LocatorDefinition;
     readonly saveEditTaskChecklistButton: LocatorDefinition;
     readonly closeTaskListPopUpButton: LocatorDefinition;
+    readonly wkoCloseWarningDialogMessage: LocatorDefinition;
 
 }> = {
     addNewRecordButton: { selector: '//li[@ng-click="addNewRecord()"]', name: "Add New Record Button" },
@@ -39,5 +40,6 @@ export const TaskChecklistsPageLocators: Readonly<{
     editTaskChecklistButton: { selector: '//datagrid[@id="TaskChecklist0"]/descendant::li[@ng-click="showEditMode()"]', name: 'Edit Task Checklist Button' },
     taskChecklistCheckbox: { selector: '//datagrid[@id="TaskChecklist0"]/descendant::span[@class="dx-checkbox-icon"]', name: 'Task Checklist Checkbox' },
     saveEditTaskChecklistButton: { selector: '//datagrid[@id="TaskChecklist0"]/descendant::li[@ng-click="saveEditMode()"]', name: 'Save Edit Task Checklist Button' },
-    closeTaskListPopUpButton: { selector: '//button[@title="Click here to close"]', name: 'Close Task List Pop Up Button' }
+    closeTaskListPopUpButton: { selector: '//button[@title="Click here to close"]', name: 'Close Task List Pop Up Button' },
+    wkoCloseWarningDialogMessage: { selector: "//div[@class='dx-dialog-message']", name: "Dialog Message" }
 };

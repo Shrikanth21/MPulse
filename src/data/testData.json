@@ -117,7 +117,8 @@
     "quantity_ordered_text": "10.00",
     "quantity_received_text": "5.00",
     "updated_stock_quantity": "4.00",
-    "hours": "2"
+    "hours": "2",
+    "units_between_maintenance": "200"
   },
   "CheckListFields_data": {
     "checkList_second_field": "Curr",

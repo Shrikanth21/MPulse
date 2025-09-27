@@ -14,3 +14,4 @@ Feature: Calendar - Create a New Calendar - verify record is displaying Correctl
     When the user clicks on the create calendar filter
     And the user navigates back to the calendar view
     Then the user should see the calendar record details displayed correctly
+    And the user deletes the created calendar record

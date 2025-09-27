@@ -14,6 +14,8 @@ Feature: Task Checklists with WKO
     And the user creates a new Work Order with created Maintenance Task
     Then the Work Order status should be Open
     And the user verifies that the Maintenance Task Record is present in the Work Order
-    And the user checks the created task checklist in the Work Order
-    When the user closes the created Work Order record with task checklist
+    When the user closes the work order without checking the task checklist
+    Then the user should see a warning message indicating that there are incomplete tasks
+    When the user checks the created task checklist in the Work Order
+    And the user closes the created Work Order record with task checklist
     Then the Work Order record should be closed successfully

@@ -49,6 +49,8 @@ class ScheduledMaintenanceRecordsPage {
         serviceGridDropdownIcon: { selector: "//div[@class='dx-datagrid-content']//div[@class='dx-dropdowneditor-icon']", name: "Service Grid Dropdown Icon" },
         assetListLink: { selector: '//datagrid[@id="AssetList"]/descendant::a[@class="dx-link ng-scope"]', name: "Asset List Link" },
         removeRowButton: { selector: '//li[@ng-click="removeRow()"]', name: "Remove Row button" },
+        configUnitsBetweenMaintenanceTextBox: { selector: '//div[@dx-text-box="configUnitsBetweenMaintenanceTextBox"]/descendant::input', name: "Config Units Between Maintenance Text Box" },
+        smrNextDate: { selector: '//span[@id="SMRNextDate"]', name: "SMR Next Date" },
     }
 
     /**
@@ -78,6 +80,49 @@ class ScheduledMaintenanceRecordsPage {
         if (!(await this.actions.isCheckboxChecked(configMeterBasedCheckBoxElement, this.elementSelectors.configMeterBasedCheckBox.name))) {
             await this.actions.click(configMeterBasedCheckBoxElement, this.elementSelectors.configMeterBasedCheckBox.name);
         }
+    }
+
+    /**
+     * Gets the Scheduled Date value.
+     * @returns The Scheduled Date value as a string.
+     */
+    public async getSMRNextDateValue(): Promise<string> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
+        const smrNextDateElement = await this.actions.getLocator(this.elementSelectors.smrNextDate.selector);
+        await this.actions.waitForElementToBeVisible(smrNextDateElement, this.elementSelectors.smrNextDate.name);
+        return await this.actions.getText(smrNextDateElement, this.elementSelectors.smrNextDate.name);
+    }
+
+    /**
+     * Enters a value in the Units Between Maintenance text box.
+     * @param value Value to enter in the Units Between Maintenance text box
+     */
+    public async setUnitsBetweenMaintenance(value: string): Promise<void> {
+        const unitsBetweenMaintenanceElement = await this.actions.getLocator(this.elementSelectors.configUnitsBetweenMaintenanceTextBox.selector);
+        await this.actions.waitForElementToBeVisible(unitsBetweenMaintenanceElement, this.elementSelectors.configUnitsBetweenMaintenanceTextBox.name);
+        await this.actions.typeText(unitsBetweenMaintenanceElement, value, this.elementSelectors.configUnitsBetweenMaintenanceTextBox.name);
+    }
+
+    /**
+     * Verifies that the Next Date is calculated based on the meter reading and units between maintenance.
+     * @param previousNextDate Previous Next Date value
+     * @param anticipatedUseStr Anticipated Use value as string
+     * @param unitsBetweenMaintenance Units Between Maintenance value as string
+     */
+    public async verifySMRNextDateCalculated(previousNextDate: string, anticipatedUseStr: string, unitsBetweenMaintenance: string): Promise<void> {
+        const currentNextDate = await this.getSMRNextDateValue();
+        const prevDate = new Date(previousNextDate);
+        const anticipatedUse = parseFloat(anticipatedUseStr);
+        const units = parseInt(unitsBetweenMaintenance, 10);
+        const daysToAdd = units / anticipatedUse;
+        const expectedNextDate = new Date(prevDate);
+        expectedNextDate.setDate(expectedNextDate.getDate() + daysToAdd);
+        const actualNextDate = new Date(currentNextDate);
+        const formattedExpected = expectedNextDate.toLocaleDateString();
+        const formattedActual = actualNextDate.toLocaleDateString();
+        await this.actions.assertToBe(formattedActual, formattedExpected, 
+            `Verifying that the Next Date is correctly calculated based on the meter reading and units between maintenance. Expected: ${formattedExpected},
+             Actual: ${formattedActual}`);
     }
 
     /**
@@ -261,7 +306,6 @@ class ScheduledMaintenanceRecordsPage {
         }
     }
 
-
     /**
      * Sets the meter-based schedule.
      * @param tabName The name of the tab to click.
@@ -274,6 +318,10 @@ class ScheduledMaintenanceRecordsPage {
     ): Promise<void> {
         await commonPageActions.clickTabByText(tabName);
         await commonPageActions.clickEditButton();
+        const configTimeBasedCheckBoxElement = await this.actions.getLocator(this.elementSelectors.configTimeBasedCheckBox.selector);
+        if ((await this.actions.isCheckboxChecked(configTimeBasedCheckBoxElement, this.elementSelectors.configTimeBasedCheckBox.name))) {
+            await this.actions.click(configTimeBasedCheckBoxElement, this.elementSelectors.configTimeBasedCheckBox.name);
+        }
         await commonPageActions.clickLinkByText(meterBasedDropdownId);
         await this.checkConfigMeterBasedCheckbox();
         await this.selectAssetDropdownValues(dropdown.ddType);

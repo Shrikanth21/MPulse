@@ -30,6 +30,7 @@ class CalendarPage {
         saveCalendarButton: { selector: "//li[@class='ng-scope']/descendant::i[@class='fas fa-check']", name: "Save Calendar Button" },
         calendarColorInput: { selector: "//input[contains(@class,'calendar-color ng-pristine')]", name: "Calendar Color Input" },
         calendarViewIcon: { selector: "//div[@class='calendarBody ng-scope']/descendant::i[@class='far fa-calendar-alt']", name: "Calendar View Icon" },
+        deleteCalendarButton: { selector: '//li[@ng-click="clickedDeleteButton()"]', name: "Delete Calendar Button" },
     }
 
     /**
@@ -176,15 +177,13 @@ class CalendarPage {
     /**
      * Verify the details of a calendar record.
      * @param expectedRecords The expected records.
-     * @param dashboardTab The dashboard tab to navigate to.
      */
-    public async verifyCalendarRecordDetails(expectedRecords: string, dashboardTab: string): Promise<void> {
+    public async verifyCalendarRecordDetails(expectedRecords: string): Promise<void> {
         const eventDateLocator = this.actions.getLocator(this.elementSelectors.eventByDateAndTitle(expectedRecords));
         await this.actions.waitForElementToBeVisible(await eventDateLocator, `Calendar Event: ${expectedRecords}`);
         const actualRecord = await eventDateLocator.innerText();
         console.log("Actual Record:", actualRecord);
         await this.actions.assertEqual(actualRecord, expectedRecords, "Calendar Event Title");
-        await commonPageActions.clickLinkByTitle(dashboardTab);
     }
 
     /**
@@ -205,6 +204,20 @@ class CalendarPage {
         await this.actions.waitForElementToBeVisible(calendarViewLocator, `Calendar View: ${calendarView}`);
         const isVisible = await calendarViewLocator.isVisible();
         await this.actions.assertTrue(isVisible, `Calendar View: ${calendarView}`);
+    }
+
+    /**
+     * Delete the created calendar record.
+     * @param yesSpanText The text of the "Yes" span to click.
+     * @param dashboardTab The title of the dashboard tab to navigate to.
+     */
+    public async deleteCalendarRecord(yesSpanText: string, dashboardTab: string): Promise<void> {
+        await this.clickOnCalendarSettingsLink();
+        const deleteButton = await this.actions.getVisibleLocator(this.elementSelectors.deleteCalendarButton.selector);
+        await this.actions.waitForElementToBeVisible(deleteButton, this.elementSelectors.deleteCalendarButton.name);
+        await this.actions.click(deleteButton, this.elementSelectors.deleteCalendarButton.name);
+        await commonPageActions.clickSpanByText(yesSpanText);
+        await commonPageActions.clickLinkByTitle(dashboardTab);
     }
 }
 

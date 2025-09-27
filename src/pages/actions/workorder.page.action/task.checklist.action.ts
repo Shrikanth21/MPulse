@@ -250,6 +250,30 @@ class TaskChecklistAction {
         await commonPageActions.clickLinkByTitle('Close Work Order');
         await commonPageActions.clickSpanByText('Yes');
     }
+
+    /**
+     * Closes the work order without checking the task checklist.
+     */
+    public async closeWorkOrderWithoutCheckingTaskChecklist(): Promise<void> {
+        const closeWorkOrderButtonLocator = this.actions.getLocator(MaintenanceTaskRecordsPageLocators.dropdownToggleRight.selector);
+        await this.actions.waitForElementToBeVisible(closeWorkOrderButtonLocator, MaintenanceTaskRecordsPageLocators.dropdownToggleRight.name);
+        await this.actions.click(closeWorkOrderButtonLocator, MaintenanceTaskRecordsPageLocators.dropdownToggleRight.name);
+        await commonPageActions.clickLinkByTitle('Close Work Order');
+    }
+
+    /**
+     * Verifies that a warning message is displayed when there are incomplete tasks in the task checklist.
+     */
+    public async verifyIncompleteTasksWarningMessage(): Promise<void> {
+        const warningMessageLocator = this.actions.getLocator(TaskChecklistsPageLocators.wkoCloseWarningDialogMessage.selector);
+        await this.actions.waitForElementToBeVisible(warningMessageLocator, TaskChecklistsPageLocators.wkoCloseWarningDialogMessage.name);
+        const messageText = await this.actions.getText(warningMessageLocator, TaskChecklistsPageLocators.wkoCloseWarningDialogMessage.name);
+        await this.actions.assertTrue(
+            messageText.includes('To close the work order,  the task checklist should be completed in the Task details popup.'),
+            `Warning message is not as expected. Actual message: ${messageText}`
+        );
+        await commonPageActions.clickSpanByText('OK');
+    }
 }
 
 export const taskChecklistAction = new TaskChecklistAction();

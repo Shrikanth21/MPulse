@@ -765,6 +765,23 @@ export class WebActions {
   }
 
   /**
+   * Asserts that the actual value is strictly equal to the expected value using toBe().
+   * @param actualValue The actual value to check.
+   * @param expectedValue The expected value to compare against.
+   * @param errorMessage Optional error message for the assertion failure.
+   */
+  public async assertToBe(actualValue: any, expectedValue: any, errorMessage?: string): Promise<void> {
+    try {
+      await this.waitForDelay();
+      await expect(actualValue, errorMessage).toBe(expectedValue);
+      logger.info(`Assertion passed: Actual value "${actualValue}" is strictly equal to expected value "${expectedValue}"`);
+    } catch (error) {
+      logger.error(`Failed to assert toBe | Error: ${error}`);
+      throw error;
+    }
+  }
+
+  /**
  * Checks if a checkbox is checked based on the 'aria-checked' attribute.
  * @param locator The Playwright locator for the checkbox element.
  * @param elementDescription A description of the checkbox for logging.

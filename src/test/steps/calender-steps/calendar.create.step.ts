@@ -41,5 +41,9 @@ When(/^the user navigates back to the calendar view$/, async () => {
 });
 
 Then(/^the user should see the calendar record details displayed correctly$/, async () => {
-    await calendarPage.verifyCalendarRecordDetails(currentEventTitle, filterOptinData.maintenanceAdvisor.dashboard_title);
+    await calendarPage.verifyCalendarRecordDetails(currentEventTitle);
+});
+
+Then(/^the user deletes the created calendar record$/, async () => {
+    await calendarPage.deleteCalendarRecord(testData.element_text.yes_button, filterOptinData.maintenanceAdvisor.dashboard_title);
 });

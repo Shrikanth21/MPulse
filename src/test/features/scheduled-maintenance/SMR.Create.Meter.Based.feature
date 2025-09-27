@@ -9,7 +9,9 @@ Feature: SMR - Create SMR - Link Assets - Meter Based - Convert to Work Order
     And the user links assets, personnel, and inventory to the meter based Scheduled Maintenance Record
     Then the newly created Scheduled Maintenance Record should be visible in the list
     When the user sets a Meter Based Schedule and selects a valid asset
+    And the user sets Units between Maintenance and next Schedule date
     Then the Meter Based Schedule should be successfully applied to the Scheduled Maintenance Record
+    And the user should see that the Next Date is calculated based on the meter reading and units between maintenance
     When the user navigate to the Open Scheduled Maintenance page from SMR
     And the user converts the Scheduled Maintenance Record into a Work Order
     Then the Work Order should be created from the Scheduled Maintenance Record

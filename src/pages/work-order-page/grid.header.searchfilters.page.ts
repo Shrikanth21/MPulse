@@ -95,6 +95,7 @@ class GridHeaderSearchFiltersPage {
      * @returns A boolean indicating whether the search input is visible.
      */
     public async getFirstIdText(columnName: string): Promise<string> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
         let columnIndex: number;
         switch (columnName) {
             case "ID":

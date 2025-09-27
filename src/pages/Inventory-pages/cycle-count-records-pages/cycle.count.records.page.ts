@@ -338,6 +338,7 @@ class CycleCountRecordsPage {
      * @param newQuantity The new stock quantity to set.
      */
     public async updateInventoryStockQty(populationType: string, cycleCountTabText: string, newQuantity: string): Promise<void> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
         await commonPageActions.clickTabByText(cycleCountTabText);
         const moreBtn = this.actions.getLocator(this.elements.moreButton.selector);
         await this.actions.waitForElementToBeVisible(moreBtn, this.elements.moreButton.name);
@@ -350,6 +351,7 @@ class CycleCountRecordsPage {
         await this.actions.click(stockInputEl, this.elements.cycleCountTab.name);
         const stockInput = this.actions.getLocator(this.elements.stockInput.selector).nth(1);
         await this.actions.waitForElementToBeVisible(stockInput, this.elements.stockInput.name);
+        await this.actions.waitForCustomDelay(timeouts.medium);
         const input = Number(newQuantity);
         switch (populationType) {
             case "Constant":

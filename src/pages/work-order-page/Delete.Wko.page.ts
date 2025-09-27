@@ -76,11 +76,11 @@ class DeleteWOPage {
      * Verifies that the "No matches found" message is displayed.
      */
     public async verifyNoMatchesFoundMessage(): Promise<void> {
-        await this.actions.waitForCustomDelay(timeouts.medium);
+        await this.actions.waitForCustomDelay(timeouts.huge);
         const noMatchesFoundLocator = this.actions.getLocator(this.Elements.noMatchesFound.selector);
         await this.actions.waitForElementToBeVisible(noMatchesFoundLocator, this.Elements.noMatchesFound.name);
         const noMatchesFoundText = await this.actions.getText(noMatchesFoundLocator, this.Elements.noMatchesFound.name);
-        await this.actions.waitForCustomDelay(timeouts.medium);
+        await this.actions.waitForCustomDelay(timeouts.huge);
         await this.actions.assertEqual(
             noMatchesFoundText.trim(),
             "No matches found.",

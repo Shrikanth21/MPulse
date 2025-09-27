@@ -68,11 +68,18 @@ Then(/^the user verifies that the Maintenance Task Record is present in the Work
     );
 });
 
-Then(/^the user checks the created task checklist in the Work Order$/, async () => {
+When(/^the user checks the created task checklist in the Work Order$/, async () => {
     await taskChecklistAction.checkCreatedTaskChecklist();
 });
 
 When(/^the user closes the created Work Order record with task checklist$/, async () => {
-    await taskChecklistAction.closeWorkOrderWithTaskChecklist(
-    );
+    await taskChecklistAction.closeWorkOrderWithTaskChecklist();
+});
+
+When(/^the user closes the work order without checking the task checklist$/, async () => {
+    await taskChecklistAction.closeWorkOrderWithoutCheckingTaskChecklist();
+});
+
+Then(/^the user should see a warning message indicating that there are incomplete tasks$/, async () => {
+    await taskChecklistAction.verifyIncompleteTasksWarningMessage();
 });
