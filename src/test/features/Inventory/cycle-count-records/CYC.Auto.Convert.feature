@@ -1,6 +1,6 @@
 Feature: CYC- Verify Auto Convert Functionality
 
-  @cyc @cycAutoConvert @sanityCYC @e2e
+  @cyc @cycAutoConvert
   Scenario: Verify Auto Convert of cycle count records to work orders
     Given the user logs into the application
     And the user selects a specific database
