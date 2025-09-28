@@ -4,6 +4,7 @@ import { WebActions } from "../../base/web.action.util";
 import { maintenanceRequestRecordsPage } from "../work-order-page/maintenance-request-records-pages/maintenanceRequestRecords.page";
 import { CommonPageLocators } from "../locators/common.page.locator";
 import { commonPageActions } from "../actions/common.page.actions";
+import { timeouts } from "../../helper/timeouts-config";
 
 class GlobalSearchPage {
     private get currentPage(): Page {
@@ -49,6 +50,23 @@ class GlobalSearchPage {
         await this.actions.assertContains(descriptionText, description);
     }
 
+    public async clickAllShowMoreLinks(): Promise<void> {
+        await this.actions.waitForCustomDelay(timeouts.medium);
+        let showMoreLinks = this.actions.getLocator(this.elements.showMoreLink.selector);
+        while (await showMoreLinks.count() > 0) {
+            const count = await showMoreLinks.count();
+            for (let i = 0; i < count; i++) {
+                const button = showMoreLinks.nth(i);
+                if (await button.isVisible()) {
+                    await button.scrollIntoViewIfNeeded();
+                    await button.waitFor({ state: "visible" });
+                    await button.click();
+                    await this.actions.waitForCustomDelay(timeouts.small);
+                }
+            }
+            showMoreLinks = this.actions.getLocator(this.elements.showMoreLink.selector);
+        }
+    }
     /**
      * Verifies the search result for a maintenance request record.
      * @param searchGroup The search group to look in.
@@ -58,17 +76,7 @@ class GlobalSearchPage {
      * @param title The title of the maintenance request record.
      */
     public async verifySearchResultWithStatus(searchGroup: string, recordId: string, description: string, status: string, title: string): Promise<void> {
-        const showMoreLinkLocator = this.actions.getLocator(this.elements.showMoreLink.selector);
-        await this.actions.waitForElementToBeVisible(showMoreLinkLocator, this.elements.showMoreLink.name);
-        if (await showMoreLinkLocator.isVisible()) {
-            const count = await showMoreLinkLocator.count();
-            for (let i = 0; i < count; i++) {
-                const button = showMoreLinkLocator.nth(i);
-                await button.scrollIntoViewIfNeeded();
-                await button.waitFor({ state: "visible" });
-                await button.click();
-            }
-        }
+        await this.clickAllShowMoreLinks();
         const headerLocator = this.actions.getLocator(this.elements.searchRecordsHeader(searchGroup));
         await this.actions.waitForElementToBeVisible(headerLocator, this.elements.searchRecordsHeader(searchGroup));
         const idText = await CommonPageLocators.getLinkByText(recordId);
