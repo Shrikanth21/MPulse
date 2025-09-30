@@ -1,27 +1,27 @@
 import { Then, When } from "@cucumber/cucumber";
-import { createFilterPage } from "../../../../pages/work-order-page/create.filter.page";
 import { generateDescription } from "../../../../helper/get.different.description";
 import filterOptinData from "../../../../data/custom.filter.data.json";
 import logger from "../../../../helper/logger";
-import { withGroupFilterPage } from "../../../../pages/work-order-page/create.filter.withGroup.page";
-import { maintenanceAdvisorPage } from "../../../../pages/work-order-page/maintenance.advisor.page";
+import { workOrderFilterPageActions } from "../../../../pages/actions/workorder.page.action/work-order-records-page-action/work.order.filter.page.action";
+import { wkoFilterWithGroupPageActions } from "../../../../pages/actions/workorder.page.action/work-order-records-page-action/wko.filter.with.group.page.action";
+import { wkoMaintenanceAdvisorPageActions } from "../../../../pages/actions/workorder.page.action/work-order-records-page-action/wko.maintenance.advisor.page.action";
 
 const layoutName = generateDescription('Layout', '_Automation');
 
 When(/^the user clicks on the Settings icon$/, async () => {
-    await createFilterPage.clickOnCustomizeButton();
+    await workOrderFilterPageActions.clickOnCustomizeButton();
 });
 
 Then(/^the user should see the Settings menu$/, async () => {
-    await createFilterPage.verifyCustomizeModalHeader();
+    await workOrderFilterPageActions.verifyCustomizeModalHeader();
 });
 
 When(/^the user clicks on the add Layout button$/, async () => {
-    await createFilterPage.clickOnAddLayoutButton();
+    await workOrderFilterPageActions.clickOnAddLayoutButton();
 });
 
 When(/^the user enters a unique name for the layout$/, async () => {
-    await createFilterPage.enterLayoutName(layoutName);
+    await workOrderFilterPageActions.enterLayoutName(layoutName);
 });
 
 // When(/^the user selected the required columns: Asset Type, dateDue, createdBy, Othercost, Status$/, async () => {
@@ -37,23 +37,23 @@ When(/^the user enters a unique name for the layout$/, async () => {
 // });
 
 When(/^the user selects the required columns$/, async () => {
-    await createFilterPage.selectFilterOption([
+    await workOrderFilterPageActions.selectFilterOption([
         filterOptinData.layOutFilterOptions.assetType,
         filterOptinData.layOutFilterOptions.dateDue,
         filterOptinData.layOutFilterOptions.createdBy,
         filterOptinData.layOutFilterOptions.otherCost,
         filterOptinData.layOutFilterOptions.status
     ]);
-    await createFilterPage.clickOnSaveButton();
-    await createFilterPage.clickOnApplyButton();
+    await workOrderFilterPageActions.clickOnSaveButton();
+    await workOrderFilterPageActions.clickOnApplyButton();
 });
 
 Then(/^the layout should be visible in dropdown list$/, async () => {
-    await createFilterPage.verifyLayoutCreatedSuccessfully(layoutName);
+    await workOrderFilterPageActions.verifyLayoutCreatedSuccessfully(layoutName);
 });
 
 Then(/^the layout should be applied and required columns should be visible$/, async () => {
-    await createFilterPage.verifyLayoutAppliedAndColumnsVisible([
+    await workOrderFilterPageActions.verifyLayoutAppliedAndColumnsVisible([
         filterOptinData.layOutFilterOptions.assetType,
         filterOptinData.layOutFilterOptions.dateDue,
         filterOptinData.layOutFilterOptions.createdBy,
@@ -63,11 +63,11 @@ Then(/^the layout should be applied and required columns should be visible$/, as
 });
 
 When(/^the user clicks on the Settings icon again$/, async () => {
-    await createFilterPage.clickOnCustomizeButtonAgain();
+    await workOrderFilterPageActions.clickOnCustomizeButtonAgain();
 });
 
 When(/^the user navigate to the custom filter Layouts tab$/, async () => {
-    await createFilterPage.clickOnTab(filterOptinData.filterTabOptions.customFiltersTab);
+    await workOrderFilterPageActions.clickOnTab(filterOptinData.filterTabOptions.customFiltersTab);
 });
 
 // When(/^the user create filter with the status "([^"]*)" and createdBy "([^"]*)" with conditions And$/, async (status: string, createdBy: string) => {
@@ -88,28 +88,23 @@ When(/^the user navigate to the custom filter Layouts tab$/, async () => {
 
 
 When(/^the user creates a filter using provided criteria with And conditions$/, async () => {
-    await createFilterPage.applyCustomFilter(
+    await workOrderFilterPageActions.applyCustomFilter(
         filterOptinData.layOutFilterOptions.status,
         filterOptinData.customFilterOperatorItemContent.equal,
         filterOptinData.customFilterValueItem.statusValue.closed,
         filterOptinData.customFilterValueItem.customFilterConditionItem.and
     );
-    await createFilterPage.applyMoreCustomFilter(
+    await workOrderFilterPageActions.applyMoreCustomFilter(
         filterOptinData.layOutFilterOptions.createdBy,
         filterOptinData.customFilterOperatorItemContent.equal,
         filterOptinData.customFilterValueItem.createdByValue.created_by,
         filterOptinData.customFilterValueItem.customFilterConditionItem.and
     );
-    await createFilterPage.clickOnApplyButton();
+    await workOrderFilterPageActions.clickOnApplyButton();
 });
 
-
-// Then(/^the user should see only the Work Orders with status "([^"]*)" and createdBy "([^"]*)"$/, async (status: string, createdBy: string) => {
-//     await createFilterPage.verifyOnlyWorkOrdersFilter(status, createdBy);
-// });
-
 Then(/^the user should see only the Work Orders matching the provided filter criteria$/, async () => {
-    await createFilterPage.verifyOnlyWorkOrdersFilter(
+    await workOrderFilterPageActions.verifyOnlyWorkOrdersFilter(
         filterOptinData.customFilterValueItem.statusValue.closed,
         filterOptinData.customFilterValueItem.createdByValue.created_by
     );
@@ -117,66 +112,66 @@ Then(/^the user should see only the Work Orders matching the provided filter cri
 
 
 When(/^the user navigates to the Color Code Layouts tab$/, async () => {
-    await createFilterPage.clickOnTab(filterOptinData.filterTabOptions.colorCodeTab);
+    await workOrderFilterPageActions.clickOnTab(filterOptinData.filterTabOptions.colorCodeTab);
 });
 
 When(/^the user creates a color code for the status "([^"]*)" with a specific color$/, async (status: string) => {
-    await createFilterPage.applyColorCodeFilter(filterOptinData.layOutFilterOptions.status, filterOptinData.customFilterOperatorItemContent.equal, status, filterOptinData.customColorItem.Yellow);
+    await workOrderFilterPageActions.applyColorCodeFilter(filterOptinData.layOutFilterOptions.status, filterOptinData.customFilterOperatorItemContent.equal, status, filterOptinData.customColorItem.Yellow);
 });
 
 Then(/^the Work Orders with status "([^"]*)" should be highlighted with the specified color$/, async (status: string) => {
-    await createFilterPage.verifyColorCodeApplied(filterOptinData.customColorItem.Yellow);
+    await workOrderFilterPageActions.verifyColorCodeApplied(filterOptinData.customColorItem.Yellow);
     logger.info(`Verified that Work Orders with status "${status}" are highlighted with the ${filterOptinData.customColorItem.Yellow} color.`);
 });
 
 Then(/^the user deletes the created layout$/, async () => {
-    await createFilterPage.clickOnDeleteCurrentRecord();
-    await createFilterPage.verifyLayoutDeleted(layoutName);
+    await workOrderFilterPageActions.clickOnDeleteCurrentRecord();
+    await workOrderFilterPageActions.verifyLayoutDeleted(layoutName);
 });
 
 When(/^the user clicks on the Group checkbox$/, async () => {
-    await withGroupFilterPage.clickGroupCheckbox();
+    await wkoFilterWithGroupPageActions.clickGroupCheckbox();
 });
 
 When(/^the user drags the "([^"]*)" and "([^"]*)" to the group by area$/, async (status: string, createdBy: string) => {
-    await withGroupFilterPage.dragColumnToGroupPanel(status);
-    await withGroupFilterPage.dragColumnToGroupPanel(createdBy);
+    await wkoFilterWithGroupPageActions.dragColumnToGroupPanel(status);
+    await wkoFilterWithGroupPageActions.dragColumnToGroupPanel(createdBy);
 });
 
 
 Then(/^the grouped column header for "([^"]*)" should be visible$/, async (columnName: string) => {
-    await withGroupFilterPage.verifyGroupedColumnHeadersVisible(columnName);
+    await wkoFilterWithGroupPageActions.verifyGroupedColumnHeadersVisible(columnName);
 });
 
 When(/^the user expands the last customized group to view its Work Orders$/, async () => {
-    await withGroupFilterPage.expandCreatedByGroup();
+    await wkoFilterWithGroupPageActions.expandCreatedByGroup();
 });
 
 When(/^the user navigates to the Maintenance Advisor module$/, async () => {
-    await maintenanceAdvisorPage.navigateToPages(filterOptinData.maintenanceAdvisor.maintenance_advisor_title);
+    await wkoMaintenanceAdvisorPageActions.navigateToPages(filterOptinData.maintenanceAdvisor.maintenance_advisor_title);
 });
 
 Then(/^the user should see the Maintenance Advisor dashboard$/, async () => {
-    await maintenanceAdvisorPage.verifyPageTitle(filterOptinData.maintenanceAdvisor.maintenance_advisor_title);
+    await wkoMaintenanceAdvisorPageActions.verifyPageTitle(filterOptinData.maintenanceAdvisor.maintenance_advisor_title);
 });
 
 When(/^the user sets the desired layout in Maintenance Advisor$/, async () => {
-    await maintenanceAdvisorPage.selectSavedLayout(layoutName);
+    await wkoMaintenanceAdvisorPageActions.selectSavedLayout(layoutName);
 });
 
 When(/^the user navigates to the dashboard view$/, async () => {
-    await maintenanceAdvisorPage.navigateToPages(filterOptinData.maintenanceAdvisor.dashboard_title);
+    await wkoMaintenanceAdvisorPageActions.navigateToPages(filterOptinData.maintenanceAdvisor.dashboard_title);
 });
 
 
 Then(/^the color code for each record should be displayed correctly$/, async () => {
-    await maintenanceAdvisorPage.verifyMaintenanceAdvisorColorCodeApplied(filterOptinData.customColorItem.Yellow);
+    await wkoMaintenanceAdvisorPageActions.verifyMaintenanceAdvisorColorCodeApplied(filterOptinData.customColorItem.Yellow);
 });
 
 Then(/^the records appearing should match the expected criteria for the layout$/, async () => {
-    await maintenanceAdvisorPage.verifyDraggableBlockHeadExists(layoutName);
+    await wkoMaintenanceAdvisorPageActions.verifyDraggableBlockHeadExists(layoutName);
 });
 
 Then(/^the user remove the Maintenance Advisor layout$/, async () => {
-    await maintenanceAdvisorPage.removeLayout();
+    await wkoMaintenanceAdvisorPageActions.removeLayout();
 });

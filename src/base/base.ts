@@ -3,7 +3,7 @@ import { Browser, BrowserContext, Page, chromium, firefox } from 'playwright';
 import dotenv from 'dotenv';
 import logger, { setLoggerForScenario } from '../helper/logger';
 import { request, APIRequestContext } from "@playwright/test";
-import { logoutPageActions } from '../pages/actions/logout.page.action/logout.page.actions';
+import { logoutPageActions } from '../pages/actions/logout-page-action/logout.page.actions';
 
 setDefaultTimeout(1000 * 60 * 2);
 

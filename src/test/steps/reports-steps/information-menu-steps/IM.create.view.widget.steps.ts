@@ -1,18 +1,18 @@
 import { Then, When } from "@cucumber/cucumber";
 import testData from '../../../../data/testData.json';
 import filterOptinData from "../../../../data/custom.filter.data.json";
-import { requisitionRecordsPage } from "../../../../pages/Inventory-pages/por-requisition-page/requisition.records.page";
-import { reportInformationMenuPage } from "../../../../pages/reports-pages/information-menu-page/report.information.menu.page";
-import { searchUpdateWorkOrderPage } from "../../../../pages/work-order-page/search.update.wko.page";
 import { generatedIMDescription, generatedReportTitle } from "../../../../helper/get.different.description";
-import { createFilterPage } from "../../../../pages/work-order-page/create.filter.page";
 import { commonPageActions } from "../../../../pages/actions/common.page.actions";
+import { workOrderFilterPageActions } from "../../../../pages/actions/workorder.page.action/work-order-records-page-action/work.order.filter.page.action";
+import { wkoSearchUpdatePageActions } from "../../../../pages/actions/workorder.page.action/work-order-records-page-action/wko.search.update.page.action";
+import { requisitionRecordsPageActions } from "../../../../pages/actions/Inventory.pages.action/por-requisition-page-action/requisition.records.page.action";
+import { reportInformationMenuPageActions } from "../../../../pages/actions/reports-pages-action/information-menu-page-action/report.information.menu.page,action";
 
 let createdIMId: string;
 let wkoRecordCount: string;
 
 When(/^the user navigates to the report widget page$/, async () => {
-    await requisitionRecordsPage.navigateToRequisitionRecordsPage(
+    await requisitionRecordsPageActions.navigateToRequisitionRecordsPage(
         testData.homePageURL,
         testData.element_text.got_it_btn,
         testData.reportsMenuTitle,
@@ -22,7 +22,7 @@ When(/^the user navigates to the report widget page$/, async () => {
 });
 
 When(/^the user creates a new Information Menu with unique description and mandatory fields$/, async () => {
-    await reportInformationMenuPage.createNewInformationMenu(
+    await reportInformationMenuPageActions.createNewInformationMenu(
         generatedReportTitle,
         generatedIMDescription,
         {
@@ -35,20 +35,20 @@ When(/^the user creates a new Information Menu with unique description and manda
 });
 
 Then(/^the user should see the new Information Menu in the report widget$/, async () => {
-    createdIMId = await reportInformationMenuPage.getReportId(generatedReportTitle);
-    await reportInformationMenuPage.verifyChartVisibility();
+    createdIMId = await reportInformationMenuPageActions.getReportId(generatedReportTitle);
+    await reportInformationMenuPageActions.verifyChartVisibility();
 });
 
 When(/^the user searches for the new Information Menu in the report widget$/, async () => {
-    await searchUpdateWorkOrderPage.searchWorkOrder(createdIMId);
+    await wkoSearchUpdatePageActions.searchWorkOrder(createdIMId);
 });
 
 Then(/^the user should see the search results for the new Information Menu$/, async () => {
-    await reportInformationMenuPage.verifySearchedIMRecords(createdIMId);
+    await reportInformationMenuPageActions.verifySearchedIMRecords(createdIMId);
 });
 
 When(/^the user creates a new Information Menu with default widget for Maintenance Advisor$/, async () => {
-    await reportInformationMenuPage.createNewInformationMenuWithDefaultWidget(
+    await reportInformationMenuPageActions.createNewInformationMenuWithDefaultWidget(
         generatedReportTitle,
         generatedIMDescription,
         {
@@ -65,7 +65,7 @@ Then(/^the user navigates back to the report widget page$/, async () => {
 });
 
 Then(/^the user should see the default widget displayed in the Maintenance Advisor$/, async () => {
-    await reportInformationMenuPage.verifyDefaultWidgetDisplayed(generatedReportTitle);
+    await reportInformationMenuPageActions.verifyDefaultWidgetDisplayed(generatedReportTitle);
 });
 
 When(/^the user clicks on the searched Information Menu$/, async () => {
@@ -73,25 +73,25 @@ When(/^the user clicks on the searched Information Menu$/, async () => {
 });
 
 Then(/^the user unchecks the default widget option$/, async () => {
-    await reportInformationMenuPage.uncheckDefaultWidgetOption();
+    await reportInformationMenuPageActions.uncheckDefaultWidgetOption();
 });
 
 Then(/^the user creates a filter using provided criteria with conditions$/, async () => {
-    await reportInformationMenuPage.applyCustomFilterWithDate(
+    await reportInformationMenuPageActions.applyCustomFilterWithDate(
         filterOptinData.layOutFilterOptions.dateOpened,
         filterOptinData.customFilterOperatorItemContent.equal,
         filterOptinData.customFilterValueItem.statusValue.today,
         filterOptinData.customFilterValueItem.customFilterConditionItem.and
     );
-    await createFilterPage.clickOnApplyButton();
+    await workOrderFilterPageActions.clickOnApplyButton();
 });
 
 Then(/^the user gets the records count from the list view$/, async () => {
-    wkoRecordCount = (await reportInformationMenuPage.getWorkOrderRecordCount()).toString();
+    wkoRecordCount = (await reportInformationMenuPageActions.getWorkOrderRecordCount()).toString();
 });
 
 When(/^the user navigates to the report Widget page$/, async () => {
-    await reportInformationMenuPage.navigateToReportWidgetPage(
+    await reportInformationMenuPageActions.navigateToReportWidgetPage(
         testData.reportsMenuTitle,
         testData.reportWidgetsTitle,
         testData.informationMenuItemsPageURL
@@ -99,7 +99,7 @@ When(/^the user navigates to the report Widget page$/, async () => {
 });
 
 Then(/^the user creates a new information menu records$/, async () => {
-    await reportInformationMenuPage.createNewInformationMenuRecords(
+    await reportInformationMenuPageActions.createNewInformationMenuRecords(
         generatedReportTitle,
         generatedIMDescription,
         {
@@ -117,5 +117,5 @@ Then(/^the user creates a new information menu records$/, async () => {
 });
 
 Then(/^the user should see the correct data count displayed in the preview$/, async () => {
-    await reportInformationMenuPage.verifyAssetCount(wkoRecordCount);
+    await reportInformationMenuPageActions.verifyAssetCount(wkoRecordCount);
 });

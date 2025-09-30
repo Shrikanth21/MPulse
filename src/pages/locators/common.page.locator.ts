@@ -30,6 +30,7 @@ export const CommonPageLocators: Readonly<{
     readonly getButtonByTitle: (title: string) => string;
     readonly getLabelByText: (text: string) => string;
     readonly getLinkByText: (text: string) => string;
+    readonly getSpanById: (id: string) => string;
 } = {
     sideBarExpander: { selector: "[class='sideBarExpander']", name: "Sidebar Expander" },
     editButton: { selector: "//a[@title='Edit']//i[@class='fa fa-pencil-alt']", name: "Edit Button" },
@@ -43,6 +44,7 @@ export const CommonPageLocators: Readonly<{
     getTabByText: (text) => `//span[@class='dFlex']//span[text()='${text}']`,
     getLinkByTitle: (title) => `//a[@title='${title}']`,
     getSpanByTitle: (title) => `//span[@title='${title}']`,
+    getSpanById: (id) => `//span[@id='${id}']`,
     getDivByTitle: (title) => `//div[contains(@title,'${title}')]`,
     getDivByText: (text) => `//div[text()='${text}']`,
     getColumnCellByTitle: (title) => `//div[@title='${title}']`,
@@ -55,6 +57,6 @@ export const CommonPageLocators: Readonly<{
     getButtonByText: (text) => `//button[normalize-space()='${text}']`,
     getDivById: (id) => `//div[@id='${id}']`,
     getButtonByTitle: (title) => `//button[@title='${title}']`,
-    getLabelByText: (text) => `//label[normalize-space()='${text}']`,
+    getLabelByText: (text) => `//label[text()='${text}']`,
     getLinkByText: (text) => `//a[normalize-space()='${text}']`
 };

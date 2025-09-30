@@ -1,14 +1,14 @@
 import { Then, When } from "@cucumber/cucumber";
 import testData from '../../../data/testData.json';
 import filterOptinData from "../../../data/custom.filter.data.json";
-import { calendarPage } from "../../../pages/calendar-page/calendar.page";
-import { reportPrintPage } from "../../../pages/reports-pages/print-information-menu-page/report.print.page";
 import { generatedWorkOrderCalendarTitle } from "../../../helper/get.different.description";
+import { calendarPageActions } from "../../../pages/actions/calendar-page-action/calendar.page.action";
+import { reportPrintPageActions } from "../../../pages/actions/reports-pages-action/print-information-menu-page-action/report.print.page.action";
 
 let currentEventTitle: string;
 
 When(/^the user navigates to the Calendar tab$/, async () => {
-    await calendarPage.navigateToCalendarTab(
+    await calendarPageActions.navigateToCalendarTab(
         filterOptinData.maintenanceAdvisor.maintenance_advisor_title,
         testData.calendar.calendar_tab_name,
         testData.calendarPageURL
@@ -16,15 +16,15 @@ When(/^the user navigates to the Calendar tab$/, async () => {
 });
 
 Then(/^the user should see the current month calendar view$/, async () => {
-    await calendarPage.verifyCurrentMonthCalendarView();
+    await calendarPageActions.verifyCurrentMonthCalendarView();
 });
 
 Then(/^the user get created work order id$/, async () => {
-    currentEventTitle = await reportPrintPage.getCurrentRecordInformation();
+    currentEventTitle = await reportPrintPageActions.getCurrentRecordInformation();
 });
 
 When(/^the user clicks on the create calendar filter$/, async () => {
-    await calendarPage.createCalendarFilter(
+    await calendarPageActions.createCalendarFilter(
         generatedWorkOrderCalendarTitle,
         testData.subMenuItemWorkTitle,
         testData.general_field,
@@ -34,16 +34,16 @@ When(/^the user clicks on the create calendar filter$/, async () => {
 });
 
 When(/^the user navigates back to the calendar view$/, async () => {
-    await calendarPage.navigateToCalendarView(
+    await calendarPageActions.navigateToCalendarView(
         testData.calendar.calendar_tab_name,
         generatedWorkOrderCalendarTitle
     );
 });
 
 Then(/^the user should see the calendar record details displayed correctly$/, async () => {
-    await calendarPage.verifyCalendarRecordDetails(currentEventTitle);
+    await calendarPageActions.verifyCalendarRecordDetails(currentEventTitle);
 });
 
 Then(/^the user deletes the created calendar record$/, async () => {
-    await calendarPage.deleteCalendarRecord(testData.element_text.yes_button, filterOptinData.maintenanceAdvisor.dashboard_title);
+    await calendarPageActions.deleteCalendarRecord(testData.element_text.yes_button, filterOptinData.maintenanceAdvisor.dashboard_title);
 });

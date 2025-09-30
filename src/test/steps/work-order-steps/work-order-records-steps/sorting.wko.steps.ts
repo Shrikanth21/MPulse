@@ -1,23 +1,23 @@
 import { Then, When } from "@cucumber/cucumber";
-import { gridPage } from "../../../../pages/work-order-page/grid.header.sorting.page";
+import { wkoGridHeaderSortingActions } from "../../../../pages/actions/workorder.page.action/work-order-records-page-action/wko.grid.header.sorting.action";
 
 let beforeSortedText: string;
 
 When(/^the user maximizes the Work Order Records list view display$/, async () => {
-    await gridPage.clickOnSideBarExpander();
-    await gridPage.clickOnMaximizeButton();
+    await wkoGridHeaderSortingActions.clickOnSideBarExpander();
+    await wkoGridHeaderSortingActions.clickOnMaximizeButton();
 });
 
 When(/^the user click on workorderID$/, async function () {
-    beforeSortedText = await gridPage.getCurrentWorkOrderIdText();
-    await gridPage.clickColumnHeader();
+    beforeSortedText = await wkoGridHeaderSortingActions.getCurrentWorkOrderIdText();
+    await wkoGridHeaderSortingActions.clickColumnHeader();
 });
 
 Then(/^the Work Order record should be sorted successfully$/, async function () {
-    await gridPage.verifySortedWorkOrderId(beforeSortedText);
+    await wkoGridHeaderSortingActions.verifySortedWorkOrderId(beforeSortedText);
 });
 
 Then(/^the user minimizes the list view display$/, async () => {
-    await gridPage.clickOnSideBarExpander();
-    await gridPage.clickOnSideBarCollapse();
+    await wkoGridHeaderSortingActions.clickOnSideBarExpander();
+    await wkoGridHeaderSortingActions.clickOnSideBarCollapse();
 });

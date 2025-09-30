@@ -1,30 +1,30 @@
 import { Then, When } from "@cucumber/cucumber";
 import { WebActions } from "../../../../base/web.action.util";
 import { timeouts } from "../../../../helper/timeouts-config";
-import { deleteMaintenanceRecordsPage } from "../../../../pages/work-order-page/maintenance-request-records-pages/delete.maintenance.records.page";
-import { searchUpdateWorkOrderPage } from "../../../../pages/work-order-page/search.update.wko.page";
 import mrtestData from '../../../../data/maintenance.records.json';
-import { deleteWOPage } from "../../../../pages/work-order-page/delete.wko.page";
+import { wkoSearchUpdatePageActions } from "../../../../pages/actions/workorder.page.action/work-order-records-page-action/wko.search.update.page.action";
+import { wkoDeletePageAction } from "../../../../pages/actions/workorder.page.action/work-order-records-page-action/wko.delete.page.action";
+import { mrDeleteRecordsPageAction } from "../../../../pages/actions/workorder.page.action/maintenance-request-records-page.action/mr.delete.records.page.action";
 
 let currentRecord: string;
 let actions: WebActions;
 
 When(/^the user click on delete current maintenance Record$/, async () => {
-    currentRecord = await deleteMaintenanceRecordsPage.getCurrentMRRecordIdText();
-    await deleteMaintenanceRecordsPage.deleteCurrentMR(mrtestData.element_text.quite_waiting);
+    currentRecord = await mrDeleteRecordsPageAction.getCurrentMRRecordIdText();
+    await mrDeleteRecordsPageAction.deleteCurrentMR(mrtestData.element_text.quite_waiting);
 });
 
 Then(/^the  Maintenance Request Records should be deleted successfully$/, async () => {
-    await deleteMaintenanceRecordsPage.verifyDeletedMRId(currentRecord);
+    await mrDeleteRecordsPageAction.verifyDeletedMRId(currentRecord);
 });
 
 Then(/^the user should not see the Maintenance Request Records in the search results$/, async function () {
     actions = new WebActions(this.page);
     await actions.waitForCustomDelay(timeouts.medium);
-    await searchUpdateWorkOrderPage.searchWorkOrder(currentRecord);
-    await deleteWOPage.verifyNoMatchesFoundMessage();
+    await wkoSearchUpdatePageActions.searchWorkOrder(currentRecord);
+    await wkoDeletePageAction.verifyNoMatchesFoundMessage();
 });
 
 When(/^the user verifies the maintenance record status$/, async () => {
-    await deleteMaintenanceRecordsPage.verifyMRStatus();
+    await mrDeleteRecordsPageAction.verifyMRStatus();
 });

@@ -3,7 +3,7 @@ import { getPage } from "../../base/base";
 import { WebActions } from "../../base/web.action.util";
 import { CommonPageLocators } from "../locators/common.page.locator";
 import { timeouts } from "../../helper/timeouts-config";
-import { HomePageLocators } from "../locators/home.page.locator/home.page.locators";
+import { HomePageLocators } from "../locators/home-page-locator/home.page.locators";
 
 
 class CommonPageActions {

@@ -1,64 +1,64 @@
 import { Then, When } from "@cucumber/cucumber";
-import { gridHeaderSearchFiltersPage } from "../../../../pages/work-order-page/grid.header.searchfilters.page";
+import { wkoRowSearchFiltersPageActions } from "../../../../pages/actions/workorder.page.action/work-order-records-page-action/wko.row.searchfilters.page.action";
 
 let beforeFilteredText: string;
 let columnName: string = "ID";
 //let columnName: string = "Description";
 
 Then(/^the user get the first record from the Work Order Records list view$/, async () => {
-    beforeFilteredText = await gridHeaderSearchFiltersPage.getFirstIdText(columnName);
+    beforeFilteredText = await wkoRowSearchFiltersPageActions.getFirstIdText(columnName);
 });
 
 When(/^the user hovers over the search icon and click on "([^"]*)" option$/, async (option: string) => {
-    await gridHeaderSearchFiltersPage.clickSearchInput(columnName);
-    await gridHeaderSearchFiltersPage.selectSearchOption(option);
+    await wkoRowSearchFiltersPageActions.clickSearchInput(columnName);
+    await wkoRowSearchFiltersPageActions.selectSearchOption(option);
 });
 
 When(/^the user enters a value in the search field in "([^"]*)" option edit box$/, async (option: string) => {
     switch (option) {
         case "Contains":
-            await gridHeaderSearchFiltersPage.enterSearchValueForColumn(columnName, beforeFilteredText);
+            await wkoRowSearchFiltersPageActions.enterSearchValueForColumn(columnName, beforeFilteredText);
             break;
         case "Does not contain":
-            await gridHeaderSearchFiltersPage.enterSearchValueForColumn(columnName, beforeFilteredText);
+            await wkoRowSearchFiltersPageActions.enterSearchValueForColumn(columnName, beforeFilteredText);
             break;
         case "Starts with":
-            await gridHeaderSearchFiltersPage.enterSearchValueForColumn(columnName, beforeFilteredText.slice(0, 3));
+            await wkoRowSearchFiltersPageActions.enterSearchValueForColumn(columnName, beforeFilteredText.slice(0, 3));
             break;
         case "Ends with":
-            await gridHeaderSearchFiltersPage.enterSearchValueForColumn(columnName, beforeFilteredText.slice(-3));
+            await wkoRowSearchFiltersPageActions.enterSearchValueForColumn(columnName, beforeFilteredText.slice(-3));
             break;
         case "Equals":
-            await gridHeaderSearchFiltersPage.enterSearchValueForColumn(columnName, beforeFilteredText);
+            await wkoRowSearchFiltersPageActions.enterSearchValueForColumn(columnName, beforeFilteredText);
             break;
         case "Does not equal":
-            await gridHeaderSearchFiltersPage.enterSearchValueForColumn(columnName, beforeFilteredText);
+            await wkoRowSearchFiltersPageActions.enterSearchValueForColumn(columnName, beforeFilteredText);
             break;
         default:
             throw new Error(`Unknown search option: ${option}`);
     }
-    await gridHeaderSearchFiltersPage.getAndStoreAllRowCellTextsAfterSearch(columnName);
+    await wkoRowSearchFiltersPageActions.getAndStoreAllRowCellTextsAfterSearch(columnName);
 });
 
 Then(/^the "([^"]*)" filtered results should be displayed$/, async (option: string) => {
     switch (option) {
         case "Contains":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option);
+            await wkoRowSearchFiltersPageActions.verifyFilteredResults(beforeFilteredText, option);
             break;
         case "Does not contain":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option);
+            await wkoRowSearchFiltersPageActions.verifyFilteredResults(beforeFilteredText, option);
             break;
         case "Starts with":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText.slice(0, 3), option);
+            await wkoRowSearchFiltersPageActions.verifyFilteredResults(beforeFilteredText.slice(0, 3), option);
             break;
         case "Ends with":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText.slice(-3), option);
+            await wkoRowSearchFiltersPageActions.verifyFilteredResults(beforeFilteredText.slice(-3), option);
             break;
         case "Equals":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option);
+            await wkoRowSearchFiltersPageActions.verifyFilteredResults(beforeFilteredText, option);
             break;
         case "Does not equal":
-            await gridHeaderSearchFiltersPage.verifyFilteredResults(beforeFilteredText, option);
+            await wkoRowSearchFiltersPageActions.verifyFilteredResults(beforeFilteredText, option);
             break;
         default:
             throw new Error(`Unknown search option: ${option}`);
@@ -66,5 +66,5 @@ Then(/^the "([^"]*)" filtered results should be displayed$/, async (option: stri
 });
 
 Then(/^the user clicks the Reset option$/, async () => {
-    await gridHeaderSearchFiltersPage.clickResetOption(columnName);
+    await wkoRowSearchFiltersPageActions.clickResetOption(columnName);
 });

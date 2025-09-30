@@ -1,9 +1,11 @@
 import { Then, When } from '@cucumber/cucumber';
 import testData from '../../../data/testData.json';
 import * as path from 'path';
-import { buildingRecordsPage } from '../../../pages/capital-assets-page/Building.records.page';
+import { buildingRecordsPage } from '../../../pages/actions/capital-assets-action-page/building.records.page.action';
 import { generatedBuildingTaskDescription } from '../../../helper/get.different.description';
-import { homePageActions } from '../../../pages/actions/home.page.action/home.page.actions';
+import { homePageActions } from '../../../pages/actions/home-page-action/home.page.actions';
+import { equipmentRecordsAction } from '../../../pages/actions/capital-assets-action-page/equipment.records.actions';
+
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
 
 When('the user accesses the Building Records section', async function () {
@@ -17,7 +19,7 @@ When('the user accesses the Building Records section', async function () {
 });
 
 When('the user creates a new asset with a unique description and uploads media file', async function () {
-    await buildingRecordsPage.createTaskWithMediaUpload(
+    await equipmentRecordsAction.createTaskWithMediaUpload(
         testData.icons.plusIcon,
         generatedBuildingTaskDescription,
         testData.element_text.media_text,

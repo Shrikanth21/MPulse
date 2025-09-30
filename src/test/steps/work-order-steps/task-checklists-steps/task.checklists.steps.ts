@@ -1,7 +1,7 @@
 import { Then, When } from "@cucumber/cucumber";
 import testData from '../../../../data/testData.json';
-import { homePageActions } from "../../../../pages/actions/home.page.action/home.page.actions";
-import { taskChecklistAction } from "../../../../pages/actions/workorder.page.action/task.checklist.action";
+import { homePageActions } from "../../../../pages/actions/home-page-action/home.page.actions";
+import { taskChecklistAction } from "../../../../pages/actions/workorder.page.action/task-checklist-action/task.checklist.action";
 import { generatedCheckBoxName, generatedMaintenanceTaskRecordDescription, generatedTaskChecklistName, generateWorkOrderWithTaskDescription } from "../../../../helper/get.different.description";
 
 let checkListId: string;

@@ -1,9 +1,9 @@
 import { Then, When } from "@cucumber/cucumber";
 import testData from "../../../../data/testData.json";
-import { labelChangePage } from "../../../../pages/work-order-page/label.change.page";
+import { wkoLabelChangePageActions } from "../../../../pages/actions/workorder.page.action/work-order-records-page-action/wko.label.change.page.action";
 
 When(/^the user navigates to the customization page and selects language options$/, async () => {
-    await labelChangePage.navigateToManagementToolCustomizationPage(
+    await wkoLabelChangePageActions.navigateToManagementToolCustomizationPage(
         testData.element_text.got_it_btn,
         testData.managementToolsMenu,
         testData.customizationSubMenuItemTitle,
@@ -13,13 +13,13 @@ When(/^the user navigates to the customization page and selects language options
 });
 
 When(/^the user selects dropdown values on the customization language page$/, async () => {
-    await labelChangePage.selectDropdownValue(testData.customization.recordAreaDropdownValues.work_Order_Records,
+    await wkoLabelChangePageActions.selectDropdownValue(testData.customization.recordAreaDropdownValues.work_Order_Records,
         testData.customization.languageDropdownValues.status);
 });
 
 When(/^the user navigates to the workorder record page after changing the label$/, async () => {
-    await labelChangePage.changeLabel(testData.customization.status_label_change);
-    await labelChangePage.navigateToWorkOrderRecordsPageFromOtherMenu(
+    await wkoLabelChangePageActions.changeLabel(testData.customization.status_label_change);
+    await wkoLabelChangePageActions.navigateToWorkOrderRecordsPageFromOtherMenu(
         testData.menuItemWorkTitle,
         testData.menuItemWorkTitle,
         testData.subMenuItemWorkTitle,
@@ -28,11 +28,11 @@ When(/^the user navigates to the workorder record page after changing the label$
 });
 
 Then(/^the record text should reflect the updated label$/, async () => {
-    await labelChangePage.validateLabelChange(testData.customization.status_label_change);
+    await wkoLabelChangePageActions.validateLabelChange(testData.customization.status_label_change);
 });
 
 When(/^the user navigates back to the customization page and selects language options after changing the label$/, async () => {
-    await labelChangePage.navigateToCustomizationPageFromOtherMenu(
+    await wkoLabelChangePageActions.navigateToCustomizationPageFromOtherMenu(
         testData.managementToolsMenu,
         testData.managementToolsMenu,
         testData.customizationSubMenuItemTitle,
@@ -42,7 +42,7 @@ When(/^the user navigates back to the customization page and selects language op
 });
 
 Then(/^the user selects the same record type from the Record Area dropdown$/, async () => {
-    await labelChangePage.selectDropdownValue(testData.customization.recordAreaDropdownValues.work_Order_Records,
+    await wkoLabelChangePageActions.selectDropdownValue(testData.customization.recordAreaDropdownValues.work_Order_Records,
         testData.customization.status_label_change);
-    await labelChangePage.changeLabel(testData.customization.languageDropdownValues.status);
+    await wkoLabelChangePageActions.changeLabel(testData.customization.languageDropdownValues.status);
 });

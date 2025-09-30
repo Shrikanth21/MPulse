@@ -1,26 +1,26 @@
 import { Then, When } from "@cucumber/cucumber"
 import { generatedBuildingTaskDescription, generatedCycleCountRecordDescription, generatedDescription, generatedMaintenanceRecordDescription, generatedScheduledMaintenanceRecordDescription } from "../../../helper/get.different.description";
-import { buildingRecordsPage } from "../../../pages/capital-assets-page/Building.records.page";
 import path from "path";
 import testData from '../../../data/testData.json';
 import mrtestData from '../../../data/maintenance.records.json';
-import { searchUpdateWorkOrderPage } from "../../../pages/work-order-page/search.update.wko.page";
-import { globalSearchPage } from "../../../pages/global-search-page/global.search.page";
-import { maintenanceRequestRecordsPage } from "../../../pages/work-order-page/maintenance-request-records-pages/maintenanceRequestRecords.page";
-import { requisitionRecordsPage } from "../../../pages/Inventory-pages/por-requisition-page/requisition.records.page";
 import { getFutureDateFormatted } from "../../../helper/date/get.future.date";
-import { deleteSMRPage } from "../../../pages/scheduled-maintenance-page/delete.smr.page";
-import { scheduledMaintenanceRecordsPage } from "../../../pages/scheduled-maintenance-page/scheduled.maintenance.record.page";
-import { cycleCountRecordsPage } from "../../../pages/Inventory-pages/cycle-count-records-pages/cycle.count.records.page";
-import { smrAutoConvert } from "../../../pages/scheduled-maintenance-page/smr.auto.convert";
 import { commonPageActions } from "../../../pages/actions/common.page.actions";
+import { equipmentRecordsAction } from "../../../pages/actions/capital-assets-action-page/equipment.records.actions";
+import { globalSearchPageActions } from "../../../pages/actions/global-search-page-action/global.search.page.action";
+import { wkoSearchUpdatePageActions } from "../../../pages/actions/workorder.page.action/work-order-records-page-action/wko.search.update.page.action";
+import { mrRecordsPageAction } from "../../../pages/actions/workorder.page.action/maintenance-request-records-page.action/mr.records.page.action";
+import { requisitionRecordsPageActions } from "../../../pages/actions/Inventory.pages.action/por-requisition-page-action/requisition.records.page.action";
+import { cycleCountRecordsPageActions } from "../../../pages/actions/Inventory.pages.action/cycle-count-records-pages-action/cycle.count.records.pages.action";
+import { scheduledMaintenanceRecordsPageActions } from "../../../pages/actions/scheduled-maintenance-page-action/scheduled.maintenance.page.action";
+import { smrAutoConvertAction } from "../../../pages/actions/scheduled-maintenance-page-action/smr.auto.convert.action";
+import { smrDeletePageAction } from "../../../pages/actions/scheduled-maintenance-page-action/smr.delete.page.action";
 
 const filePath = path.resolve(__dirname, '../../../data/docs/MPulse.docx');
 let recordId: string;
 let convertedWkoId: string;
 
 When(/^the user creates a new Equipment Record with a unique description and uploads media$/, async () => {
-    await buildingRecordsPage.createTaskWithMediaUpload(
+    await equipmentRecordsAction.createTaskWithMediaUpload(
         testData.icons.plusIcon,
         generatedBuildingTaskDescription,
         testData.element_text.media_text,
@@ -30,28 +30,28 @@ When(/^the user creates a new Equipment Record with a unique description and upl
 });
 
 When(/^the user gets the created record id$/, async () => {
-    recordId = await searchUpdateWorkOrderPage.getWorkOrderId();
+    recordId = await wkoSearchUpdatePageActions.getWorkOrderId();
 });
 
 Then(/^the user searches the Equipment Records by equipment id and its description$/, async () => {
-    await globalSearchPage.searchRecord(recordId + generatedBuildingTaskDescription);
+    await globalSearchPageActions.searchRecord(recordId + generatedBuildingTaskDescription);
 });
 
 Then(/^the user should see the Equipment Record in the search results$/, async () => {
-    await globalSearchPage.verifySearchResult(
+    await globalSearchPageActions.verifySearchResult(
         testData.customization.recordAreaDropdownValues.equipment_Records,
         recordId,
         generatedBuildingTaskDescription);
 });
 
 When(/^the user creates a new Maintenance Request with a only description$/, async () => {
-    await maintenanceRequestRecordsPage.createMaintenanceRecord(generatedMaintenanceRecordDescription);
+    await mrRecordsPageAction.createMaintenanceRecord(generatedMaintenanceRecordDescription);
     await commonPageActions.clickSaveButton();
     await commonPageActions.clickSpanByText(testData.element_text.ok_button_text);
 });
 
 When(/^the user convert a Maintenance Request into new Work order$/, async () => {
-    await maintenanceRequestRecordsPage.clickOnConvertWorkOrderButton(
+    await mrRecordsPageAction.clickOnConvertWorkOrderButton(
         mrtestData.element_text.convert_wko_order,
         mrtestData.element_text.yes_convert,
         testData.element_text.no_button_text
@@ -59,11 +59,11 @@ When(/^the user convert a Maintenance Request into new Work order$/, async () =>
 });
 
 When(/^the user searches the Maintenance Request Records by request id description and status$/, async () => {
-    await globalSearchPage.searchRecord(recordId + " " + generatedMaintenanceRecordDescription + " " + testData.element_text.convert_status);
+    await globalSearchPageActions.searchRecord(recordId + " " + generatedMaintenanceRecordDescription + " " + testData.element_text.convert_status);
 });
 
 Then(/^the user should see the Maintenance Request in the search results$/, async () => {
-    await globalSearchPage.verifySearchResultWithStatus(
+    await globalSearchPageActions.verifySearchResultWithStatus(
         mrtestData.maintenanceRequestSubMenuItemTitle,
         recordId,
         generatedMaintenanceRecordDescription,
@@ -73,11 +73,11 @@ Then(/^the user should see the Maintenance Request in the search results$/, asyn
 });
 
 When(/^the user searches the Purchase Order Records by order id and status$/, async () => {
-    await globalSearchPage.searchRecord(recordId + " " + testData.element_text.closed_status_text);
+    await globalSearchPageActions.searchRecord(recordId + " " + testData.element_text.closed_status_text);
 });
 
 When(/^the user closes the created Purchase Order Requisition record directly$/, async () => {
-    await requisitionRecordsPage.closeRequisitionRecordWithDate(
+    await requisitionRecordsPageActions.closeRequisitionRecordWithDate(
         testData.element_text.supplier_tab_text,
         testData.element_text.close_requisition_text,
         testData.element_text.yes_button,
@@ -87,23 +87,23 @@ When(/^the user closes the created Purchase Order Requisition record directly$/,
 });
 
 Then(/^the user should see the Purchase Order in the search results$/, async () => {
-    await globalSearchPage.verifySearchPORResultWithStatus(
+    await globalSearchPageActions.verifySearchPORResultWithStatus(
         testData.requisitionMenuTitle,
         recordId
     );
 });
 
 When(/^the user creates a new Work Order with a unique description$/, async () => {
-    await maintenanceRequestRecordsPage.createMaintenanceRecord(generatedDescription);
+    await mrRecordsPageAction.createMaintenanceRecord(generatedDescription);
     await commonPageActions.clickSaveButton();
 });
 
 When(/^the user searches the closed Work Order Records by order id and status$/, async () => {
-    await globalSearchPage.searchRecord(recordId + " " + testData.element_text.closed_status_text);
+    await globalSearchPageActions.searchRecord(recordId + " " + testData.element_text.closed_status_text);
 });
 
 Then(/^the user should see the closed Work Order in the search results$/, async () => {
-    await globalSearchPage.verifySearchResultWithStatus(
+    await globalSearchPageActions.verifySearchResultWithStatus(
         testData.subMenuItemWorkTitle,
         recordId,
         generatedDescription,
@@ -113,11 +113,11 @@ Then(/^the user should see the closed Work Order in the search results$/, async 
 });
 
 When(/^the user searches the Maintenance Request Records by request id description and Cancel status$/, async () => {
-    await globalSearchPage.searchRecord(recordId + " " + generatedMaintenanceRecordDescription + " " + testData.element_text.cancel_status);
+    await globalSearchPageActions.searchRecord(recordId + " " + generatedMaintenanceRecordDescription + " " + testData.element_text.cancel_status);
 });
 
 Then(/^the user should see the Maintenance Request in the search Cancel results$/, async () => {
-    await globalSearchPage.verifySearchResultWithStatus(
+    await globalSearchPageActions.verifySearchResultWithStatus(
         testData.subMenuItemWorkTitle,
         recordId,
         generatedDescription,
@@ -127,11 +127,11 @@ Then(/^the user should see the Maintenance Request in the search Cancel results$
 });
 
 When(/^the user searches the Maintenance Request Records by request id description and Waiting for Reply status$/, async () => {
-    await globalSearchPage.searchRecord(recordId + " " + generatedMaintenanceRecordDescription + " " + testData.element_text.waiting_for_reply_status);
+    await globalSearchPageActions.searchRecord(recordId + " " + generatedMaintenanceRecordDescription + " " + testData.element_text.waiting_for_reply_status);
 });
 
 Then(/^the user should see the Maintenance Request in the search Waiting for Reply results$/, async () => {
-    await globalSearchPage.verifySearchResultWithStatus(
+    await globalSearchPageActions.verifySearchResultWithStatus(
         testData.subMenuItemWorkTitle,
         recordId,
         generatedMaintenanceRecordDescription,
@@ -141,22 +141,22 @@ Then(/^the user should see the Maintenance Request in the search Waiting for Rep
 });
 
 When(/^the user creates a new Scheduled Maintenance Record with a only description$/, async () => {
-    await maintenanceRequestRecordsPage.createMaintenanceRecord(generatedScheduledMaintenanceRecordDescription);
+    await mrRecordsPageAction.createMaintenanceRecord(generatedScheduledMaintenanceRecordDescription);
     await commonPageActions.clickSaveButton();
 });
 
 When(/^the user gets the created smr record id$/, async () => {
-    recordId = await deleteSMRPage.getCurrentSmrIdText();
+    recordId = await smrDeletePageAction.getCurrentSmrIdText();
 });
 
 When(/^the user converts the Scheduled Maintenance into a Work Order$/, async () => {
-    await scheduledMaintenanceRecordsPage.navigateToOpenScheduledMaintenancePageFromSmrPage(
+    await scheduledMaintenanceRecordsPageActions.navigateToOpenScheduledMaintenancePageFromSmrPage(
         testData.element_text.openScheduledMaintenanceTitle,
         testData.openScheduledMaintenancePageURL
     );
-    await cycleCountRecordsPage.selectDateRange(testData.element_text.this_month, testData.element_text.openScheduledMaintenanceTitle);
-    await cycleCountRecordsPage.searchCycleCountRecord(recordId, testData.element_text.next_week, testData.element_text.openScheduledMaintenanceTitle);
-    await cycleCountRecordsPage.clickOnConvertWorkOrderButton(
+    await cycleCountRecordsPageActions.selectDateRange(testData.element_text.this_month, testData.element_text.openScheduledMaintenanceTitle);
+    await cycleCountRecordsPageActions.searchCycleCountRecord(recordId, testData.element_text.next_week, testData.element_text.openScheduledMaintenanceTitle);
+    await cycleCountRecordsPageActions.clickOnConvertWorkOrderButton(
         mrtestData.element_text.convert_wko_order,
         mrtestData.element_text.yes_convert,
         testData.element_text.no_button_text,
@@ -168,17 +168,17 @@ When(/^User navigates back to the Scheduled Maintenance Records page$/, async ()
 });
 
 Then(/^the user navigates to more button on scheduled maintenance page$/, async () => {
-    await smrAutoConvert.clickDropdownMenu();
+    await smrAutoConvertAction.clickDropdownMenu();
 });
 
 Then(/^the user see the converted work order id on the scheduled maintenance page$/, async () => {
-    convertedWkoId = await smrAutoConvert.getConvertedWorkOrderID();
-    await smrAutoConvert.verifyConvertedWorkOrder();
+    convertedWkoId = await smrAutoConvertAction.getConvertedWorkOrderID();
+    await smrAutoConvertAction.verifyConvertedWorkOrder();
     await commonPageActions.clickCloseButton();
 });
 
 When(/^the user searches the Scheduled Maintenance Records by scheduled maintenance id and its description$/, async () => {
-    await globalSearchPage.searchRecord(convertedWkoId + " " + generatedScheduledMaintenanceRecordDescription);
+    await globalSearchPageActions.searchRecord(convertedWkoId + " " + generatedScheduledMaintenanceRecordDescription);
 });
 
 When(/^the user click on the searched converted work order record$/, async () => {
@@ -186,7 +186,7 @@ When(/^the user click on the searched converted work order record$/, async () =>
 });
 
 Then(/^the user should see the Scheduled Maintenance in the search results$/, async () => {
-    await globalSearchPage.verifySearchResult(
+    await globalSearchPageActions.verifySearchResult(
         testData.subMenuItemWorkTitle,
         recordId,
         generatedDescription
@@ -194,23 +194,23 @@ Then(/^the user should see the Scheduled Maintenance in the search results$/, as
 });
 
 When(/^the user creates a new Cycle Count with a only description$/, async () => {
-    await maintenanceRequestRecordsPage.createMaintenanceRecord(generatedCycleCountRecordDescription);
+    await mrRecordsPageAction.createMaintenanceRecord(generatedCycleCountRecordDescription);
     await commonPageActions.clickSaveButton();
 });
 
 When(/^the user gets the created cyc record id$/, async () => {
-    recordId = await deleteSMRPage.getCurrentSmrIdText();
+    recordId = await smrDeletePageAction.getCurrentSmrIdText();
 });
 
 When(/^the user converts the Cycle Count into a Work Order$/, async () => {
-    await cycleCountRecordsPage.navigateToOpenScheduledMaintenancePage(
+    await cycleCountRecordsPageActions.navigateToOpenScheduledMaintenancePage(
         testData.element_text.scheduledMaintenanceTitle,
         testData.element_text.openScheduledMaintenanceTitle,
         testData.openScheduledMaintenancePageURL
     );
-    await cycleCountRecordsPage.selectDateRange(testData.element_text.this_month, testData.element_text.openScheduledMaintenanceTitle);
-    await cycleCountRecordsPage.searchCycleCountRecord(recordId, testData.element_text.next_week, testData.element_text.openScheduledMaintenanceTitle);
-    await cycleCountRecordsPage.clickOnConvertWorkOrderButton(
+    await cycleCountRecordsPageActions.selectDateRange(testData.element_text.this_month, testData.element_text.openScheduledMaintenanceTitle);
+    await cycleCountRecordsPageActions.searchCycleCountRecord(recordId, testData.element_text.next_week, testData.element_text.openScheduledMaintenanceTitle);
+    await cycleCountRecordsPageActions.clickOnConvertWorkOrderButton(
         mrtestData.element_text.convert_wko_order,
         mrtestData.element_text.yes_convert,
         testData.element_text.no_button_text,
@@ -222,21 +222,21 @@ When(/^User navigates back to the Cycle Count Records page$/, async () => {
 });
 
 Then(/^the user navigates to more button on cycle count page$/, async () => {
-    await smrAutoConvert.clickDropdownMenu();
+    await smrAutoConvertAction.clickDropdownMenu();
 });
 
 Then(/^the user see the converted work order id on the cycle count page$/, async () => {
-    convertedWkoId = await smrAutoConvert.getConvertedWorkOrderID();
-    await smrAutoConvert.verifyConvertedWorkOrder();
+    convertedWkoId = await smrAutoConvertAction.getConvertedWorkOrderID();
+    await smrAutoConvertAction.verifyConvertedWorkOrder();
     await commonPageActions.clickCloseButton();
 });
 
 When(/^the user searches the Cycle Count Records by cycle count id and its description$/, async () => {
-    await globalSearchPage.searchRecord(convertedWkoId + " " + generatedCycleCountRecordDescription);
+    await globalSearchPageActions.searchRecord(convertedWkoId + " " + generatedCycleCountRecordDescription);
 });
 
 Then(/^the user should see the Cycle Count in the search results$/, async () => {
-    await globalSearchPage.verifySearchResult(
+    await globalSearchPageActions.verifySearchResult(
         testData.subMenuItemWorkTitle,
         recordId,
         generatedCycleCountRecordDescription

@@ -5,6 +5,7 @@ Feature: Report - Form View - All Record
     Given the user logs into the application
     And the user selects a specific database
     When the user navigates to the Work Order Records page
+    And the user choses the default layout from the dropdown
     Then the user gets the all record information displayed
     When the user clicks the print button
     And the user sets the filter to all records
