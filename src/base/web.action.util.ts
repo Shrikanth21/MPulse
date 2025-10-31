@@ -360,19 +360,24 @@ export class WebActions {
   }
 
   /**
-   * Validates the current URL of the page.
-   * @param expectedUrl The expected URL to validate against.
-   */
-  public async validateCurrentUrl(expectedUrl: string): Promise<void> {
+  * Validates that the current URL of the page contains the expected substring.
+  * Handles delayed SPA navigations by waiting until the URL updates.
+  * @param expectedUrlPart The substring that should be present in the current URL.
+  */
+  public async validateCurrentUrl(expectedUrlPart: string): Promise<void> {
     try {
       await this.waitForDelay();
-      await this.page.waitForLoadState('networkidle');
-      await this.waitForDelay();
-      await this.page.waitForURL(expectedUrl, { waitUntil: 'load', timeout: timeouts.largest });
-      logger.info(`Successfully validated current URL: ${expectedUrl}`);
+      await this.page.waitForFunction(
+        (part) => window.location.href.includes(part),
+        expectedUrlPart,
+        { timeout: 15000 }
+      );
+      const currentUrl = this.page.url();
+      logger.info(`Current URL contains expected part: "${expectedUrlPart}" | Full URL: ${currentUrl}`);
     } catch (error) {
-      logger.error(`Failed to validate current URL: ${expectedUrl} | Error: ${error}`);
-      throw error;
+      const currentUrl = this.page.url();
+      logger.error(`Failed to validate current URL contains "${expectedUrlPart}" | Current URL: ${currentUrl} | Error: ${error}`);
+      throw new Error(`Expected URL to contain "${expectedUrlPart}", but got "${currentUrl}"`);
     }
   }
 

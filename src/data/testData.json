@@ -1,24 +1,26 @@
 {
   "userName": "shrikanth@inapp.com",
-  "homePageURL": "https://dev.mpulse9.com/#/main/maintenanceAdvisor/dashboard",
-  "equipmentRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/EquipmentRecords/",
-  "buildingRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/BuildingRecords/",
-  "customizationLanguageUrl": "https://dev.mpulse9.com/#/main/language/Language",
-  "workOrderRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/WorkOrderRecords/",
-  "workflowWorkOrderUrl": "https://dev.mpulse9.com/#/main/workOrders/WorkOrders",
-  "requisitionRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/RequisitionRecords/",
-  "cycleCountRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/CycleCount/",
-  "openScheduledMaintenancePageURL": "https://dev.mpulse9.com/#/main/openScheduledMaintenance/",
-  "scheduledMaintenanceRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/ScheduledMaintenanceRecords/",
-  "scheduledMaintenancePageURL": "https://dev.mpulse9.com/#/main/scheduledMaintenance/ScheduledMaintenance",
-  "informationMenuItemsPageURL": "https://dev.mpulse9.com/#/main/informationMenu/InformationMenuItems/",
-  "calendarPageURL": "https://dev.mpulse9.com/#/main/maintenanceAdvisor/calendar/",
-  "taskChecklistsPageURL": "https://dev.mpulse9.com/#/main/fal/TaskChecklist/",
-  "maintenanceTaskRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/MaintenanceTaskRecords/",
+  "homePageURL": "maintenanceAdvisor/dashboard",
+  "equipmentRecordsPageURL": "EquipmentRecords",
+  "buildingRecordsPageURL": "BuildingRecords",
+  "customizationLanguageUrl": "Language",
+  "workOrderRecordsPageURL": "WorkOrderRecords",
+  "workflowWorkOrderUrl": "workOrders/WorkOrders",
+  "requisitionRecordsPageURL": "RequisitionRecords",
+  "cycleCountRecordsPageURL": "CycleCount",
+  "openScheduledMaintenancePageURL": "openScheduledMaintenance",
+  "scheduledMaintenanceRecordsPageURL": "ScheduledMaintenanceRecords",
+  "scheduledMaintenancePageURL": "scheduledMaintenance/ScheduledMaintenance",
+  "informationMenuItemsPageURL": "informationMenu/InformationMenuItems",
+  "calendarPageURL": "maintenanceAdvisor/calendar",
+  "taskChecklistsPageURL": "TaskChecklist",
+  "maintenanceTaskRecordsPageURL": "MaintenanceTaskRecords",
   "menuItemWorkTitle": "Work Orders",
   "subMenuItemWorkTitle": "Work Order Records",
   "managementToolButton": "Management Tools",
   "createWorkOrderButton": "Create Work Order",
+  "cancel_reason": "due to other reason",
+  "hold_reason_text": "Waiting for parts",
   "workFLow": "WorkFlow",
   "workOrderTitle": "Work Orders",
   "scheduledMaintenanceOptions": "Scheduled Maintenance Options",
@@ -68,7 +70,9 @@
     "open_status_text": "Open",
     "closed_status_text": "Closed",
     "pending_status_text": "Pending",
+    "canceled_status_text": "Canceled",
     "backorder_status_text": "Backorder",
+    "hold_status_text": "Hold",
     "convert_status": "Converted",
     "cancel_status": "Cancel",
     "waiting_for_reply_status": "Waiting for Reply",
@@ -168,6 +172,17 @@
       "ddType": "LK_GENPRIOR"
     }
   ],
+  "wkoDropdownSelections": [
+    {
+      "ddType": "WorkOrderType"
+    },
+    {
+      "ddType": "WorkOrderGroup"
+    },
+    {
+      "ddType": "WorkOrderPriority"
+    }
+  ],
   "customization": {
     "recordAreaDropdownValues": {
       "work_Orders": "Work Orders",
@@ -235,13 +250,18 @@
     "anticipatedUseValue": "100",
     "frequencyIntervalValue": "Day"
   },
+  "labels": [
+    "Hold Reason",
+    "Hold Until"
+  ],
   "dataBase": {
     "freshDBSep": "FreshDBSep",
     "anchorglass_inapapptest": "ANCHORGLASS_INAPPTEST",
     "inapp_pns": "INAPP_PNS",
     "fresdb959_inappdev": "FRESHDB959_INAPPDEV",
     "automation_freshdb": "AutomationFreshDB",
-    "fresdb96101": "FRESHDB96101"
+    "fresdb96101": "FRESHDB96101",
+    "fresdb959_inapp_maint": "FRESHDB959_INAPP_MAINT"
   },
   "db_name": "FreshDBSep"
 }

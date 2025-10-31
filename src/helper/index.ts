@@ -49,5 +49,5 @@ if (fs.existsSync(reportPath)) {
   const updatedHtml = html.replace("<body>", `<body>\n${logoHTML}`);
   fs.writeFileSync(reportPath, updatedHtml, "utf-8");
 } else {
-  console.error("❌ Report file not found. Logo injection failed.");
+  console.error("Report file not found. Logo injection failed.");
 }

@@ -1,9 +1,9 @@
 {
-  "homePageURL": "https://dev.mpulse9.com/#/main/maintenanceAdvisor/dashboard",
-  "workOrderRecordsPageURL": "https://dev.mpulse9.com/#/main/fal/WorkOrderRecords/",
-  "maintenanceRequestPageRecordsURL": "https://dev.mpulse9.com/#/main/fal/WorkRequestRecords/",
-  "workOrderURL": "https://dev.mpulse9.com/#/main/workOrders/WorkOrders",
-  "workRequest": "https://dev.mpulse9.com/#/main/fal/WorkRequestRecords/",
+  "homePageURL": "maintenanceAdvisor/dashboard",
+  "workOrderRecordsPageURL": "WorkOrderRecords",
+  "maintenanceRequestPageRecordsURL": "WorkRequestRecords",
+  "workOrderURL": "workOrders/WorkOrders",
+  "workRequest": "WorkRequestRecords",
   "wkoMenuItemTitle": "Work Orders",
   "wkoSubMenuItemTitle": "Work Order Records",
   "maintenanceRequestSubMenuItemTitle": "Maintenance Request Records",
@@ -15,11 +15,8 @@
   "wo_info": {
     "requester_email": "shrikanth.hk@inapp.com",
     "assetAssignedToTask": "Asset Assigned to Task",
-    "assetId": "EQU-023",
     "personnelAssignedToAsset": "Personnel Assigned to Asset",
-    "empId": "EMP-001",
     "inventoryAssignedToAsset": "Inventory Assigned to Asset",
-    "inventoryId": "PRT-001",
     "maintenanceRequestId": "WRQ",
     "workOrderId": "WKO"
   },

@@ -13,15 +13,38 @@ let logger: Logger = createLogger({
   transports: [new transports.Console()]
 });
 
+let currentLogFilePath: string | null = null;
+
+function deleteOldLogs(logsDir: string, safeScenarioName: string) {
+  if (!fs.existsSync(logsDir)) return;
+
+  try {
+    const files = fs.readdirSync(logsDir);
+    for (const file of files) {
+      if (file.startsWith(safeScenarioName) && file.endsWith('.log')) {
+        const p = path.join(logsDir, file);
+        try {
+          fs.unlinkSync(p);
+        } catch {
+          // ignore individual delete errors
+        }
+      }
+    }
+  } catch {
+    // ignore read errors
+  }
+}
+
 export function setLoggerForScenario(scenarioName: string): void {
   const logsDir = path.resolve(process.cwd(), 'logs');
   if (!fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir, { recursive: true });
   }
-
-  const timestamp = new Date().toISOString().replace(/:/g, '-').replace('T', '_').replace('Z', '');
   const safeScenarioName = scenarioName.replace(/[^a-zA-Z0-9-_]/g, '_');
+  deleteOldLogs(logsDir, safeScenarioName);
+  const timestamp = new Date().toISOString().replace(/:/g, '-');
   const logFilePath = path.join(logsDir, `${safeScenarioName}${timestamp}.log`);
+  currentLogFilePath = logFilePath;
   logger.clear();
   logger.add(new transports.Console());
   logger.add(new transports.File({ filename: logFilePath }));
